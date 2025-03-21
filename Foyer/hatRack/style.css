@@ -116,6 +116,11 @@ html {
   pointer-events: none;
 }
 
+.lower {
+      height: 5vh;
+      width: 100%;
+}
+
 .playArea {
   display: grid;
   padding-left: 115px;
