@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html id="html">
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- To Do: Come up with Good Name -->
+  <title>HRA</title>
+  <!-- To Do: Come up with Good Name -->
+
+  <!-- References -->
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <main>
+    <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+    <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+    <div class="center" id="center">
+      <div class="row">
+        <div class="pad imgcontainer" id="pad">
+          <img class="stamp" src="./images/gavstamp.webp">
+          <span class="text" id="notePad">
+          </span>
+          <button class="textButton" id="lastButton" onclick="lastPage()">← Previous Page</button>
+          <button class="textButton" id="nextButton" onclick="nextPage()">Next Page →</button>
+          <img src="./images/list.webp">
+        </div>
+        <!-- <img class="mapEdge" id="mapEdge" src="./images/roomMapEdge.webp"> -->
+        <div class="grid" id="mainGrid"></div> 
+      </div>
+      <div class="halfSlipLoungeA" id="halfSlipLoungeA">
+        <img src='./images/halfSlipLoungeA.webp' class="halfSlipLoungeAImg" id='halfSlipLoungeAImg' draggable="false">
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </main>
+</body>
+
+</html>
