@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Medicines</title>
+      <link rel="stylesheet" href="./style.css">
+      <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+      <main>
+            <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0;">
+            </div>
+            <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+            <div class='center' id='gameArea'>
+                  <div class="sticky position" id="sticky">
+                        <img src='./images/stickynote.webp' width='350px' draggable="false">
+                  </div>
+                  <div class="cabinet position" id="cabinet">
+                        <div class="cabinetBG dropShadow position">
+                              <img src="./images/cupboard.webp" height="100%" draggable="false">
+                        </div>
+                  </div>
+                  <div class="machine position" id="machine">
+                        <div class="machineBG dropShadow position">
+                              <img class="machineImage" src="./images/boxes.webp" height="100%" draggable="false">
+                        </div>
+                        <div class="slot" id="slot0"></div>
+                        <div class="slot" id="slot1"></div>
+                        <div class="slot" id="slot2"></div>
+                        <div class="slot" id="slot3"></div>
+                        <div class="slot" id="slot4"></div>
+                        <div class="slot" id="slot5"></div>
+                        <div class="slot" id="slot6"></div>
+                  </div>
+                  <div class="dispenser position" id="dispenser">
+                        <!-- <div class="button" onclick="dispenseSlip()"></div> -->
+                        <div class="slipHider">
+                              <div class="slip position" id="slip" onclick="takeItem(this)">
+                                    <div class="weekLabel week3" id="week3">Fourth</div>
+                                    <div class="slipCalendar" id="slipCalendar"></div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </main>
+      <script src="script.js"></script>
+</body>
+
+</html>

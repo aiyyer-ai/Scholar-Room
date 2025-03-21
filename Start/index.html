@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Agency</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./images/favicon.png" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="position topRight" onclick="startGame()"></div>
+      <div class="position topLeft" onclick="startGame()"></div>
+      <div class="position bottomRight" onclick="startGame()"></div>
+      <div class="position bottomLeft" onclick="startGame()"></div>
+      <div class="position nametag" id="nametag">
+            <img src="./images/nametag.webp" class="position" height='100%' draggable='false'>
+            <input type="text" class="nameInput position" autofocus="true" placeholder="Name" id="playerName">
+            <button class="submitInput position" onclick="acceptName()">SUBMIT</button>
+      </div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

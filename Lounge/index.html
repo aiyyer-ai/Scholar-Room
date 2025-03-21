@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lounge</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./images/favicon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div id="gameArea">
+        <div class='mirror position notFireplace' id="mirrorMovement">
+          <a onclick="setTimeSpent()" href="./mirror/index.html">
+            <img src="./images/mirror.webp" class="position" height='100%' draggable='false' style="left: -350px">
+            <img src="./images/glass.webp" class="position" id="glass" height='100%' draggable='false'>
+          </a>
+        </div>
+        <div class='position behindMirror notFireplace' id="door">
+          <a onclick="setTimeSpent()" href="../Study/index.html">
+            <img src="./images/study.webp" class="position" height='100%' draggable='false' style="left: -450px">
+          </a>
+        </div>
+        <div class='fireplace position' id="fireplace">
+          <img src="./images/fireplaceLong.webp" class='fireplaceImg' height='100%' draggable='false'>
+        </div>
+        <div class='sofa position notFireplace' id="sofa">
+          <img src="./images/sofa.webp" class='sofaImg' height='100%' draggable='false' onclick="lookAtFireplace()">
+        </div>
+        <div class='piano position fireplaceFlip'>
+          <a onclick="setTimeSpent()" href="./piano/index.html">
+            <img src="./images/piano.webp" class='pianoImg' height='100%' draggable='false'>
+          </a>
+        </div>
+        <div class='recordPlayer position fireplaceFlip'>
+          <a onclick="setTimeSpent()" href="./recordPlayer/index.html">
+            <img src="./images/recordPlayer.webp" class='recordPlayerImg' height='100%' draggable='false'>
+          </a>
+        </div>
+        <div class='wallTable position fireplaceFlip' id="wallTable">
+          <img src="./images/wallTable.webp" class='wallTableImg' height='100%' draggable='false'>
+        </div>
+        <div class='globe position fireplaceFlip'>
+          <a onclick="setTimeSpent()" href="./globe/index.html">
+            <img src="./images/globe.webp" class='globeImg' height='100%' draggable='false'>
+          </a>
+        </div>
+        <div class='phone position fireplaceFlip'>
+            <img src="./images/phone.webp" class='phoneImg' height='100%' draggable='false'>
+        </div>
+        <div class='table position fireplaceFlip'>
+          <img src="./images/table.webp" class='tableImg' id="table" height='100%' draggable='false'>
+          <a onclick="setTimeSpent()" href="./chessboard/index.html">
+            <div class='chessBoard position'>
+              <img src="./images/chessBoard.webp" class='chessBoardImg' height='100%' draggable='false'>
+            </div>
+          </a>
+        </div>
+        <div class='happyRoomShelf position notFireplace' id="happyRoomShelf">
+          <a onclick="setTimeSpent()" href="./hra/index.html">
+            <img src="./images/happyRoomShelf.webp" class='happyRoomShelfImg' height='100%' draggable='false'>
+          </a>
+          <div class="halfSlipHider" id="halfSlipHider">
+            <div class="halfSlipLoungeASlider" id="halfSlipLoungeASlider" style="visibility: hidden;">
+              <img src='./images/halfSlipLoungeA.webp' class="halfSlipLoungeAImg" id='halfSlipLoungeAIMG' draggable="false">
+            </div>
+          </div>
+        </div>
+        <div class='hook hook1 position notFireplace'>
+          <img src="./images/hook.webp" class='hookImg' height='100%' draggable='false'>
+        </div>
+        <div class='hook hook2 position notFireplace'>
+          <img src="./images/hook.webp" class='hookImg' height='100%' draggable='false'>
+        </div>
+        <div class='hook hook3 position notFireplace'>
+          <img src="./images/hook.webp" class='hookImg' height='100%' draggable='false'>
+        </div>
+        <div class='hook hook4 position notFireplace'>
+          <img src="./images/hook.webp" class='hookImg' height='100%' draggable='false'>
+        </div>
+        <!-- Begin five movable objects for Happy Home -->
+        <div class='painting HRA position notFireplace'>
+          <img src="./images/painting.webp" class='paintingImg' height='100%' draggable='false'>
+        </div>
+        <div class='statue HRA position'>
+          <img src="./images/statue.webp" class='statueImg' height='100%' draggable='false'>
+        </div>
+        <div class='plant HRA position'>
+          <img src="./images/plant.webp" class='plantImg' height='100%' draggable='false'>
+        </div>
+        <div class='teacup HRA position'>
+          <img src="./images/teacup.webp" class='teacupImg' height='100%' draggable='false'>
+        </div>
+        <div class='candlestick HRA position'>
+          <img src="./images/candlestick.webp" class='candlestickImg' height='100%' draggable='false'>
+        </div>
+        <!-- end five movable objects for happy home -->
+      </div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 5; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <script src="script.js"></script>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Record Player</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div class='center' id='gameArea'>
+        <div class='recordPlayer imgContainer' id='recordPlayer'>
+          <img src='./images/recordplayer.webp' draggable='false'>
+          <div class="recordSnap position" id="recordSnap"></div>
+          <div class='recordNeedle imgContainer' id='recordNeedle'>
+            <img src='./images/recordNeedle.webp' draggable='false'>
+          </div>
+        </div>
+        <div class='handwrittenNote' id='handwrittenNote'>
+          <span class="position noteText">
+            Lisa,
+            <br>
+            I've really been enjoying fiddling with the broken player piano you gifted me, and I even wrote a few tunes for it! My favorite is the <span class="bigText">FIRST</span> one.
+            <br>
+            Cheers,
+            <br>
+            Ellis
+          </span>
+          <img src='./images/note.webp' draggable='false'>
+        </div>
+      </div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

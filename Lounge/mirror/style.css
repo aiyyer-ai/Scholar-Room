@@ -1,0 +1,326 @@
+html {
+	background-color: whitesmoke;
+	background-image: url('./images/background.webp');
+	background-size: cover;
+	font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
+	color: whitesmoke;
+	overflow: hidden;
+}
+
+* {
+ user-select: none; 
+ -moz-user-select: none;
+ -webkit-text-select: none;
+ -webkit-user-select: none;
+ cursor: default;
+}
+
+:root {
+	--mirrorSize: 80%;
+	--mirrorOffset: 10%;
+	--holeHeight: 150px;
+	--holeWidth: 150px;
+	--gaugeHeight: 400px;
+	--slotArrayHeight: calc(var(--gaugeHeight) + var(--holeHeight) * 2 + 20px);
+	--plateArrayHeight: calc(var(--holeHeight) * 2 + 70px);
+}
+
+.position {
+	position: absolute;
+}
+
+.inventory {
+	height: 15vh;
+	width: 100%;
+	top: -10vh;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	gap: 5vw;
+	z-index: 10;
+	background-color: lightslategrey;
+	opacity: 50%;
+}
+
+
+.pause {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      border: 4px solid black;
+      background-color: rgba(245, 245, 245, 0.8);
+      top: calc(50% - 30px);
+      right: calc(7.5vh - 30px);
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      font-size: 40px;
+      color: black;
+}
+
+.unpauseButton {
+      border: none;
+      background-color: transparent;
+      font-size: 60px;
+      color: rgb(255, 255, 255, 0.8);
+      bottom: 30%;
+      font-family: 'Passion One';
+}
+
+.unpauseButton:hover {
+      color: rgb(255, 255, 255, 0.5);
+}
+
+.unpauseButton:active {
+      color: rgb(255, 255, 255, 0.2);
+}
+
+.pauseOverlay {
+      height: 100vh;
+      width: 100vw;
+      top: 0;
+      left: 0;
+      pointer-events: all;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0px 0px 500px 100px black;
+      backdrop-filter: blur(20px);
+      display: none;
+}
+
+.unpause {
+      font-family: 'Passion One';
+      font-size: 160px;
+      color: rgb(255, 255, 255, 0.8);
+      width: 1000px;
+      height: 400px;
+      top: calc(50% - 200px);
+      left: calc(50% - 500px);
+      z-index: 101;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+}
+
+@font-face {
+      font-family: 'Passion One';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/passionone/v18/Pby6FmL8HhTPqbjUzux3JEMq007vyJc.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.inventoryItem {
+	max-height: 90%;
+	display: flex;
+	justify-content: center;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.dragItem {
+	position: absolute !important;
+	z-index: 20;
+}
+
+.mirror {
+	overflow: hidden;
+	height: 100%;
+	width: var(--mirrorSize);
+	left: var(--mirrorOffset);
+}
+
+#frame {
+	right: 0;
+	height: 100%;
+	top: 0;
+}
+
+#frameFill {
+	left: 0;
+	height: 100%;
+	top: 0;
+}
+
+.slotArray1 {
+	/* opacity: 50%; */
+	top: calc(50% - (var(--slotArrayHeight)/2) + 40px);
+	left: 5%;
+	height: var(--slotArrayHeight);
+	width: 50%;
+	/* background-color: gray; */
+	display: grid;
+	box-sizing: border-box;
+	grid-template-columns: auto auto auto ;
+	padding: 20px;
+}
+
+.slotArray2 {
+	/* opacity: 50%; */
+	top: calc(50% - (var(--slotArrayHeight)/2) - 17px);
+	right: 5%;
+	height: var(--slotArrayHeight);
+	width: 50%;
+	/* background-color: gray; */
+	display: grid;
+	box-sizing: border-box;
+	grid-template-columns: auto auto auto ;
+	padding: 20px;
+}
+
+.gauge {
+	place-self: center center;
+	height: var(--gaugeHeight);
+	width: 100px;
+	display: flex;
+}
+
+.gaugeFill {
+	height: 2px;
+	width: 100px;
+}
+
+.gaugeTop {
+	background-color: red;
+	place-self: start center;
+}
+
+.gaugeBottom {
+	background-color: green;
+	place-self: end center;
+}
+
+.holeTop {
+	place-self: start center;
+}
+
+.holeBottom {
+	place-self: end center;
+}
+
+.hole {
+	height: var(--holeHeight);
+	width: var(--holeWidth);
+	background-color: black;
+	opacity: 85%;
+}
+
+.plateArray {
+	/* top: calc(50% - (var(--plateArrayHeight)/2)); */
+	left: calc(50% - (var(--holeWidth) + 35px));
+	height: var(--plateArrayHeight);
+	width: calc(var(--holeWidth));
+	display: grid;
+	box-sizing: border-box;
+	grid-template-columns: auto auto;
+	padding: 10px;
+	gap: 50px;
+	z-index: 2;
+}
+
+.plateArray1 {
+	top: calc(20% - (var(--plateArrayHeight)/3));
+	/* opacity: 50%; */
+	/* left: calc((100% - var(--holeWidth) * 2) / 3); */
+	/* background-color: gray; */
+}
+
+.plateArray2 {
+	top: calc(70% - (var(--plateArrayHeight)/3));
+	/* opacity: 50%; */
+	/* right: calc((100% - var(--holeWidth) * 2) / 3); */
+	/* background-color: gray; */
+}
+
+.plate {
+	height: var(--holeHeight);
+}
+
+/* .connectorTop {
+	top: calc(20% - (var(--plateArrayHeight)/3 - var(--holeHeight)) );
+	left: calc(50% - 20px);
+	font-size: 50px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.connectorBottom {
+	top: calc(70% - (var(--plateArrayHeight)/3 - 10px - var(--holeHeight)) );
+	left: calc(50%);
+} */
+
+/* .plateTop {
+	top: 10%;
+}
+
+.plateMiddle {
+	top: calc(50% - (var(--holeHeight)/2));
+} */
+
+.plateBottom {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	place-self: center center;
+}
+
+.plateHoleMiddle {
+	top: calc(50% - (var(--holeHeight)/2));
+}
+
+.plateHoleBottom {
+	bottom: 10%;
+}
+
+.imgcontainer {
+	/* position: absolute; */
+/*    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));*/
+}
+
+.imgcontainer img {
+	max-height: 100%;
+	max-width: 100%;
+	pointer-events: none;
+	object-fit: contain;
+}
+
+.scratch {
+	mix-blend-mode: overlay;
+	position: absolute;
+	height: 16px;
+	top: 56.25%;
+	left: calc(50% - (1691 / 71) * 8px);
+}
+
+/* HEY IF YOU EVER NEED GRADIENTS TO MESS WITH FOR A FEW HOURS BEFORE DECIDING ON USING AN IMAGE HERES A GOOD START */
+
+	/* box-shadow: inset -3px 0 0 black, inset 0 -3px 0 black, inset 3px 0 0 black, inset 0 3px 0 black; */
+	/* background-image:
+	linear-gradient(to right, 
+		transparent 0 30%,
+    	whitesmoke 30% 70%,
+		transparent 70% 100%
+	),
+	linear-gradient(to top,
+		black 0% 4%,
+		transparent 4% 96%,
+		black 96% 100%
+	),
+	linear-gradient(to right, 
+		transparent 0 20%,
+    	whitesmoke 20% 80%,
+		transparent 80% 100%
+	),
+    linear-gradient(to top, 
+		transparent 0 20%,
+    	black 20% 23%,
+		transparent 23% 39%,
+    	black 39% 42%,
+		transparent 42% 58%,
+    	black 58% 61%,
+		transparent 61% 77%,
+    	black 77% 80%,
+		transparent 80% 100%
+	);
+	background-size: 100% 10%;
+	/* box-sizing: border-box;
+	border: 2px solid black; */

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Study</title>
+      <link rel="stylesheet" href="./style.css">
+      <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+      <main>
+            <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+            <div class='center' id='gameArea'>
+                  <div class="perspective position">
+                        <a draggable="false" onclick="setTimeSpent()" href="../Workshop/index.html">
+                              <div class='workshopEnter position' id='workshopEnter'></div>
+                        </a>
+                        <div class='wallDoor position' id='wallDoor'>
+                              <img src='./images/wallDoor.webp' height='100%' draggable='false'>
+                        </div>
+                  </div>
+                  <div class='mirror position' id='mirror'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./mirrorBack/index.html">
+                              <img src='./images/mirror.webp' class="position" height="100%" draggable='false'>
+                              <div class="mirrorBlocker position" id="mirrorBlocker">
+                                    <img src='./images/mirrorAnswer.webp' class="mirrorAnswer position" height="100%" draggable='false'>
+                                    <img src='./images/mirrorAnswer2.webp' class="mirrorAnswer2 position" height="100%" draggable='false'>
+                              </div>
+                        </a>
+                  </div>
+                  <div class='fuseBox position' id='fuseBox'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./fuseBox/index.html">
+                              <img src='./images/fusebox.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='fuseBoxLights position' id='fuseBoxLights'>
+                        <img src='./images/fuseBoxLights.webp' height="100%" draggable='false'>
+                  </div>
+                  <div class='painting position' id='painting'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./painting/index.html">
+                              <img src='./images/painting.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <!-- <div class='calendar position' id='calendar'>
+          <a onclick="setTimeSpent()" href="./calendar/index.html">
+            <img src='./images/calendar.webp' height="100%" draggable='false'>
+          </a>
+        </div> -->
+                  <div class='counter position' id='counter'>
+                        <img src='./images/counter.webp' height="100%" draggable='false'>
+                        <div class='lamp position' id='lamp' onclick="rotateLamp(this.children[1])">
+                              <img src='./images/lampBase.webp' class="position" height="100%" draggable='false'>
+                              <img src='./images/lampHead.webp' class="lampHead position" height="100%"
+                                    draggable='false'>
+                        </div>
+                        <div class='lecterns position' id='lecterns'>
+                              <a draggable="false" onclick="setTimeSpent()" href="./lecterns/index.html">
+                                    <img src='./images/lecterns.webp' height="100%" draggable='false'>
+                              </a>
+                        </div>
+                  </div>
+                  <div class='doorFoyer position doorFoyerHole' id='doorFoyerHole'>
+                        <a draggable="false" onclick="setTimeSpent()" href="../Foyer/index.html">
+                              <img src='./images/doorFoyerHole.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='doorFoyer position' id='doorFoyer'>
+                        <img src='./images/doorFoyer.webp' height="100%" draggable='false'>
+                  </div>
+                  <div class='feeder position' id='feeder'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./medicines/index.html">
+                              <img src='./images/feeder.webp' class='feederImg' height="100%" draggable='false'>
+                        </a>
+                  </div>
+
+                  <div class='lectern position' id='lectern' onmousedown="pullCheck(this, event)">
+                        <!-- <a draggable="false" onclick="setTimeSpent()" href="./podium/index.html"> -->
+                              <img src='./images/lectern.webp' height="100%" draggable='false'>
+                        <!-- </a> -->
+                  </div>
+
+                  <div class='table position' id='table'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./calendar/index.html">
+                              <img src='./images/table.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+
+            </div>
+      </main>
+      <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phone</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div class='center' id='gameArea'>
+        <div class='transcription' id='lastTranscription'></div>
+        <div class='transcription' id='transcription'></div>
+        <div class='imgcontainer tabletop' id='tabletop'>
+          <img src='./images/tabletop.webp' width='200px' style='position: absolute; width:100%; bottom: 0; left: 0;'>
+        </div>
+        <div class='imgcontainer phone' id='phone'>
+          <div class='screenText' id='text'>1 New Message</div>
+          <button class='button' id="reciever" onclick="keypad(this.id)"></button>
+          <button class='button' id="one" onclick="keypad(this.id)"></button>
+          <button class='button' id="two" onclick="keypad(this.id)"></button>
+          <button class='button' id="three" onclick="keypad(this.id)"></button>
+          <button class='button' id="four" onclick="keypad(this.id)"></button>
+          <button class='button' id="five" onclick="keypad(this.id)"></button>
+          <button class='button' id="six" onclick="keypad(this.id)"></button>
+          <button class='button' id="seven" onclick="keypad(this.id)"></button>
+          <button class='button' id="eight" onclick="keypad(this.id)"></button>
+          <button class='button' id="nine" onclick="keypad(this.id)"></button>
+          <button class='button' id="star" onclick="keypad(this.id)"></button>
+          <button class='button' id="zero" onclick="keypad(this.id)"></button>
+          <button class='button' id="pound" onclick="keypad(this.id)"></button>
+          <button class='button' id="voicemail" onclick="voicemail(this)"></button>
+          <img src='./images/landline.webp' height='800px' style='height:65vh;'>
+        </div>
+      <div class='imgcontainer fax position' id='fax'>
+          <img class='faxMachine' src='./images/fax.webp'>
+          <div class="faxSlipHider position" id="faxSlipHider"></div>
+      </div>
+      <div class="faxPaperHider position" id="faxPaperHider">
+            <div class='faxPaperItem position' id="faxPaperFax" onclick="takeItem(this)">
+                  <img src="./images/inventoryItems/faxPaper.webp" height='100%' draggable='false'>
+            </div>
+      </div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

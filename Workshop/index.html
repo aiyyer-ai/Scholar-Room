@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Workshop</title>
+      <link rel="stylesheet" href="./style.css">
+      <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+      <main>
+            <div class='roomOverlay position' id="roomOverlay"></div>
+            <div class='explosion position' id="explosion"></div>
+            <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+            <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+            <div class='center' id='gameArea'>
+                  <div class='pipes position' id='pipes'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./wallPipes/index.html">
+                              <img src='./images/pipes.webp' width="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='counter position'>
+                        <img src='./images/counter.webp' height="100%" draggable='false'>
+                  </div>
+                  <div class='map position' id='map'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./map/index.html">
+                              <img src='./images/map.webp' width="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='newspapers position' id='newspapers'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./newspapers/index.html">
+                              <img src='./images/newspapers.webp' width="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='voltage position' id='voltage'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./voltage/index.html">
+                              <img src='./images/voltage.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='temperature position' id='temperature'>
+                        <a draggable="false" onclick="setTimeSpent()" href="./coolantControl/index.html">
+                              <img src='./images/temperature.webp' height="100%" draggable='false'>
+                        </a>
+                  </div>
+                  <div class='imgcontainer fax position' id='fax'>
+                        <img src='./images/fax.webp' width='100%' draggable="false">
+                        <div class="faxDataHider position" id="faxDataHider">
+                              <div class='faxDataItem position' id="faxDataFax" onclick="takeItem(this)">
+                                    <img src="./inventoryItems/faxData.webp" height='100%' draggable='false'>
+                              </div>
+                        </div>
+                  </div>
+                  <div class='centerThing position' id='centerThing'>
+                        <div class="voltageCheck" id="voltageCheck">
+                              <svg class="thingSVG position" height="125" width="200" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="50,50 75,60 75,40 100,60 100,40 125,60 125,40 150,50" style="fill:none;stroke:yellow;stroke-width:5" />
+                              </svg>
+                              <svg class="thingSVG2 position" height="125" width="200" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="50,50 75,40 75,60 100,40 100,60 125,40 125,60 150,50" style="fill:none;stroke:yellow;stroke-width:5" />
+                              </svg>
+                        </div>
+                        <img src='./images/thing.webp' class="position" width="100%" draggable='false' id="thing">
+                        <button class="centerThingButton position" id="centerThingButton" onclick="attemptFae()"></button>
+                        <div class="thingAnimationHolder position" id="thingAnimations">
+                              <div class="temperatureCheck position" id="temperatureCheck">
+                                    <div class="thingHeater position">
+                                          <svg class="steamHolder position" height="330" width="200" xmlns="http://www.w3.org/2000/svg">
+                                                <filter x="-50%" y="-50%" width="200%" height="200%" id="blurMe">
+                                                      <feGaussianBlur in="SourceGraphic" stdDeviation="8" />
+                                                </filter>
+                                                <linearGradient id="Gradient2" x1="0" x2="2" y1="0" y2="0">
+                                                      <stop offset="0%" stop-color="gray" />
+                                                      <stop offset="50%" stop-color="lightgray" />
+                                                      <stop offset="100%" stop-color="gray" />
+                                                </linearGradient>
+                                                <path class="steam" id="steam1" d="M 0 0 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 " stroke="url(#Gradient2)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#blurMe)"/>
+                                                <path class="steam" id="steam1" d="M 50 20 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50" stroke="url(#Gradient2)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#blurMe)"/>
+                                                <path class="steam" id="steam2" d="M 100 0 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50" stroke="url(#Gradient2)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#blurMe)"/>
+                                                <path class="steam" id="steam3" d="M 150 20 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50" stroke="url(#Gradient2)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#blurMe)"/>
+                                                <path class="steam" id="steam1" d="M 200 0 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50 q -25 25 0 50 q 25 25 0 50" stroke="url(#Gradient2)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#blurMe)"/>
+                                          </svg>
+                                    </div>
+                              </div>
+                              <div class="pipeCheck position" id="pipeCheck">
+                                    <div class="thingBottom2 position" id="thingBottom2"></div>
+                                    <div class="thingBottom position" id="thingBottom"></div> 
+                              </div>
+                        </div>
+                        <img src='./images/thingGlass.webp' class="position" width="100%" draggable='false' id="thingGlass">
+                  </div>
+                  <!-- <div class="indicator position" id="pipeCheck"></div>
+                  <div class="indicator position" id="voltageCheck"></div>
+                  <div class="indicator position" id="temperatureCheck"></div> -->
+            </div>
+      </main>
+      <script src="script.js"></script>
+</body>
+
+</html>

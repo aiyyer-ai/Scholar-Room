@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Voltage</title>
+      <link rel="stylesheet" href="./style.css">
+      <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+      <main>
+            <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+            <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+            <!-- <div class='buttonHolder position' id="buttonHolder">
+                  <button type = "button" class="genButton" id="singleButton" onclick="buttonSelect(this)">SINGLE</button>
+                  <button type = "button" class="genButton" id="doubleButton" onclick="buttonSelect(this)">DOUBLE</button>
+                  <button type = "button" class="genButton" id="resetButton" onclick="buttonSelect(this)">RESET</button>
+            </div> -->
+            <div class="changePuzzle prev position" id="previousPuzzle" onclick="goToPuzzle(this)" style="cursor: url('/cursors/previous.webp'), pointer;"></div>
+            <div class="board" id="gameArea">
+                  <div class="dotHolder" id="dotHolder"></div>
+            </div>
+            <div class="changePuzzle next position" id="nextPuzzle" onclick="goToPuzzle(this)" style="cursor: url('/cursors/next.webp'), pointer;"></div>
+
+      </main>
+      <script src="script.js"></script>
+</body>
+
+</html>

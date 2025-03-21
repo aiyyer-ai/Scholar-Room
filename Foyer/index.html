@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Foyer</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./images/favicon.png" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div>
+      </div>
+      <div class='doorLounge position' id="doorLounge" onclick="goToRoom(this)">
+          <img src="./images/doorLounge.webp" height='100%' draggable='false'>
+          <div class='lightLoungeBorder position' id="lightLoungeBorder">
+            <div class='lightLounge position' id="lightLounge">
+            </div>
+          </div>
+      </div>
+      <div class='doorOffice position' id="doorOffice" onclick="goToRoom(this)">
+          <img src="./images/doorOffice.webp" height='100%' draggable='false'>
+          <div class='lightOfficeBorder position' id="lightOfficeBorder">
+            <div class='lightOffice position' id="lightOffice">
+            </div>
+          </div>
+      </div>
+      <div class='fuseBox position'>
+        <a onclick="setTimeSpent()" href="./fuseBox/index.html">
+          <img src="./images/fusebox.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='hatrack position'>
+        <a onclick="setTimeSpent()" href="./hatrack/index.html">
+          <img src="./images/hatrack.webp" height='100%' draggable='false'>
+          <img src="./images/visor.webp" id="visor" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='bookTable position'>
+        <a onclick="setTimeSpent()" href="./sidetable/index.html">
+          <img src="./images/bookTableGlass.webp" id="bookTable" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='phone position'>
+        <a onclick="setTimeSpent()" href="./phone/index.html">
+          <img src="./images/phone.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='fax position'>
+        <a onclick="setTimeSpent()" href="./phone/index.html">
+          <img src="./images/fax.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='wallPaintings position'>
+        <a onclick="setTimeSpent()" href="./wall/index.html" class='wallPaintings'>
+          <img src="./images/paintingA.webp" height='100%' draggable='false'>
+        </a>
+        <a onclick="setTimeSpent()" href="./wall/index.html" class='wallPaintings'>
+          <img src="./images/paintingB.webp" height='100%' draggable='false'>
+        </a>
+        <div class='doorStudy' id="doorStudy" onclick="goToRoom(this)">
+          <img src="./images/doorStudy.webp" height='125%' draggable='false' style="position: relative; top: 150px">
+            <div class='lightStudyBorder position' id="lightStudyBorder">
+              <div class='lightStudy position' id="lightStudy">
+              </div>
+            </div>
+        </div>
+        <a onclick="setTimeSpent()" href="./wall/index.html" class='wallPaintings'>
+          <img src="./images/paintingC.webp" height='100%' draggable='false'>
+        </a>
+        <a onclick="setTimeSpent()" href="./wall/index.html" class='wallPaintings'>
+          <img src="./images/paintingD.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='chandelier position' id="chandelier">
+        <img src="./images/chandelier.webp" height='100%' draggable='false' class="clickThrough">
+        <div class='fedoraItem position' id="fedora" onclick="takeItem(this)">
+          <img src="./images/fedora.webp" height='100%' draggable='false'>
+        </div>
+      </div>
+      <div class='bust position'>
+        <img src="./images/bust.webp" height='100%' draggable='false'>
+      </div>
+      <div class='gradCapItem position' id="gradCap" onclick="takeItem(this)">
+        <img src="./images/gradCap.webp" height='100%' draggable='false'>
+      </div>
+      <div class='flatCapItem position' id="flatCap" onclick="takeItem(this)">
+        <img src="./images/flatCap.webp" height='100%' draggable='false'>
+      </div>
+      <div class='bustGlass position' id="bustGlass">
+        <img src="./images/bustGlass.webp" height='100%' draggable='false'>
+      </div>
+      <div class='table position'>
+        <a onclick="setTimeSpent()" href="./centerTable/index.html">
+          <img src="./images/table.webp" height='100%' draggable='false'>
+        </a>
+    </div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

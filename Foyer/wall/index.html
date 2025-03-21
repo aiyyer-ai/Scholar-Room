@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Walls</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div class='center' id='gameArea'>
+        <div class='imgcontainer paintings'>
+          <img src='./images/paintingA.webp' id='paintingA' draggable="false">
+          <img src='./images/paintingB.webp' id='paintingB' draggable="false">
+          <img src='./images/paintingC.webp' id='paintingC' draggable="false">
+          <img src='./images/paintingD.webp' id='paintingD' draggable="false">
+          <button class='button circle' id='buttonA' onmousedown="directSpotlight(this, this.parentElement.children[0], event)">
+          </button>
+          <button class='button circle' id='buttonB' onmousedown="directSpotlight(this, this.parentElement.children[1], event)">
+          </button>
+          <button class='button circle' id='buttonC' onmousedown="directSpotlight(this, this.parentElement.children[2], event)">
+          </button>
+          <button class='button circle' id='buttonD' onmousedown="directSpotlight(this, this.parentElement.children[3], event)">
+          </button>
+        </div>
+      </div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

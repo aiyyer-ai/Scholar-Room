@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Globe</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+        <div class="board" id="gameArea">
+          <div class='globe' id='globe'></div>
+          <div class="gameBack" id="gameBack">
+            <div class="piece" id="piece">
+            </div>
+          </div>
+          <div class="tray" id="tray"></div>
+          <div class="perspective" id="dieHolder">
+            <div class="die" id="die">
+              <div class="face front" id="1"></div>
+              <div class="face back" id="2"></div>
+              <div class="face right" id="3"></div>
+              <div class="face left" id="4"></div>
+              <div class="face top" id="5"></div>
+              <div class="face bottom" id="6"></div>
+            </div>
+          </div>
+        </div>  
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

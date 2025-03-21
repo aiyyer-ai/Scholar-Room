@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Office</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./images/favicon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+    <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+    <main id="gameArea">
+      <div class='mirror position' id="mirrorMovement">
+        <a onclick="setTimeSpent()" href="./mirror/index.html">
+          <img src="./images/mirror.webp" class="position" height='100%' draggable='false' style="left: -450px">
+          <img src="./images/glass.webp" class="position" id="glass" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='position behindMirror' id="door">
+        <a onclick="setTimeSpent()" href="../Study/index.html">
+          <img src="./images/study.webp" class="position" height='100%' draggable='false' style="left: -450px">
+        </a>
+      </div>
+      <div class='desk'>
+        <a onclick="setTimeSpent()" href="./desk/index.html">
+          <img src="./images/desk.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='globe position'>
+        <a onclick="setTimeSpent()" href="./globe/index.html">
+          <img src="./images/globe.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='shelf position'>
+        <a onclick="setTimeSpent()" href="./shelf/index.html">
+          <img src="./images/shelf.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='bookshelf position'>
+        <div class="bookClick position" onclick="halfSlipTrigger(this.parentElement)"></div>
+        <div class="plateHolder position">
+          <div class='plate3Item position plates' id="plate3" onclick="takeItem(this)">
+            <img src="./images/inventoryItems/plate3.webp" height='100%' draggable='false'>
+          </div>
+          <div class='plate4Item position plates' id="plate4" onclick="takeItem(this)">
+            <img src="./images/inventoryItems/plate4.webp" height='100%' draggable='false'>
+          </div>
+          <div class='plate7Item position plates' id="plate7" onclick="takeItem(this)">
+            <img src="./images/inventoryItems/plate7.webp" height='100%' draggable='false'>
+          </div>
+        </div>
+        <img src="./images/bookshelf.webp" height='100%' draggable='false'>
+      </div>
+      <div class='pedestal1 position'>
+        <a onclick="setTimeSpent()" href="./vase1/index.html">
+          <img src="./images/pedestal.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='pedestal2 position'>
+        <a onclick="setTimeSpent()" href="./vase2/index.html">
+          <img src="./images/pedestal.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='pedestal3 position'>
+        <a onclick="setTimeSpent()" href="./vase3/index.html">
+          <img src="./images/pedestal.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='vase1 vase position' id="vaseHolder1">
+        <a onclick="setTimeSpent()" href="./vase1/index.html">
+          <img src="./vase1/images/0_a0.webp" id="vase1" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='vase2 vase position' id="vaseHolder2">
+        <a onclick="setTimeSpent()" href="./vase2/index.html">
+          <img src="./vase2/images/1_a5.webp" id="vase2" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='vase3 vase position' id="vaseHolder3">
+        <a onclick="setTimeSpent()" href="./vase3/index.html">
+          <img src="./vase3/images/2_a8.webp" id="vase3" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='tripod position' id="tripod" onclick="toggleCamera()">
+          <img src="./images/tripod.webp" height='100%' draggable='false'>
+      </div>
+      <div class='cameraCrop position' id="cameraCrop">
+      </div>
+      <div id="tableHolder">
+        <a onclick="setTimeSpent()" href="./table/index.html" class='table position'>
+          <img src="./images/table.webp" class='tableImg' height='100%' draggable='false'>
+          <img src="./images/teacup0.webp" class='teacup0 cup' height='15%' draggable='false'>
+          <img src="./images/teacup1.webp" class='teacup1 cup' height='15%' draggable='false'>
+          <img src="./images/teacup2.webp" class='teacup2 cup' height='15%' draggable='false'>
+        </a>
+      </div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+    </main>
+	<script src="script.js"></script>
+  </main>
+  </body>
+</html>

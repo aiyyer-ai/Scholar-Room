@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coffee Table</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="../images/favicon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+        <div class='teacup tea0 position'>
+          <div class='saucer position'>
+            <img src="./images/teasaucer0.webp" height='100%' draggable='false'>
+          </div>
+          <div class='cup position'>
+            <img src="./images/teacup0.webp" height='100%' draggable='false'>
+          </div>
+        </div>
+        <div class='teacup tea1 position'>
+          <div class='saucer position'>
+            <img src="./images/teasaucer1.webp" height='100%' draggable='false'>
+          </div>
+          <div class='cup position'>
+            <img src="./images/teacup1.webp" height='100%' draggable='false'>
+          </div>
+        </div>
+        <div class='teacup tea2 position'>
+          <div class='saucer position'>
+            <img src="./images/teasaucer2.webp" height='100%' draggable='false'>
+          </div>
+          <div class='cup position'>
+            <img src="./images/teacup2.webp" height='100%' draggable='false'>
+          </div>
+        </div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

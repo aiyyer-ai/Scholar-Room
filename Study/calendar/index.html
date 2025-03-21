@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Feeding</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div class='center' id='gameArea'>
+        <div class="slip position" id="slip">
+          <div class="weekLabel week3" id="week3">Third</div>
+          <div class="slipCalendar" id="slipCalendar"></div>
+        </div>
+        <div class="calendarData" id="mainCalendar">
+          <div class="title" id="title">Research Medication Regimen</div>
+          <div class="rules" id="rules">
+            No medication on the first days of the week. 
+            <br><br><br><br>
+            Research cannot have more than two medications in a single day.
+            <br>
+
+          </div>
+          <div class="weekLabel" id="weekLabeler">Week</div>
+          <div class="weekLabel week1" id="week1">First</div>
+            <img src="./images/x.webp" class="week1 xImage x1" height="100%" draggable="false">
+          <div class="weekLabel week2" id="week2">Second</div>
+            <img src="./images/x.webp" class="week2 xImage x2" height="100%" draggable="false">
+          <div class="weekLabel week3" id="week3">Third</div>
+            <img src="./images/x.webp" class="week3 xImage x3" height="100%" draggable="false">
+          <div class="weekLabel week4" id="week4">Fourth</div>
+          <div class="weekLabel week5" id="week5">Fifth</div>
+          <div class="weekLabel week6" id="week6">Sixth</div>
+          <div class="board" id="board"></div>
+        </div>
+      </div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

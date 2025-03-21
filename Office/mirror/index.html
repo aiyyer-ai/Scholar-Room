@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mirror</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="../images/favicon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <!-- <div class='1Item position' id="1" onclick="takeItem(this)">
+        <img src="./images/inventoryItems/1.webp" height='100%' draggable='false'>
+      </div> -->
+      <div class='mirror position' id="mirror">
+        <img src="./images/mirror.webp" class="position" height='100%' draggable='false'>
+        <img src="./images/glass.webp" class="position" id="glass" height='100%' draggable='false'>
+      </div>
+      <div class='frame position' id="frame">
+        <img src="./images/frame2.webp" height='100%' draggable='false'>
+        <div class='slotArray1 position' id="slotArray">
+          <div class='holeTop hole position' id="holeTopLeft"></div>
+          <div class='gauge position' id="gauge" style="background-color: whitesmoke;">
+            <div class='gaugeFill gaugeTop position' id="gaugeTopLeft"></div>
+            <div class='gaugeFill gaugeBottom position' id="gaugeBottomLeft"></div>
+          </div>
+          <img src="./images/gauge1.webp" class="gauge position" height='100%' draggable='false'>
+          <div class='holeBottom hole position' id="holeBottomLeft"></div>
+        </div>
+        <div class="scratch">
+          <img src="./images/scratches.webp" height="100%" draggable="false">
+        </div>
+        <div class='slotArray2 position' id="slotArray">
+          <div class='holeTop hole position' id="holeTopRight"></div>
+          <div class='gauge position' id="gauge" style="background-color: whitesmoke;">
+            <div class='gaugeFill gaugeTop position' id="gaugeTopRight"></div>
+            <div class='gaugeFill gaugeBottom position' id="gaugeBottomRight"></div>
+          </div>
+          <img src="./images/gauge1.webp" class="gauge position" height='100%' draggable='false'>
+          <div class='holeBottom hole position' id="holeBottomRight"></div>
+        </div>
+      </div>
+      <div class='frame position' id="frameFill">
+        <img src="./images/frame2.webp" height='100%' draggable='false'>
+        <div class='plateArray plateArray1 position' id="plateArray1">
+          <img src="./images/inventoryItems/plate2.webp" class='plateTop plate' id="plateTopLeft" height='100%' draggable='false'>
+          <img src="./images/inventoryItems/plate3.webp" class='plateMiddle plate' id="plateMiddleLeft" height='100%' draggable='false'>
+          <img src="./images/inventoryItems/plate5.webp" class='plateBottom plate' id="plateBottomLeft" height='100%' draggable='false'>
+        </div>
+        <div class='plateArray plateArray2 position' id="plateArray2">
+          <img src="./images/inventoryItems/plate6.webp" class='plateMiddle plate' id="plateTopRight" height='100%' draggable='false'>
+          <div class='plateTop plateHoleBottom hole' id="plateHoleBottomRight"></div>
+          <img src="./images/inventoryItems/plate7.webp" class='plateBottom plate' id="plateTopRight" height='100%' draggable='false'>
+        </div>
+      </div>
+      <!-- <div class='slotArray position' id="slotArray">
+
+        <div class='holeTop' id="holeTop"></div>
+        <div class='holeTop' id="holeTop"></div>
+        <div class='holeTop' id="holeTop"></div>
+
+        <div class='gauge' id="gauge"></div>
+        <div class='gauge' id="gauge"></div>
+        <div class='gauge' id="gauge"></div>
+        <div class='gauge' id="gauge"></div>
+        <div class='gauge' id="gauge"></div>
+        <div class='gauge' id="gauge"></div>
+
+        <div class='hole' id="hole"></div>
+        <div class='hole' id="hole"></div>
+        <div class='hole' id="hole"></div>
+        <div class='hole' id="hole"></div>
+        <div class='hole' id="hole"></div>
+        <div class='hole' id="hole"></div>
+      </div> -->
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>

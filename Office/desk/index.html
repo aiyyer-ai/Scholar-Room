@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Desk</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="../images/favicon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class="pauseOverlay position" id="pauseOverlay">
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+      </div>
+      <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="pause position" onclick="pause()">⏸</div></div>
+      <div class='floor' id="floor" style="visibility: hidden;">
+        <img src="./images/floor.webp" height='100%' draggable='false'>
+      </div>
+      <div class='desk position' id="desk">
+        <img src="./images/desk.webp" height='100%' draggable='false'>
+        <div class="drawerCheck position" id="drawerCheck">
+        </div>
+      </div>
+      <div class='globe position' id="globe">
+        <a onclick="setTimeSpent()" href="../globe/index.html">
+          <img src="../images/globe.webp" height='100%' draggable='false'>
+        </a>
+      </div>
+      <div class='plate2Item position plates' id="plate2" onclick="takeItem(this)" style="visibility: hidden;">
+        <img src="../inventoryItems/plate2.webp" height='100%' draggable='false'>
+      </div>
+      <div class='plate5Item position plates' id="plate5" onclick="takeItem(this)" style="visibility: hidden;">
+        <img src="../inventoryItems/plate5.webp" height='100%' draggable='false'>
+      </div>
+      <!-- <div class='plate6Item position plates' id="plate6" onclick="takeItem(this)" style="visibility: hidden;">
+        <img src="./images/inventoryItems/plate6.webp" height='100%' draggable='false'>
+      </div> -->
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>
