@@ -1,6 +1,6 @@
 let slipData = [0, 18, 39, 36, 36, 22, 21];
 let currentInput = [0, ];
-let randomSeed = Math.random();
+let randomSeed = 0.231312;
 
 var timeStart;
 window.onload = (event) => {
