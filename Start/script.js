@@ -15,7 +15,41 @@ function acceptName() {
 }
 
 function startGame() {
+      let allOldElements = Array.from(document.body.getElementsByTagName("div")).filter((element) => {
+            return !Array.from(element.classList).includes(`instructions`);
+      });
+      allOldElements.forEach((element) => {
+            element.style.display = `none`;
+      });
+      Array.from(document.getElementsByClassName(`instructBack`)).forEach((element) => {
+            element.style.display = `block`;
+            element.style.top = (window.innerHeight - element.clientHeight) / 2 + "px";
+            element.style.left = (window.innerWidth - element.clientWidth) / 2 + "px";
+            element.style.opacity = 1;
+      });
+      Array.from(document.getElementsByClassName(`hidden`)).forEach((element) => {
+            element.style.display = `block`;
+      })
+}
+
+function actuallyStart() {
       window.location.href = `../Foyer/index.html`;
+}
+
+function pullDownInv(inventoryDiv) {
+	if(inventoryDiv.target) {
+		inventoryDiv = document.getElementsByClassName(`inventory`)[0];
+	}
+	inventoryDiv.style.opacity = `100%`;
+	inventoryDiv.style.top = 0 + "px";
+}
+
+function pullUpInv(inventoryDiv) {
+	if(inventoryDiv.target) {
+		inventoryDiv = document.getElementsByClassName(`inventory`)[0];
+	}
+	inventoryDiv.style.opacity = ``;
+	inventoryDiv.style.top = ``;
 }
 
 function addImg(src, parentElement, imgCallback) {

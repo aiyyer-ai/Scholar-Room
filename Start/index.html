@@ -19,6 +19,51 @@
             <input type="text" class="nameInput position" autofocus="true" placeholder="Name" id="playerName">
             <button class="submitInput position" onclick="acceptName()">SUBMIT</button>
       </div>
+      <div class="position notepad" id="notepad">
+            <img src="./images/notepad.webp" class="notepadIMG position" height='100%' draggable='false'>
+            <span class="noteText position">
+                  Agency Equipment: <br>
+                  Pen and Paper <br>
+                  Calculator <br>
+            </span>
+      </div>
+      <div class="instructions instructBack position">
+            <div class="instructions textHolder position">
+                  <span class="instructLargeText"> How to Play: <br></span>
+                  <span class="instructText">
+                        The Inventory is located at the top of the screen. Hover over it for access. <br>
+                        The pause button is also located there. <br>
+                        NEVER click the Browser's back arrow! <br>
+                        Clicking on the bottom of the screen will take you back instead. <br>
+                        (The cursor will become feet) <br>
+                        Right click to Rotate! This might be in 2D or 3D space. <br><br><br>
+                  </span>
+                  <img src="./images/arrow.webp" class="arrowLeft position" height='100%' draggable='false'>
+                  <img src="./images/cow.webp" class="cow position" height='100%' draggable='false'>
+                  <img src="./images/arrow.webp" class="arrowRight position" height='100%' draggable='false'>
+                  <!-- <div class="instructions cubeHolder position">
+                        <div class="instructions face" id="faceOne"></div>
+                        <div class="instructions face" id="faceTwo"></div>
+                        <div class="instructions face" id="faceThree"></div>
+                        <div class="instructions face" id="faceFour"></div>
+                        <div class="instructions face" id="faceFive"></div>
+                        <div class="instructions face" id="faceSix"></div>
+                  </div> -->
+                  <div class="instructions cubeHolderBig position">
+                        <div class="instructions face" id="faceOneBig"></div>
+                        <div class="instructions face" id="faceTwoBig"></div>
+                        <div class="instructions face" id="faceThreeBig"></div>
+                        <div class="instructions face" id="faceFourBig"></div>
+                        <div class="instructions face" id="faceFiveBig"></div>
+                        <div class="instructions face" id="faceSixBig"></div>
+                  </div>
+                  <span class="instructText"> When you are ready, Click the bottom of the screen. <br> (feet) </span>
+            </div>
+      </div>
+      <div class='hidden inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="instructions pause position">⏸</div>
+      </div>
+      <div class='hidden leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 5; cursor: url('/cursors/steps.webp'), pointer;" onclick="actuallyStart()"></div>
     </main>
 	<script src="script.js"></script>
   </body>

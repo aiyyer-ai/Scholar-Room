@@ -7,7 +7,7 @@ var boardStats = {
   gridGap: 0,
   backlineOrder: [`Rook`, `Knight`, `Bishop`, `Queen`, `King`, `Bishop`, `Knight`, `Rook`],
 
-  usedPieces: {"2,7": `whiteKing`, "6,1": `whiteRook`, "1,5" : `whiteBishop`, "3,6": `whiteknight`, "4,0": `blackKing`, "5,4": `blackQueen`, "2,2": `blackRook`, "4,1": `blackPawn`},
+  usedPieces: {"2,7": `whiteKing`, "6,1": `whiteKnight`, "1,5" : `whiteBishop`, "3,6": `whitePawn`, "4,0": `blackKing`, "5,4": `blackQueen`, "2,2": `blackRook`, "4,1": `blackPawn`},
 
   unusedPieces: [`whitePawn`, `whiteQueen`, `whiteBishop`, `whiteKnight`, `whiteRook`, `blackPawn`, `blackBishop`, `blackBishop`, `blackRook`, `blackKnight`, `blackKnight`],
   rowLabels: [`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`],

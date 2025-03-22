@@ -75,19 +75,19 @@ window.onload = (event) => {
 		}
 		window.sessionStorage.setItem(`wallInfo`, JSON.stringify(wallData));
 	} else {
-		if (!inventory.fedora) {
+            let takenFedora = JSON.parse(window.sessionStorage.getItem(`wallLightsDone`));
+		if (!takenFedora) {
 			wallData = JSON.parse(wallData);
 			currentCombination = [Number(wallData.paintingA), Number(wallData.paintingB), Number(wallData.paintingC), Number(wallData.paintingD)];
 			if(arraysEqual(currentCombination, correctCombination)) {
 				let chandelier = document.getElementById("chandelier");
-				chandelier.style.transform = `translate(0px, 400px)`
+				chandelier.style.transform = `translate(0px, 400px)`;
+                        window.sessionStorage.setItem(`wallLightsDone`, JSON.stringify(true));
 			}
 		} else {
 			let chandelier = document.getElementById("chandelier");
 			chandelier.style.transition = `none`;
 			chandelier.style.top = `0px`;
-			let fedora = document.getElementById("fedora");
-			fedora.style.visibility = "hidden";
 		}
 	}
 

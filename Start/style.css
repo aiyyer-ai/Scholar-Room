@@ -26,6 +26,80 @@ html {
 	pointer-events: none;
 }
 
+.inventory {
+	height: 15vh;
+	width: 100%;
+	top: -10vh;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	gap: 5vw;
+	z-index: 10;
+	background-color: lightslategrey;
+      /* background-image: url(./inventoryItems/inventoryBackground.webp);
+      background-size: 100% 100%; */
+	opacity: 50%;
+}
+
+.pause {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      border: 4px solid black;
+      background-color: rgba(245, 245, 245, 0.8);
+      top: calc(50% - 30px);
+      right: calc(7.5vh - 30px);
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      font-size: 40px;
+      color: black;
+}
+
+.unpauseButton {
+      border: none;
+      background-color: transparent;
+      font-size: 60px;
+      color: rgb(255, 255, 255, 0.8);
+      bottom: 30%;
+      font-family: 'Passion One';
+}
+
+.unpauseButton:hover {
+      color: rgb(255, 255, 255, 0.5);
+}
+
+.unpauseButton:active {
+      color: rgb(255, 255, 255, 0.2);
+}
+
+.pauseOverlay {
+      height: 100vh;
+      width: 100vw;
+      top: 0;
+      left: 0;
+      pointer-events: all;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0px 0px 500px 100px black;
+      backdrop-filter: blur(20px);
+      display: none;
+}
+
+.unpause {
+      font-family: 'Passion One';
+      font-size: 160px;
+      color: rgb(255, 255, 255, 0.8);
+      width: 1000px;
+      height: 400px;
+      top: calc(50% - 200px);
+      left: calc(50% - 500px);
+      z-index: 101;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+}
+
 .imgcontainer {
 	/* position: absolute; */
 /*    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));*/
@@ -103,4 +177,186 @@ html {
       left: calc(50% - 37.5px);
       text-align: center;
 
+}
+
+.notepad {
+      width: 300px;
+      height: 400px;
+      right: 225px;
+      top: 500px;
+      filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+}
+
+.notepadIMG {
+      z-index: 1;
+}
+
+.noteText {
+      color: black;
+      z-index: 5;
+      margin-top: 40px;
+      margin-left: 50px;
+      transform: rotate(4deg);
+      line-height: 31px;
+}
+
+.hidden {
+      display: none;
+}
+
+.instructBack {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(10px);
+      transition: 0.5s all ease-in;
+      opacity: 0;
+}
+
+.textHolder {
+      width: 90%;
+      height: 70%;
+      top: 15%;
+      left: 5%;
+      text-align: center;
+      filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+      perspective: 2000px;
+}
+
+.instructText {
+      color: white;
+      font-size: 50px;
+      font-family: 'Passion One';
+}
+
+.instructLargeText {
+      color: white;
+      font-size: 80px;
+      font-family: 'Passion One';
+}
+
+.arrowLeft {
+      height: 80px;
+      top: 415px;
+      left: 1010px;
+      filter: invert(100%);
+}
+
+.arrowRight {
+      height: 80px;
+      top: 415px;
+      left: 1200px;
+      filter: invert(100%);
+      transform: scaleX(-1);
+}
+
+.cow {
+      height: 60px;
+      top: 450px;
+      left: 900px;
+      animation: 4s spinInHead;
+      animation-iteration-count: infinite;
+      animation-timing-function: steps(4, end);
+}
+
+.cubeHolder {
+      transform-style: preserve-3d;
+      position: relative;
+      width: 60px;
+      height: 60px;
+      top: 30px;
+      left: 1350px;
+      animation: 4s spinAround;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+}
+
+.cubeHolderBig {
+      transform-style: preserve-3d;
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      top: 450px;
+      left: 1350px;
+      animation: 4s spinAround;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      animation-direction: reverse;
+}
+
+.face {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      backface-visibility: inherit;
+      background: radial-gradient(lightblue, lightslategrey);
+      transform-style: preserve-3d;
+}
+
+#faceOne {
+      transform: translateZ(30px);
+}
+
+#faceTwo {
+      transform: rotateY(90deg) translateZ(30px);
+}
+
+#faceThree {
+      transform: rotateX(90deg) translateZ(30px);
+}
+
+#faceFour {
+      transform: rotateY(-90deg) translateZ(30px);
+}
+
+#faceFive {
+      transform: rotateX(-90deg) translateZ(30px);
+}
+
+#faceSix {
+      transform: rotateY(180deg) translateZ(30px);
+}
+
+#faceOneBig {
+      transform: translateZ(40px);
+}
+
+#faceTwoBig {
+      transform: rotateY(90deg) translateZ(40px);
+}
+
+#faceThreeBig {
+      transform: rotateX(90deg) translateZ(40px);
+}
+
+#faceFourBig {
+      transform: rotateY(-90deg) translateZ(40px);
+}
+
+#faceFiveBig {
+      transform: rotateX(-90deg) translateZ(40px);
+}
+
+#faceSixBig {
+      transform: rotateY(180deg) translateZ(40px);
+}
+
+@keyframes spinAround {
+      0% { transform: rotate3d(1, 1, 1, 0deg); }
+      100% { transform: rotate3d(1, 1, 1, 360deg); }
+}
+
+@keyframes spinInHead {
+      0% { transform: rotate(0deg) }
+      100% { transform: rotate(360deg) }
+}
+
+@font-face {
+      font-family: 'Passion One';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/passionone/v18/PbynFmL8HhTPqbjUzux3JEuR9ls.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
