@@ -369,6 +369,14 @@ function makeBoard(gearSize) {
                   if (pegRows == sideGearRow && i == 0) {
                         generateSideGear(newPeg);
                   }
+                  if(!document.getElementById(`${i}Light`)) {
+                        let newLight = document.createElement(`div`);
+                        newLight.id = `${i}Light`;
+                        newLight.classList.add(`light`, `position`);
+                        gameArea.appendChild(newLight);
+                        newLight.style.top = (board.offsetTop + newLight.clientHeight) / 2 + "px";
+                        newLight.style.left = board.offsetLeft + (board.clientWidth / keys.length * i) + (board.clientWidth / keys.length / 2) - newLight.clientWidth / 2 + "px";
+                  }
             }
       }
       let pitchBar = document.createElement(`div`);
@@ -641,6 +649,15 @@ function dragElement(elmnt) {
             pos3 = e.clientX;
             pos4 = e.clientY;
             if (Array.from(e.target.classList).includes(`gear`)) {
+                  if(e.target.pegValue) {
+                        let rowLight = document.getElementById(`${e.target.pegValue.split(`,`)[0]}Light`);
+                        rowLight.count--;
+                        if(rowLight.count == 1) {
+                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        } else {
+                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        }
+                  }
                   e.target.pegValue = null;
                   let chainCheck = false;
                   if (e.target.alreadyChecked) {
@@ -710,6 +727,17 @@ function dragElement(elmnt) {
                         event.target.style.top = overPeg.offsetTop + overPeg.offsetParent.offsetTop + overPeg.offsetHeight / 2 - event.target.offsetHeight / 2 + "px";
                         event.target.style.left = overPeg.offsetLeft + overPeg.offsetParent.offsetLeft + overPeg.offsetWidth / 2 - event.target.offsetWidth / 2 + "px";
                         event.target.pegValue = overPeg.id;
+                        let rowLight = document.getElementById(`${overPeg.id.split(`,`)[0]}Light`);
+                        if(!rowLight.count) {
+                              rowLight.count = 0;
+                        }
+                        console.log(rowLight.count);
+                        if(rowLight.count == 0) {
+                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        } else {
+                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        }
+                        rowLight.count++;
                         gearMemory[event.target.id] = event.target.pegValue;
                         window.sessionStorage.setItem(`gearMemory`, JSON.stringify(gearMemory));
                   }

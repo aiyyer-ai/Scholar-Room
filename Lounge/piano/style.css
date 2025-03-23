@@ -136,6 +136,14 @@ html {
 	display: grid;
 }
 
+.light {
+      height: 30px;
+      width: 30px;
+      background-color: red;
+      background: radial-gradient(circle at center, red, darkred);
+      border-radius: 50%;
+}
+
 .pitchBar {
 	background-color: maroon;
 	height: 20px;

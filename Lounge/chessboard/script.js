@@ -550,7 +550,8 @@ function dragElement(elmnt) {
                         let otherPiece = pieceToCapture.filter((pieceDiv) => { return pieceDiv.id != elmnt.id })[0];
                         if (otherPiece) {
                               capture(otherPiece);
-                              if (elmnt.id == "whiteBishop" && otherPiece.id == "blackRook") {
+                              console.log(elmnt.id.toLowerCase(), otherPiece.id.toLowerCase());
+                              if (elmnt.id.toLowerCase() == "whitebishop" && otherPiece.id.toLowerCase() == "blackrook") {
                                     operateDrawer();
                               }
                         }
