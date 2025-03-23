@@ -1,5 +1,5 @@
 var SVGsLoaded = 0;
-var correctNumber = 71;
+var correctNumber = [70, 71, 72, 73, 74];
 //degrees Farenheit, I guess...
 
 var liquidColor;
@@ -1307,7 +1307,7 @@ function dragElement(elmnt) {
                                           });
                                     }
                               });
-                              if (totalTemp == correctNumber) {
+                              if (correctNumber.includes(totalTemp)) {
                                     let correctAnswer = true;
                                     Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
                                           if (pipeExit.style.backgroundColor == `red` || (Array.from(pipeExit.classList).includes(`pipeEnd`) && pipeExit.style.backgroundColor != `green`)) {

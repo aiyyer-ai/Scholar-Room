@@ -364,8 +364,13 @@ function dragElement(elmnt) {
                         placedItem.children[0].style.display = ``;
                         placedItem.children[1].style.display = `none`;
                   }
-                  placedItem.style.height = Math.min(500 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
-                  placedItem.style.width = placedItem.style.height.replace("px", "") * this.children[0].naturalWidth / this.children[0].naturalHeight + "px";
+                  if (placedItem.id.includes(`halfSlip`)) {
+                        placedItem.style.width = 1000 + "px";
+                        placedItem.style.height = placedItem.style.width.replace("px", "") * this.children[0].naturalHeight / this.children[0].naturalWidth + "px";
+                  } else {
+                        placedItem.style.height = Math.min(500 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
+                        placedItem.style.width = placedItem.style.height.replace("px", "") * this.children[0].naturalWidth / this.children[0].naturalHeight + "px";
+                  }
                   this.style.opacity = `50%`;
                   this.onPage = true;
                   placedItem.originalItem = this;

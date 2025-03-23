@@ -84,7 +84,6 @@ function checkPlates(mirrorCheck) {
 	}
 	if(passedSolution) {
 		let mirror = document.getElementById(`mirrorMovement`);
-		console.log(mirror);
 		mirror.style.transition = `all 1s ease-out`;
 		mirror.style.transformOrigin = `-40px -40px 0px`;
 		mirror.style.transform = `rotate3d(0, 1, 0, -60deg)`;
@@ -134,7 +133,6 @@ function happyRoomCheck() {
 		}
 	});	
 	if(correctItems) {
-		console.log(`all done`);
 		dispenseHalfSlip();
 		//activate half slip
 	}
@@ -156,6 +154,8 @@ function dispenseHalfSlip() {
 
 function lookAtFireplace() {
 	lookingAtFireplace = true;
+      let leaveDiv = document.getElementById(`leaveDiv`);
+      leaveDiv.style.cursor = "url('/cursors/turnAround.webp'), pointer";
 	let disappearingObjects = document.getElementsByClassName(`notFireplace`);
 	Array.from(disappearingObjects).forEach((object) => {
 		object.style.visibility = `hidden`;
@@ -193,6 +193,8 @@ function lookAtFireplace() {
 
 function lookAtMirror() {
 	lookingAtFireplace = false;
+      let leaveDiv = document.getElementById(`leaveDiv`);
+      leaveDiv.style.cursor = "url('/cursors/steps.webp'), pointer";
 	let fireplace = document.getElementById(`fireplace`);
 	fireplace.style.visibility = `hidden`;
 	let disappearingObjects = document.getElementsByClassName(`notFireplace`);
@@ -472,8 +474,13 @@ function dragElement(elmnt) {
 			placedItem.children[0].style.display = ``;
 			placedItem.children[1].style.display = `none`;
 		}
-		placedItem.style.height = Math.min(500 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
-		placedItem.style.width = placedItem.style.height.replace("px","") * this.children[0].naturalWidth / this.children[0].naturalHeight + "px";
+            if (placedItem.id.includes(`halfSlip`)) {
+                  placedItem.style.width = 1000 + "px";
+                  placedItem.style.height = placedItem.style.width.replace("px", "") * this.children[0].naturalHeight / this.children[0].naturalWidth + "px";
+            } else {
+                  placedItem.style.height = Math.min(500 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
+                  placedItem.style.width = placedItem.style.height.replace("px", "") * this.children[0].naturalWidth / this.children[0].naturalHeight + "px";
+            }
 		this.style.opacity = `50%`;
 		this.onPage = true;
 		placedItem.originalItem = this;
@@ -482,11 +489,9 @@ function dragElement(elmnt) {
 		placedItem.classList.add(`dragItem`);
 		placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
 		placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
-		console.log(event.clientX, event.clientY)
 		dragElement(placedItem);
 		elmnt = placedItem;
 		dragMouseDown(event);
-		console.log(placedItem);
 	}
   
 	function dragMouseDown(e) {

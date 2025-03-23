@@ -31,7 +31,7 @@
           <img src="./images/fireplaceLong.webp" class='fireplaceImg' height='100%' draggable='false'>
         </div>
         <div class='sofa position notFireplace' id="sofa">
-          <img src="./images/sofa.webp" class='sofaImg' height='100%' draggable='false' onclick="lookAtFireplace()">
+          <img src="./images/sofa.webp" class='sofaImg' height='100%' draggable='false' onclick="lookAtFireplace()" style="cursor: url('/cursors/turnAround.webp'), pointer;">
         </div>
         <div class='piano position fireplaceFlip'>
           <a onclick="setTimeSpent()" href="./piano/index.html">
@@ -102,7 +102,7 @@
         </div>
         <!-- end five movable objects for happy home -->
       </div>
-      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 5; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 5; cursor: url('/cursors/steps.webp'), pointer;" id="leaveDiv"></div>
       <script src="script.js"></script>
     </main>
   </body>

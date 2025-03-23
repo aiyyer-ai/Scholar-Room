@@ -342,40 +342,49 @@ function dragElement(elmnt) {
 	  }
 	}
 
-	function copyAndDrag(event) {
-		if(this.onPage) {
-			return;
-		}
-		let placedItem;
-		if(this.id == `pegs`) {
-			let nextPeg = Array.from(this.children).filter((peg) => { return !peg.onPage})[0];
-			placedItem = nextPeg.cloneNode(true);
-			placedItem.style.height = 100 + "px";
-			placedItem.style.width = 100 + "px";
-			nextPeg.style.opacity = `50%`;
-			nextPeg.onPage = true;
-			nextPeg.isPeg = true;
-			placedItem.originalItem = nextPeg;
-			if(Array.from(this.children).filter((peg) => { return !peg.onPage}).length == 0) {
-				this.onPage = true;
-			}
-		} else {
-			placedItem = this.cloneNode(true);
-			placedItem.style.height = 500 + "px";
-			placedItem.style.width = 500 + "px";
-			this.style.opacity = `50%`;
-			this.onPage = true;
-			placedItem.originalItem = this;
-		}
-		document.body.children[0].appendChild(placedItem);
-		placedItem.classList.remove(`inventoryItem`);
-		placedItem.classList.add(`dragItem`);
-		placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
-		placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
-		dragElement(placedItem);
-		elmnt = placedItem;
-		dragMouseDown(event);
-	}
+      function copyAndDrag(event) {
+            if (this.onPage) {
+                  return;
+            }
+            let placedItem;
+            if (this.id == `pegs`) {
+                  let nextPeg = Array.from(this.children).filter((peg) => { return !peg.onPage })[0];
+                  placedItem = nextPeg.cloneNode(true);
+                  placedItem.style.height = 100 + "px";
+                  placedItem.style.width = 100 + "px";
+                  nextPeg.style.opacity = `50%`;
+                  nextPeg.onPage = true;
+                  nextPeg.isPeg = true;
+                  placedItem.originalItem = nextPeg;
+                  if (Array.from(this.children).filter((peg) => { return !peg.onPage }).length == 0) {
+                        this.onPage = true;
+                  }
+            } else {
+                  placedItem = this.cloneNode(true);
+                  if (this.children.length > 1) {
+                        placedItem.children[0].style.display = ``;
+                        placedItem.children[1].style.display = `none`;
+                  }
+                  if (placedItem.id.includes(`halfSlip`)) {
+                        placedItem.style.width = 1000 + "px";
+                        placedItem.style.height = placedItem.style.width.replace("px", "") * this.children[0].naturalHeight / this.children[0].naturalWidth + "px";
+                  } else {
+                        placedItem.style.height = Math.min(500 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
+                        placedItem.style.width = placedItem.style.height.replace("px", "") * this.children[0].naturalWidth / this.children[0].naturalHeight + "px";
+                  }
+                  this.style.opacity = `50%`;
+                  this.onPage = true;
+                  placedItem.originalItem = this;
+            }
+            document.body.children[0].appendChild(placedItem);
+            placedItem.classList.remove(`inventoryItem`);
+            placedItem.classList.add(`dragItem`);
+            placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
+            placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
+            dragElement(placedItem);
+            elmnt = placedItem;
+            dragMouseDown(event);
+      }
   
 	function dragMouseDown(e) {
 	  e = e || window.event;
