@@ -405,7 +405,6 @@ function directSpotlight(button, painting, event) {
             spotlight.style.left = spotLocations[pegTurn][1] - spotlight.clientWidth / 2 + "px";
             currentCombination[(painting.id.replace("painting", "").charCodeAt(0) - 65)] = pegTurn;
             let takenFedora = JSON.parse(window.sessionStorage.getItem(`wallLightsDone`));
-            console.log(takenFedora);
             if (arraysEqual(currentCombination, correctCombination) && !takenFedora) {
                   setTimeSpent();
                   setInterval(() => {
@@ -422,23 +421,22 @@ function onPin(peg, circle) {
       }
       circle.style.position = "relative";
       circle.appendChild(peg);
-      peg.style.top = `-${peg.clientHeight - circle.clientHeight / 2 - 5}px`;
-      peg.style.left = `-${peg.clientWidth / 2 - circle.clientWidth / 2 + 5}px`;
-      peg.style.transformOrigin = "50% 95%";
+      peg.style.top = `-${peg.clientHeight - circle.clientHeight / 2 - 20}px`;
+      peg.style.left = `-${peg.clientWidth / 2 - circle.clientWidth / 2 + 3}px`;
+      peg.style.transformOrigin = "50% 80%";
       peg.style.transform = null;
       peg.onmousedown = false;
-      directSpotlight(circle, document.getElementById(`painting${circle.id.replace("button", "")}`), { which: 3 });
       let wallData = JSON.parse(window.sessionStorage.getItem(`wallInfo`));
       if (wallData[`painting${circle.id.slice(-1)}`] == -1) {
             removeItemFromInv(peg);
       }
       wallData[`painting${circle.id.slice(-1)}`] = 0;
       window.sessionStorage.setItem(`wallInfo`, JSON.stringify(wallData));
+      directSpotlight(circle, document.getElementById(`painting${circle.id.replace("button", "")}`), { which: 3 });
 }
 
 function rotatePeg(button) {
       let slices = 8;
-      console.log(button.children[0].currentRotation);
       if (!button.children[0].currentRotation) {
             button.children[0].currentRotation = 0;
       } else if (button.children[0].currentRotation >= (1 / slices) * (slices - 1)) {
