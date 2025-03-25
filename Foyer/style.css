@@ -67,7 +67,7 @@ html {
 .saveButton {
       top: 30px;
       right: 50px;
-      font-size: 40px;
+      font-size: 40px !important;
 }
 
 .unpauseButton {
