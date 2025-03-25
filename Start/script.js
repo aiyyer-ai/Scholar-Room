@@ -7,11 +7,44 @@ window.onload = (event) => {
       let nametag = document.getElementById(`nametag`);
       nametag.style.width = nametag.children[0].clientWidth + "px";
 
+      const fileSelect = document.getElementById("fileSelect");
+      const fileElem = document.getElementById("fileElem");
+      
+      fileSelect.addEventListener(
+        "click",
+        (e) => {
+          if (fileElem) {
+            fileElem.click();
+          }
+        },
+        false,
+      );      
+
+      fileElem.addEventListener("change", handleFiles, false);
+
 }
 
 function acceptName() {
       let playerName = document.getElementById(`playerName`);
       window.sessionStorage.setItem(`playerName`, JSON.stringify(playerName.value));
+}
+
+function handleFiles() {
+      const dataFile = this.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        let pastSessionData = JSON.parse(reader.result);
+        let lastRoom = pastSessionData.lastRoom;
+        delete pastSessionData.lastRoom;
+        for([key, value] of Object.entries(pastSessionData)) {
+            window.sessionStorage.setItem(key, value);
+        }
+        window.location.href = lastRoom;
+      };
+      reader.onerror = () => {
+        return;
+      };
+      reader.readAsText(dataFile);
 }
 
 function startGame() {

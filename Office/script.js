@@ -101,7 +101,6 @@ window.onload = (event) => {
 }
 
 function checkPlates(mirrorCheck) {
-	console.log(mirrorCheck);
 	let passedSolution = true;
 	let correctHolesOffice = {
 	  holeTopLeft: [4, 90],
@@ -146,6 +145,20 @@ function halfSlipTrigger(bookshelf) {
 }
 
 var pauseTimeStart;
+
+function save() {
+      let jsonData = {...window.sessionStorage};
+      jsonData.lastRoom = `${window.location.pathname}`;
+      function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+      }
+      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
+}
+
 
 function pause() {
       setTimeSpent();
@@ -396,7 +409,6 @@ function dragElement(elmnt) {
 		dragElement(placedItem);
 		elmnt = placedItem;
 		dragMouseDown(event);
-		console.log(placedItem);
 	}
   
 	function dragMouseDown(e) {
@@ -510,7 +522,9 @@ function toggleCamera() {
 	let camera = document.getElementById("tripod");
 	let table = document.getElementById('tableHolder');
 	let cameraCrop = document.getElementById('cameraCrop');
+      let leaveDiv = document.getElementById(`leave`);
 	if (camera.children[0].src.includes(`tripod.webp`)) {
+            leaveDiv.style.visibility = `hidden`;
 		//Camera Change
 		camera.firstElementChild.src = "./images/camera.webp";
 		camera.classList.remove("tripod");
@@ -518,7 +532,6 @@ function toggleCamera() {
 		camera.style.height = window.innerHeight * 2 + "px";
 		camera.style.top = -(window.innerHeight / 1.25) + "px";
 		camera.style.left = -(window.innerWidth / 20) + "px";
-		console.log(camera);
 		//Add Camera 'Viewport' Crop
 		cameraCrop.style.display = "inline";
 		cameraCrop.style.width = `${camera.clientWidth * (228/498)}px`;
@@ -526,7 +539,6 @@ function toggleCamera() {
 		cameraCrop.style.top = 93 + "px"
 		let cropBounds = cameraCrop.getBoundingClientRect();
 		camera.cropBounds = cropBounds;
-		console.log(cameraCrop);
 		//Hiding Elements
 		table.style.visibility = "hidden";
 		Array.from(document.querySelectorAll(".cup")).forEach((cup) => {
@@ -549,6 +561,7 @@ function toggleCamera() {
 		}
 	}
 	else if (camera.children[0].src.includes(`camera.webp`)) {
+            leaveDiv.style.visibility = `visible`;
 		//Camera Change
 		camera.firstElementChild.src = "./images/tripod.webp"
 		camera.classList.remove("cameraClose");

@@ -40,6 +40,20 @@ var correctSolution = [1, -2, 1, -6, -2, -4, 1, 5, 3, 1];
 
 var pauseTimeStart;
 
+function save() {
+      let jsonData = {...window.sessionStorage};
+      jsonData.lastRoom = `${window.location.pathname}`;
+      function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+      }
+      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
+}
+
+
 function pause() {
       setTimeSpent();
       pauseTimeStart = Date.now();

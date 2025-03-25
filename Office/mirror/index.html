@@ -10,9 +10,10 @@
   </head>
   <body>
     <main>
-      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
+      <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 1; cursor: url('/cursors/steps.webp'), pointer;"></div>
       <div class="pauseOverlay position" id="pauseOverlay">
-            <div class="unpause position">PAUSED <br> <button class="unpauseButton position" onclick="unpause()">UNPAUSE?</button></div>
+            <button class="unpauseButton saveButton position" onclick="save()">SAVE?</button>
+            <div class="unpause position">PAUSED <br> <button class="unpauseButton unpauseButt position" onclick="unpause()">UNPAUSE?</button></div>
       </div>
       <div class='inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
             <div class="pause position" onclick="pause()">⏸</div></div>

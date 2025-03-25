@@ -147,6 +147,19 @@ var batteryStorageToChange;
 // var totalDepth = 6;
 // var dotsAtDepth = {"0":2,"1":3,"2":4,"3":3,"4":4,"5":3,"6":2,"7":0};
 
+// firstOffset = true;
+// randomize = [false, 6];
+// dotsAtDepth = {
+//       "0": [1, 0, '0'],
+//       "1": ['0', '0', 0],
+//       "2": [0, 0, 0, 0],
+//       "3": [0, 0, 0],
+//       "4": [0, '0', '0', 0],
+//       "5": ['0', 0, 0],
+//       "6": [1, 0, 0],
+//       "7": [1, 0],
+// };
+
 //End Third State
 
 var timeStart;
@@ -155,6 +168,10 @@ window.onload = (event) => {
       timeStart = Date.now();
       //end time recording code
       //in case I want to make something run at launch
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventory`);
       if (!inventory || Object.keys(JSON.parse(inventory)).includes(`pegs`)) {
@@ -176,17 +193,15 @@ window.onload = (event) => {
       let nextDiv = document.getElementById('nextPuzzle');
       switch (queryString.replace("?", "")) {
             case `3`:
-                  firstOffset = true;
-                  randomize = [false, 6];
+                  firstOffset = false;
                   dotsAtDepth = {
-                        "0": [1, 0, '0'],
-                        "1": ['0', '0', 0],
-                        "2": [0, 0, 0, 0],
-                        "3": [0, 0, 0],
-                        "4": [0, '0', '0', 0],
-                        "5": ['0', 0, 0],
-                        "6": [1, 0, 0],
-                        "7": [1, 0],
+                        "0": [1, 0],
+                        "1": [1, '0', '0'],
+                        "2": [0, 0, 0],
+                        "3": [0, '0', '0', 0],
+                        "4": [0, 0, 0],
+                        "5": [1, 0, '0'],
+                        "6": [1, 0],
                   };
                   storageToChange = `voltage3`;
                   batteryStorageToChange = `voltage3BatteryLocation`;
@@ -309,6 +324,20 @@ function loadCode() {
 }
 
 var pauseTimeStart;
+
+function save() {
+      let jsonData = {...window.sessionStorage};
+      jsonData.lastRoom = `${window.location.pathname}`;
+      function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+      }
+      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
+}
+
 
 function pause() {
       setTimeSpent();
@@ -520,8 +549,8 @@ function mouseClick(event) {
       else if (event.button) {
             rightclick = (event.button == 2);
       }
-      if (rightclick) {// true or false
-            // resetGrid(rightclick);
+      if (rightclick) {
+            resetGrid(rightclick);
       }
 }
 

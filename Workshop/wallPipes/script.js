@@ -117,6 +117,20 @@ window.onload = (event) => {
 
 var pauseTimeStart;
 
+function save() {
+      let jsonData = {...window.sessionStorage};
+      jsonData.lastRoom = `${window.location.pathname}`;
+      function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+      }
+      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
+}
+
+
 function pause() {
       setTimeSpent();
       pauseTimeStart = Date.now();
@@ -364,6 +378,15 @@ function uploadButton() {
 }
 
 function uploadLiquids() {
+      let noneActive = true;
+      for ([key, value] of Object.entries(activePaths)) {
+            if(activePaths[key].filter((value) => { return value != undefined })[0]) {
+                  noneActive = false;
+            }
+      }
+      if(!noneActive) {
+            return;
+      }
       let workshopData =  window.sessionStorage.getItem(`workshopData`);
       if(!workshopData) {
             workshopData = {
@@ -382,6 +405,28 @@ function uploadLiquids() {
             workshopData[`pipes`] = false;
             window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
       }
+      let usedEndPipes = Array.from(boxHolder.children).filter((child) => {
+            return child.children[0].style.filter;
+      });
+      let uploadInterval = setInterval(() => {
+            if(usedEndPipes.length == 0) {
+                  return clearInterval(uploadInterval);
+            }
+            let pipesToShift = [...usedEndPipes];
+            let lastFilter = null;
+            while(pipesToShift.length > 0) {
+                  let lastPipe = pipesToShift.pop();
+                  if(lastFilter) {
+                        let tempFilter = lastPipe.firstChild.style.filter;
+                        lastPipe.firstChild.style.filter = lastFilter;
+                        lastFilter = tempFilter;
+                  } else {
+                        lastFilter = lastPipe.firstChild.style.filter;
+                        lastPipe.firstChild.style.filter = ``;
+                  }
+            }
+            usedEndPipes.pop();
+      }, 200);
 }
 
 function resetButton() {
@@ -1061,14 +1106,21 @@ function changeBoxHolderPosition() {
 }
 
 function runLiquids() {
-      if (timeoutID) {
-            resetLiquids();
-      }
+      let usedEndPipes = Array.from(boxHolder.children).filter((child) => {
+            return child.children[0].style.filter;
+      });
       let emptyPath = true;
+      let noneActive = true;
       for ([key, value] of Object.entries(activePaths)) {
             if (activePaths[key].filter((value) => { return value != undefined })[0] || futurePaths[key].filter((value) => { return value != undefined })[0] || pastPaths[key].filter((value) => { return value != undefined })[0]) {
                   emptyPath = false;
             }
+            if(activePaths[key].filter((value) => { return value != undefined })[0]) {
+                  noneActive = false;
+            }
+      }
+      if (timeoutID || (usedEndPipes.length > 0 && noneActive)) {
+            resetLiquids();
       }
       if (emptyPath) {
             if (this.storedGraph) {
@@ -1150,6 +1202,7 @@ function initializeLiquids(storedGraphs) {
 function liquidStep(direction) {
       if (direction) {
             clearTimeout(timeoutID);
+            timeoutID = undefined;
       }
       let continueTimeout = false;
       let gridEmpty = true;

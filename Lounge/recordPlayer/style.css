@@ -42,6 +42,17 @@ html {
       color: black;
 }
 
+
+.unpauseButt {
+      bottom: 30%;
+}
+
+.saveButton {
+      top: 30px;
+      right: 50px;
+      font-size: 40px;
+}
+
 .unpauseButton {
       border: none;
       background-color: transparent;

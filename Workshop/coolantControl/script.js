@@ -1,6 +1,12 @@
 var SVGsLoaded = 0;
-var correctNumber = [70, 71, 72, 73, 74];
+var correctNumber = [32];
 //degrees Farenheit, I guess...
+
+//var allNumbers = testNumbers();
+var allNumbers = [ 8, 10, 14, 19, 7, 9, 21, 12, 20, 18 ];
+var correctPiecePositions = [1, 6, 8];
+var correctNumbers = allNumbers.slice(0, 3);
+allNumbers.splice(0, 3);
 
 var liquidColor;
 
@@ -37,9 +43,139 @@ window.onload = (event) => {
       pieceDisplay(board);
       addIntersections(board);
       liquidColor = getComputedStyle(document.getElementsByClassName('pipeStart')[0]).getPropertyValue('background-color');
+      flowLiquid();
+}
+
+function testNumbers() {
+      let totalInputs = 10;
+      let minGroupSize = 3;
+      let maxGroupSize = 4;
+      let minNumSize = 7;
+      let maxNumSize = 48;
+      let goalNumber = 32;
+
+      let startNumberList = pickGoalNumbers(minGroupSize);
+      for( i = 0; i < totalInputs - minGroupSize; i++) {
+            let potentialNumber = minNumSize;
+            while(startNumberList.indexOf(potentialNumber) != -1) {
+                  potentialNumber++;
+            }
+            startNumberList = checkApplicableNumber(startNumberList, potentialNumber);
+      }
+
+      return startNumberList;
+
+      function checkApplicableNumber(array, number) {
+            let potentialNewArray = [...array];
+            potentialNewArray.push(number);
+            let allPairs = arrayCreate(potentialNewArray, minGroupSize);
+            let allGoalPairs = checkArray(allPairs);
+            if(allGoalPairs.length > 1) {
+                  number++;
+                  while(array.indexOf(number) != -1) {
+                        number++;
+                  }
+                  return checkApplicableNumber(array, number);
+            } else {
+                  return potentialNewArray;
+            }
+            
+      }
+
+      function pickGoalNumbers(numberCount) {
+            let remainingNumber = goalNumber;
+            let goalNumberList = [];
+            for( i = 0; i < numberCount - 1; i++) {
+                  let goalNumber = Math.floor(Math.random() * ((remainingNumber - (numberCount - i) * minNumSize) - minNumSize + 1) + minNumSize);
+                  while(goalNumberList.indexOf(goalNumber) != -1) {
+                        goalNumber = Math.floor(Math.random() * ((remainingNumber - (numberCount - i) * minNumSize) - minNumSize + 1) + minNumSize);
+                  }
+                  remainingNumber -= goalNumber;
+                  goalNumberList.push(goalNumber);
+            }
+            goalNumberList.push(remainingNumber);
+            return goalNumberList;
+      }
+
+      // let currentNumbers = Array(totalInputs).fill(0).map(function (x, i) { return i + minNumSize; });
+
+      // loopTilDone(currentNumbers);
+
+      // function loopTilDone(numberArray) {
+
+      //       let allPairs = arrayCreate(numberArray, minGroupSize);
+      //       let allGoalPairs = checkArray(allPairs);
+      //       if(allGoalPairs.length == 1) {
+      //             return numberArray;
+      //       } else {
+      //             //change numbers
+      //             return loopTilDone(numberArray);
+      //       }
+
+      // }
+
+      function checkArray(array) {
+            let allGoals = [];
+            array.forEach((group) => {
+                  let groupSum = group.reduce((partialSum, a) => partialSum + a, 0);
+                  if(groupSum == goalNumber) {
+                        allGoals.push(group);
+                  }
+            });
+            return allGoals;
+      }
+
+      function arrayCreate(array, size) {
+            var result = [];
+            array.forEach(function iter(parts) {
+                return function (v) {
+                    var temp = parts.concat(v);
+                    if (parts.includes(v)) {
+                        return;
+                    }
+                    if (temp.length === size) {
+                        let alreadyHas = false;
+                        result.forEach((group) => {
+                              let sortedGroup = [...group];
+                              sortedGroup.sort(function(a, b) {
+                                    return a - b;
+                              });
+                              let sortedTemp = [...temp];
+                              sortedTemp.sort(function(a, b) {
+                                    return a - b;
+                              });
+                              if(arraysEqual(sortedGroup, sortedTemp)) {
+                                    alreadyHas = true;
+                              }
+                        });
+                        if(!alreadyHas) {
+                              result.push(temp);
+                        }
+                        return;
+                    }
+                    array.forEach(iter(temp));
+                }
+            }([]));
+            return result;
+      }
+
 }
 
 var pauseTimeStart;
+
+function save() {
+      let jsonData = {...window.sessionStorage};
+      jsonData.lastRoom = `${window.location.pathname}`;
+      function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+      }
+      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
+}
+
 
 function pause() {
       setTimeSpent();
@@ -365,18 +501,18 @@ function pieceDisplay(board) {
       let thermometerBase = document.createElement(`div`);
       thermometerBase.classList.add(`thermometerBase`);
       gameArea.appendChild(thermometerBase);
-      thermometerBase.style.width = hexSize * .4 + `px`;
-      thermometerBase.style.height = hexSize * .4 + 'px';
+      thermometerBase.style.width = hexSize * .5 + `px`;
+      thermometerBase.style.height = hexSize * .5 + 'px';
       thermometerBase.style.left = pieceHolderLeft.getBoundingClientRect().right + (board.getBoundingClientRect().left - pieceHolderLeft.getBoundingClientRect().right - thermometerBase.clientWidth) / 2 + `px`;
-      thermometerBase.style.top = (window.innerHeight - 576) / 2 + 576 - thermometerBase.clientHeight + `px`;
+      thermometerBase.style.top = (window.innerHeight - 576) / 2 + 576 - thermometerBase.clientHeight / 2 + `px`;
       thermometerBase.style.zIndex = -2;
       let thermometer = document.createElement(`div`);
       thermometer.classList.add(`thermometer`);
       thermometer.id = `thermometer`;
       thermometerBase.appendChild(thermometer);
-      thermometer.style.width = hexSize * .2 + `px`;
+      thermometer.style.width = hexSize * .25 + `px`;
       thermometer.style.height = 576 + 'px';
-      thermometer.style.bottom = hexSize * .4 - 5 + `px`;
+      thermometer.style.bottom = hexSize * .5 - 5 + `px`;
       let thermometerBar = document.createElement(`div`);
       thermometerBar.classList.add(`thermometerBar`);
       thermometerBar.id = `thermometerBar`;
@@ -387,6 +523,22 @@ function pieceDisplay(board) {
       thermometer.appendChild(thermometerScale);
       thermometerScale.style.zIndex = 2;
       thermometer.style.zIndex = -1;
+
+      addSVG(`1`, thermometerBase, (div) => {
+            div.style.filter = `invert(100%)`;
+            div.style.width = 60 + "%";
+            div.style.height = div.clientWidth / thermometerBase.clientHeight * 100 + "%";
+            div.style.top = (thermometerBase.clientHeight - div.clientHeight) / 2 + "px";
+            div.style.left = (thermometerBase.clientWidth - div.clientWidth) / 2 + "px";
+            div.firstChild.onload = null;
+            div.style.visibility = `hidden`;
+            div.id = `thermometerNumber`;
+            SVGsLoaded++;
+            if(SVGsLoaded == tileSystem.length + 1) {
+                  placePiecesOnBoard();
+            }
+      });
+
 }
 
 var tileSystem = [
@@ -796,7 +948,12 @@ function generatePiecesFromSystem(parent) {
             newShape.classList.add(`selection`);
             newShape.style.width = miniHexSize * 4 * multiplier + "px";
             newShape.id = tileSystem.indexOf(piece);
-            newShape.numberID = piece.number;
+            if(correctPiecePositions.includes(Number(newShape.id))) {
+                  newShape.numberID = correctNumbers.pop();
+            } else {
+                  newShape.numberID = allNumbers.pop();
+            }
+            //newShape.numberID = piece.number;
             parent.appendChild(newShape);
             let hexNum = 0;
             let top, bottom, left, right;
@@ -829,7 +986,7 @@ function generatePiecesFromSystem(parent) {
                                     top: (hexBounds.top - newShape.offsetTop - parent.offsetTop),
                                     left: (hexBounds.left - newShape.offsetLeft - parent.offsetLeft)
                               };
-                              addSVG(piece.number, hex, (div) => {
+                              addSVG(newShape.numberID, hex, (div) => {
                                     div.style.filter = `invert(100%)`;
                                     div.style.width = 60 + "%";
                                     div.style.height = div.clientWidth / hex.clientHeight * 100 + "%";
@@ -837,7 +994,7 @@ function generatePiecesFromSystem(parent) {
                                     div.style.left = 50 - Math.ceil(div.clientWidth / (hex.clientWidth * 2) * 100) + "%";
                                     newShape.numberDisplay = div;
                                     SVGsLoaded++;
-                                    if(SVGsLoaded == tileSystem.length) {
+                                    if(SVGsLoaded == tileSystem.length + 1) {
                                           placePiecesOnBoard();
                                     }
                               });
@@ -938,6 +1095,47 @@ function addSVG(src, parentElement, imgCallback) {
                   imgCallback(newDiv);
             }
       }
+}
+
+function flowLiquid() {
+
+      Array.from(document.querySelectorAll(`.intersection`)).forEach((intersection) => {
+            if(intersection.firstChild.style.backgroundColor != `black`) {
+                  intersection.firstChild.style.backgroundColor = `whitesmoke`;
+            }
+      });
+
+      Array.from(document.querySelectorAll(`.pipeStart`)).forEach((pipeStart) => {
+            let touchingIntersection = overlayCheck(pipeStart, `intersection`);
+            if (touchingIntersection[0] && touchingIntersection[0].firstChild.style.backgroundColor == `whitesmoke`) {
+                  runLiquid(touchingIntersection[0].firstChild);
+            }
+
+            function runLiquid(actualIntersection) {
+                  actualIntersection.parentElement.style.opacity = `100%`;
+                  actualIntersection.style.backgroundColor = liquidColor;
+                  let nextIntersections = overlayCheck(actualIntersection, `actualIntersection`).filter((result) => {
+                        return result.style.backgroundColor == `whitesmoke`;
+                  });
+                  nextIntersections.forEach(runLiquid);
+            }
+
+            Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
+                  let touchingIntersection = overlayCheck(pipeExit, `intersection`);
+                  if (touchingIntersection[0] && touchingIntersection[0].firstChild.style.backgroundColor == liquidColor) {
+                        if(Array.from(pipeExit.classList).includes(`pipeEnd`)) {
+                              pipeExit.style.backgroundColor = `green`;
+                        } else if(Array.from(pipeExit.classList).includes(`pipeStart`)) {
+                              pipeExit.style.backgroundColor = liquidColor;
+                        } else {
+                              pipeExit.style.backgroundColor = `red`;
+                        }
+                  } else {
+                        pipeExit.style.backgroundColor = ``;
+                  }
+            });
+
+      });
 }
 
 function dragElement(elmnt) {
@@ -1048,6 +1246,7 @@ function dragElement(elmnt) {
                                     boardHex.style.backgroundColor = '';
                               } else {
                                     boardHex.style.opacity = '0%';
+                                    boardHex.firstChild.style.backgroundColor = `whitesmoke`;
                               }
                         }
                         elmnt.parentElement.classList.remove(`onBoard`);
@@ -1060,7 +1259,19 @@ function dragElement(elmnt) {
                               totalTemp += pieceNumber;
                         });
                         let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
-                        thermometerBar.style.height = baseHeight + (totalTemp * 5) + "px";
+                        thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
+                        let thermometerNumber = document.getElementById(`thermometerNumber`);
+                        if(totalTemp == 0) {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
+                              thermometerNumber.style.visibility = `hidden`;
+                        } else if(totalTemp > 48) {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
+                              thermometerNumber.style.visibility = `hidden`;
+                        } else {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/${totalTemp}.svg`;
+                              thermometerNumber.style.visibility = `visible`;
+                        }
+                        
 
                         let piecePositions = window.sessionStorage.getItem(`temperaturePieces`);
                         if(!piecePositions) {
@@ -1075,17 +1286,6 @@ function dragElement(elmnt) {
                         if(piecePositions[elmnt.parentElement.id]) {
                               piecePositions[elmnt.parentElement.id] = false;
                               window.sessionStorage.setItem(`temperaturePieces`, JSON.stringify(piecePositions));
-                              Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeEnd) => {
-                                    if (pipeEnd.style.backgroundColor) {
-                                          pipeEnd.style.backgroundColor = '';
-                                    }
-                              });
-                              Array.from(document.querySelectorAll(`.intersection`)).forEach((intersection) => {
-                                    if (intersection.firstChild.style.backgroundColor) {
-                                          intersection.style.opacity = `0%`;
-                                          intersection.firstChild.style.backgroundColor = ``;
-                                    }
-                              });
                         }
 
                         let workshopData =  window.sessionStorage.getItem(`workshopData`);
@@ -1101,6 +1301,8 @@ function dragElement(elmnt) {
                         }
                         workshopData[`temperature`] = false;
                         window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
+
+                        flowLiquid();
 
                   }
             }
@@ -1247,6 +1449,7 @@ function dragElement(elmnt) {
                                                       }
                                                       if (showIntersection) {
                                                             intersection.style.opacity = `100%`;
+                                                            intersection.firstChild.style.backgroundColor = 'black';
                                                             elmnt.parentElement.onBoard.push(intersection);
                                                       }
                                                 }
@@ -1263,9 +1466,23 @@ function dragElement(elmnt) {
                               totalTemp += pieceNumber;
                         });
                         let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
-                        thermometerBar.style.height = baseHeight + (totalTemp * 5) + "px";
+                        thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
+                        let thermometerNumber = document.getElementById(`thermometerNumber`);
+                        if(totalTemp == 0) {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
+                              thermometerNumber.style.visibility = `hidden`;
+                        } else if(totalTemp > 48) {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
+                              thermometerNumber.style.visibility = `hidden`;
+                        } else {
+                              thermometerNumber.firstChild.src = `./images/SVGNumbers/${totalTemp}.svg`;
+                              thermometerNumber.style.visibility = `visible`;
+                        }
 
                         //lets check if everything is snapped
+
+                        flowLiquid();
+
                         let boardFilled = true;
                         Array.from(document.querySelectorAll(`.slot`)).forEach((boardHex) => {
                               let centerLocation = Object.create(locationObject);
@@ -1278,35 +1495,6 @@ function dragElement(elmnt) {
                               }
                         });
                         if (boardFilled) {
-                              Array.from(document.querySelectorAll(`.pipeStart`)).forEach((pipeStart) => {
-                                    let touchingIntersection = overlayCheck(pipeStart, `intersection`);
-                                    if (touchingIntersection[0] && touchingIntersection[0].style.opacity == `0`) {
-                                          runLiquid(touchingIntersection[0].firstChild);
-
-                                          function runLiquid(actualIntersection) {
-                                                actualIntersection.parentElement.style.opacity = `100%`;
-                                                actualIntersection.style.backgroundColor = liquidColor;
-                                                let nextIntersections = overlayCheck(actualIntersection, `actualIntersection`).filter((result) => {
-                                                      return result.parentElement.style.opacity == 0;
-                                                });
-                                                nextIntersections.forEach(runLiquid);
-                                          }
-
-                                          Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
-                                                let touchingStart = overlayCheck(pipeExit, `intersection`);
-                                                if (touchingStart[0] && touchingStart[0].firstChild.style.backgroundColor == liquidColor) {
-                                                      if(Array.from(pipeExit.classList).includes(`pipeEnd`)) {
-                                                            pipeExit.style.backgroundColor = `green`;
-                                                      } else if(Array.from(pipeExit.classList).includes(`pipeStart`)) {
-                                                            pipeExit.style.backgroundColor = liquidColor;
-                                                      } else {
-                                                            pipeExit.style.backgroundColor = `red`;
-                                                      }
-                                                      
-                                                }
-                                          });
-                                    }
-                              });
                               if (correctNumber.includes(totalTemp)) {
                                     let correctAnswer = true;
                                     Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
