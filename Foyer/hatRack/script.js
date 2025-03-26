@@ -678,7 +678,7 @@ function applyGravity(div, stopPoint) {
                   div.timesBounced = 0;
                   div.speedY = 0;
                   if (div.id.includes(`pegs`)) {
-                        takeItem(div)
+                        takeItem(div);
                   }
             }
       } else {
