@@ -327,6 +327,9 @@ function loadImages() {
             if (imgContainer.id == 6) {
                   imgContainer.style.width = `800px`;
             }
+            if (imgContainer.id == 7) {
+                  imgContainer.style.width = `300px`;
+            }
             imgContainer.style.top = topPosition + `px`;
             imgContainer.style.left = leftPosition + `px`;
             console.log(imgContainer);
