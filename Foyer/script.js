@@ -287,8 +287,8 @@ function enterInventoryEntry(item, itemValue) {
 		if(item == "pegs") {
 			let pegs = document.createElement(`div`);
 			pegs.id = item;
-			pegs.style.width = inventoryDiv.clientHeight + "px";
-			pegs.style.height = inventoryDiv.clientHeight + "px";
+			pegs.style.width = inventoryDiv.clientHeight * 0.8 + "px";
+			pegs.style.height = inventoryDiv.clientHeight * 0.8 + "px";
 			pegs.classList.add(`inventoryItem`);
 			dragElement(pegs);
 			inventoryDiv.appendChild(pegs);
@@ -301,7 +301,8 @@ function enterInventoryEntry(item, itemValue) {
 					imgDiv.style.transform = `rotate(-120deg)`;
 					imgDiv.style.height = pegs.clientWidth * 0.70 + "px";
 					imgDiv.style.left = 100 - 40 * imgNum + "px";
-					imgDiv.style.top = -27 + 20 * imgNum + "px";
+					// imgDiv.style.top = -37 + 20 * imgNum + "px";
+                              imgDiv.style.top = `calc(1vh - 44px + ${20 * imgNum}px)`;
 					changeItemVisibility(item, itemValue);
 					appendFixer++;
 					if(appendFixer == 4) {

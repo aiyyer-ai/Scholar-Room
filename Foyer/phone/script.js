@@ -192,39 +192,40 @@ function enterInventoryEntry(item, itemValue) {
       let inventoryElement = Array.from(inventoryDiv.children).filter((inventoryItem) => { return inventoryItem.id == item })[0];
       if (!inventoryElement) {
             if (item == "pegs") {
-                  let pegs = document.createElement(`div`);
-                  pegs.id = item;
-                  pegs.style.width = inventoryDiv.clientHeight + "px";
-                  pegs.style.height = inventoryDiv.clientHeight + "px";
-                  pegs.classList.add(`inventoryItem`);
-                  dragElement(pegs);
-                  inventoryDiv.appendChild(pegs);
-                  let appendFixer = 0;
-                  for (i = 1; i <= 4; i++) {
-                        let imgNum = i;
-                        addInv(`${item}`, pegs, (imgDiv) => {
-                              imgDiv.style.position = `relative`;
-                              imgDiv.id = `${imgNum}peg`;
-                              imgDiv.style.transform = `rotate(-120deg)`;
-                              imgDiv.style.height = pegs.clientWidth * 0.70 + "px";
-                              imgDiv.style.left = 100 - 40 * imgNum + "px";
-                              imgDiv.style.top = -27 + 20 * imgNum + "px";
-                              changeItemVisibility(item, itemValue);
-                              appendFixer++;
-                              if (appendFixer == 4) {
-                                    sortPegs(pegs);
-                              }
-                        });
-                  }
+			let pegs = document.createElement(`div`);
+			pegs.id = item;
+			pegs.style.width = inventoryDiv.clientHeight * 0.8 + "px";
+			pegs.style.height = inventoryDiv.clientHeight * 0.8 + "px";
+			pegs.classList.add(`inventoryItem`);
+			dragElement(pegs);
+			inventoryDiv.appendChild(pegs);
+			let appendFixer = 0;
+			for(i = 1; i <= 4; i++) {
+				let imgNum = i;
+				addInv(`${item}`, pegs, (imgDiv) => {
+					imgDiv.style.position = `relative`;
+					imgDiv.id = `${imgNum}peg`;
+					imgDiv.style.transform = `rotate(-120deg)`;
+					imgDiv.style.height = pegs.clientWidth * 0.70 + "px";
+					imgDiv.style.left = 100 - 40 * imgNum + "px";
+					// imgDiv.style.top = -37 + 20 * imgNum + "px";
+                              imgDiv.style.top = `calc(1vh - 44px + ${20 * imgNum}px)`;
+					changeItemVisibility(item, itemValue);
+					appendFixer++;
+					if(appendFixer == 4) {
+						sortPegs(pegs);
+					}
+				});				
+			}
 
-                  function sortPegs(pegHolder) {
-                        let correctOrder = Array.from(pegHolder.children).sort(function (a, b) {
-                              return Number(Array.from(a.id)[0]) - Number(Array.from(b.id)[0]);
-                        });
-                        for (peg of correctOrder) {
-                              pegHolder.appendChild(peg);
-                        }
-                  }
+			function sortPegs(pegHolder) {
+				let correctOrder = Array.from(pegHolder.children).sort(function(a, b) {
+					return Number(Array.from(a.id)[0]) - Number(Array.from(b.id)[0]);
+				});
+				for (peg of correctOrder) {
+					pegHolder.appendChild(peg);
+				}
+			}
             } else {
                   addInv(`${item}`, inventoryDiv, (imgDiv) => {
                         if (imgDiv) {
