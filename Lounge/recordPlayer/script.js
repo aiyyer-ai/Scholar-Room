@@ -9,6 +9,7 @@ window.onload = (event) => {
       if (!inventory) {
             inventory = {
                   halfSlipLoungeA: false,
+                  tapeRecorder: false,
                   plate1: false,
                   plate2: false,
                   plate3: false,
@@ -635,6 +636,11 @@ function dragElement(elmnt) {
                               elmnt.style.transform = "";
                         }
                   }
+                  // if(elmnt.id == `tapeUnit` && overInventory) {
+                  //       elmnt.style.visibility = `hidden`;
+                  //       let tapeRecorder = document.getElementById(`tapeRecorder`);
+                  //       tapeRecorder.style.opacity
+                  // }
             }
             document.onmouseup = null;
             document.onmousemove = null;

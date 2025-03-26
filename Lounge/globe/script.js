@@ -28,6 +28,7 @@ window.onload = (event) => {
       if (!inventory) {
             inventory = {
                   halfSlipLoungeA: false,
+                  tapeRecorder: false,
                   plate1: false,
                   plate2: false,
                   plate3: false,

@@ -28,6 +28,7 @@ var gearNeighbors = {
             1: [[-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1], [1, 2], [2, 1]]
       },
 };
+var allNoteTimeouts = [];
 var timeStart;
 window.onload = (event) => {
       //time recording code
@@ -46,6 +47,7 @@ window.onload = (event) => {
       if (!inventory) {
             inventory = {
                   halfSlipLoungeA: false,
+                  tapeRecorder: false,
                   plate1: false,
                   plate2: false,
                   plate3: false,
@@ -341,8 +343,8 @@ function generateGears() {
                         // console.log(matchingPeg);
                         gear.style.top = matchingPeg.offsetTop + matchingPeg.offsetParent.offsetTop + matchingPeg.offsetHeight / 2 - gear.offsetHeight / 2 + "px";
                         gear.style.left = matchingPeg.offsetLeft + matchingPeg.offsetParent.offsetLeft + matchingPeg.offsetWidth / 2 - gear.offsetWidth / 2 + "px";
-                        gear.pegValue = matchingPeg.id;
-                        if (gearsLoaded == Object.keys(gearMemory).length) {
+                        // gear.pegValue = matchingPeg.id;
+                        //if (gearsLoaded == Object.keys(gearMemory).length) {
                               const event = new MouseEvent("mousedown", {
                                     clientX: matchingPeg.offsetLeft + matchingPeg.offsetParent.offsetLeft + matchingPeg.offsetWidth / 2 - gear.offsetWidth / 2,
                                     clientY: matchingPeg.offsetTop + matchingPeg.offsetParent.offsetTop + matchingPeg.offsetHeight / 2 - gear.offsetHeight / 2,
@@ -352,7 +354,7 @@ function generateGears() {
                                     cancelable: true,
                               });
                               gear.dispatchEvent(event);
-                        }
+                        //}
                   }
 
             });
@@ -665,8 +667,13 @@ function dragElement(elmnt) {
             if (Array.from(e.target.classList).includes(`gear`)) {
                   if(e.target.pegValue) {
                         let rowLight = document.getElementById(`${e.target.pegValue.split(`,`)[0]}Light`);
-                        rowLight.count--;
-                        if(rowLight.count == 1) {
+                        if(!rowLight.count) {
+                              rowLight.count = []
+                        }
+                        rowLight.count = rowLight.count.filter((value) => {
+                              return value.id != e.target.id;
+                        });
+                        if(rowLight.count.length == 1) {
                               rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
                         } else {
                               rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
@@ -743,29 +750,31 @@ function dragElement(elmnt) {
                         event.target.pegValue = overPeg.id;
                         let rowLight = document.getElementById(`${overPeg.id.split(`,`)[0]}Light`);
                         if(!rowLight.count) {
-                              rowLight.count = 0;
+                              rowLight.count = [];
                         }
-                        console.log(rowLight.count);
-                        if(rowLight.count == 0) {
+                        rowLight.count.push(event.target);
+                        if(rowLight.count.length == 1) {
                               rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
                         } else {
                               rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
                         }
-                        rowLight.count++;
                         gearMemory[event.target.id] = event.target.pegValue;
                         window.sessionStorage.setItem(`gearMemory`, JSON.stringify(gearMemory));
                   }
             }
             if (solutionCheck(document.getElementById(`startGear`), false, { id: -1 })) {
-                  // let correct = true;
-                  // Array.from(document.querySelectorAll(`.whitekey`)).forEach((key) => {
-                  // 	if(!key.audioValue || correctSolution[key.keyNumber] != key.audioValue) {
-                  // 		correct = false;
-                  // 	}
-                  // });
-                  //
-                  //arraysEqual(currentSolution, correctSolution)
-                  // let nonZeroSolution = currentSolution.filter((note) => {return note != 0;});
+                  let sideGearEnd = document.getElementById(`startGearEnd`);
+                  if(sideGearEnd.rotateInterval && overPeg && !inventoryItem) {
+                        let timeoutDelay = 0;
+                        allNoteTimeouts.forEach((timeoutID) => {
+                              clearTimeout(timeoutID);
+                        });
+                        allNoteTimeouts = [];
+                        currentSolution.forEach((note) => {
+                              allNoteTimeouts.push(setTimeout(playSong, timeoutDelay, note));
+                              timeoutDelay += 600;
+                        }); 
+                  }
                   if (arraysEqual(currentSolution, correctSolution)) {
                         let timeoutDelay = 0;
                         correctSolution.forEach((note) => {

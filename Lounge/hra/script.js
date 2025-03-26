@@ -35,15 +35,16 @@ window.onload = () => {
 	document.onclick = movementCheck;
 	let inventory = window.sessionStorage.getItem(`inventoryLounge`);
 	if(!inventory) {
-		inventory = {
-			halfSlipLoungeA: false,
-			plate1: false,
-			plate2: false,
-			plate3: false,
-			plate4: false,
-			plate5: false,
-			plate6: false,
-		};
+            inventory = {
+                  halfSlipLoungeA: false,
+                  tapeRecorder: false,
+                  plate1: false,
+                  plate2: false,
+                  plate3: false,
+                  plate4: false,
+                  plate5: false,
+                  plate6: false,
+            };
 	  window.sessionStorage.setItem(`inventoryLounge`, JSON.stringify(inventory));
 	} else {
 	  inventory = JSON.parse(inventory);

@@ -11,13 +11,14 @@ window.onload = (event) => {
       let inventory = window.sessionStorage.getItem(`inventoryLounge`);
       if (!inventory) {
             inventory = {
-                  halfSlipLoungeA: true,
-                  plate1: true,
-                  plate2: true,
-                  plate3: true,
-                  plate4: true,
-                  plate5: true,
-                  // plate6: true,
+                  halfSlipLoungeA: false,
+                  tapeRecorder: false,
+                  plate1: false,
+                  plate2: false,
+                  plate3: false,
+                  plate4: false,
+                  plate5: false,
+                  plate6: false,
             };
             window.sessionStorage.setItem(`inventoryLounge`, JSON.stringify(inventory));
       } else {
