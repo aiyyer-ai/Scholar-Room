@@ -224,7 +224,8 @@ html {
     pointer-events: none;
 }
     .bigText {
-        /* font-size: calc(var(--antiBlurScaling) * 25px);  */  
+        font-size: calc(var(--antiBlurScaling) * 25px);
+        /* text-decoration: underline; */
     }
 
 .number {
@@ -252,7 +253,7 @@ html {
       /* background-color: whitesmoke; */
       padding-left: 10px;
       padding-right: 10px;
-      font-size: calc(var(--antiBlurScaling) * 20px);
+      font-size: calc(var(--antiBlurScaling) * 15px);
       font-family: 'Bebas Neue';
       color: gold;
       overflow: hidden;

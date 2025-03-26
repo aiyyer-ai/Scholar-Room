@@ -51,10 +51,10 @@ window.onload = () => {
 	for (item in inventory) {
 	  enterInventoryEntry(item, inventory[item]);
 	}
-	let halfSlipState = window.sessionStorage.getItem(`halfSlipState`);
+	let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
 	let halfSlip = document.getElementById(`halfSlipLoungeA`);
 	if (!inventory.halfSlipLoungeA) {
-		if (halfSlipState == "out") {
+		if (halfSlipState) {
 			halfSlip.style.visibility = "visible";
 			halfSlip.classList.add(`halfSlipLoungeAItem`);
 			halfSlip.onclick = takeItem;

@@ -129,7 +129,10 @@ function generateLecterns() {
                               closedBookDiv.classList.add(`position`, `closedBook`, `lecternContainer`);
                               let closedBookText = document.createElement(`div`);
                               closedBookText.classList.add(`position`, `closedTitle`);
-                              closedBookText.innerHTML = `${lecternTitles[lecternData][bookNumber]}`;
+                              let wordArray = lecternTitles[lecternData][bookNumber].split(" ");
+                              let firstWord = wordArray.shift();
+                              let otherWords = wordArray.join(" ");
+                              closedBookText.innerHTML = `<span class="bigText">${firstWord}</span> ${otherWords}`;
                               closedBookDiv.appendChild(closedBookText);
                               closedBookText.style.maxWidth = closedBookDiv.clientWidth * 0.7 + "px";
                               closedBookDiv.style.filter = `hue-rotate(${bookColorRand * 360}deg)`;
@@ -143,7 +146,7 @@ function generateLecterns() {
                         let wordArray = lecternList[lecternData][bookNumber].split(" ");
                         let firstWord = wordArray.shift();
                         let otherWords = wordArray.join(" ");
-                        bookText.innerHTML = `<span class="bigText">${firstWord}</span> ${otherWords}`;
+                        bookText.innerHTML = `${firstWord} ${otherWords}`;
                         book.appendChild(bookText);
                         book.style.width = book.children[0].clientWidth + "px";
                         book.style.left = (newFace.clientWidth - book.clientWidth) / 4 + 'px';
