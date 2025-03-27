@@ -187,12 +187,12 @@ function enterInventoryEntry(item, itemValue) {
       let inventoryDiv = document.getElementsByClassName(`inventory`)[0];
       let inventoryElement = Array.from(inventoryDiv.children).filter((inventoryItem) => { return inventoryItem.id == item })[0];
       if (!inventoryElement) {
-            addImgInv(`inventoryItems/${item}`, inventoryDiv, (imgDiv) => {
+            addInv(`${item}`, inventoryDiv, (imgDiv) => {
                   if (imgDiv) {
                         imgDiv.id = item;
                         imgDiv.classList.add(`inventoryItem`);
                         // if(imgDiv.clientWidth > 200) {
-                        addImgInv(`inventoryItems/${item}Alt`, imgDiv, (altImgDiv) => {
+                              addInv(`${item}Alt`, imgDiv, (altImgDiv) => {
                               if (altImgDiv) {
                                     imgDiv.appendChild(altImgDiv.children[0]);
                                     altImgDiv.remove();
