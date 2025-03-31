@@ -337,6 +337,8 @@ function changePosition() {
             rollResult = 0;
             clearInterval(moveInterval);
             moveInterval = false;
+            let die = document.getElementById(`dieHolder`);
+            die.onmousedown = die.replaceMouseDown;
       }
 }
 
@@ -372,6 +374,7 @@ function dragElement(elmnt) {
                   elmnt.onmousedown = copyAndDrag;
             } else {
                   elmnt.onmousedown = dragMouseDown;
+                  elmnt.replaceMouseDown = dragMouseDown;
             }
       }
 
@@ -462,6 +465,8 @@ function dragElement(elmnt) {
 
       function closeDragElement(e) {
             // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
             if (elmnt.id == `dieHolder`) {
                   inertiaVector.time -= Date.now();
                   inertiaVector.x -= e.clientX;
@@ -472,6 +477,7 @@ function dragElement(elmnt) {
                         Array.from(document.querySelectorAll(`.face`)).forEach((element) => {
                               element.style.boxShadow = `none`;
                         });
+                        elmnt.onmousedown = null;
                         inertiaInterval = setInterval(applyInertia, 10, elmnt);
                   }
             } else {
@@ -488,8 +494,6 @@ function dragElement(elmnt) {
                         elmnt.originalItem.onPage = false;
                   }
             }
-            document.onmouseup = null;
-            document.onmousemove = null;
       }
 }
 
