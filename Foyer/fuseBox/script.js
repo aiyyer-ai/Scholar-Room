@@ -563,7 +563,7 @@ function dragElement(elmnt) {
                   let nextPeg = Array.from(this.children).filter((peg) => { return !peg.onPage })[0];
                   placedItem = nextPeg.cloneNode(true);
                   placedItem.style.height = 200 + "px";
-                  placedItem.style.width = 200 + "px";
+                  placedItem.style.width = placedItem.style.height.replace("px", "") * nextPeg.children[0].naturalWidth / nextPeg.children[0].naturalHeight + "px";
                   nextPeg.style.opacity = `50%`;
                   nextPeg.onPage = true;
                   nextPeg.isPeg = true;

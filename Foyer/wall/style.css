@@ -175,6 +175,7 @@ html {
 
 .button {
 	border: none;
+      padding: 0px;
 }
 
 .inputHole {

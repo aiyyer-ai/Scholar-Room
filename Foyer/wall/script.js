@@ -50,7 +50,7 @@ function checkPegs() {
                         let peg = pegHolder.children[0].cloneNode(true);
                         peg.style.display = ``;
                         peg.style.height = `100px`;
-                        peg.style.width = `100px`;
+                        peg.style.width = peg.style.height.replace("px", "") * pegHolder.children[0].children[0].naturalWidth / pegHolder.children[0].children[0].naturalHeight + "px";
                         let button = document.getElementById(`button${painting.slice(-1)}`)
                         onPin(peg, button);
                         let paintingPair = document.getElementById(painting);
@@ -422,11 +422,12 @@ function onPin(peg, circle) {
       }
       circle.style.position = "relative";
       circle.appendChild(peg);
-      peg.style.transformOrigin = "50% 80%";
       peg.style.transform = null;
       peg.classList.remove(`dragItem`);
-      peg.style.top = `-${peg.clientHeight - circle.clientHeight / 2 - 17}px`;
-      peg.style.left = `-${peg.clientWidth / 2 - circle.clientWidth / 2 + 4}px`;
+      peg.style.top = `0px`;
+      peg.style.left = `0px`;
+      peg.style.top = (circle.clientHeight / 1.25) - peg.clientHeight + "px";
+      peg.style.left = (circle.clientWidth - peg.clientWidth) / 2 - 1 + "px";
       peg.onmousedown = false;
       circle.style.cursor = `url('/cursors/turnAroundOtherWay.webp'), pointer`;
       let wallData = JSON.parse(window.sessionStorage.getItem(`wallInfo`));
@@ -507,11 +508,12 @@ function dragElement(elmnt) {
                   let nextPeg = Array.from(this.children).filter((peg) => { return !peg.onPage && !(peg.style.display == `none`) })[Array.from(this.children).filter((peg) => { return !peg.onPage && !(peg.style.display == `none`) }).length - 1];
                   placedItem = nextPeg.cloneNode(true);
                   placedItem.style.height = 100 + "px";
-                  placedItem.style.width = 100 + "px";
+                  placedItem.style.width = placedItem.style.height.replace("px", "") * nextPeg.children[0].naturalWidth / nextPeg.children[0].naturalHeight + "px";
                   nextPeg.style.opacity = `50%`;
                   nextPeg.onPage = true;
                   nextPeg.isPeg = true;
                   placedItem.originalItem = nextPeg;
+                  placedItem.style.transform = ``;
                   if (Array.from(this.children).filter((peg) => { return !peg.onPage }).length == 0) {
                         this.onPage = true;
                   }
