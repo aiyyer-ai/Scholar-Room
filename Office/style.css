@@ -230,8 +230,8 @@ html {
 }
 
 .globe {
-	height: 200px;
-	bottom: calc(var(--deskHeight) - 80px);
+	height: 250px;
+	bottom: calc(var(--deskHeight) - 120px);
 	right: 170px;
 }
 

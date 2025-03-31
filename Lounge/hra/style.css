@@ -350,7 +350,7 @@ brb {
     background-color: white;
 }
 
-.halfSlipLoungeA {
+.halfSlipLoungeFront {
     visibility: hidden;
     position: absolute;
     top: 250px;
@@ -362,7 +362,7 @@ brb {
     z-index: 5;
 }
 
-.halfSlipLoungeAImg {
+.halfSlipLoungeFrontImg {
     position: absolute;
     width: inherit;
     height: inherit;

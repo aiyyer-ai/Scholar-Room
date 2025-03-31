@@ -4,6 +4,10 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       // document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventory`);
@@ -399,17 +403,28 @@ function dragElement(elmnt) {
       function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-            let inventoryItem = Array.from(elmnt.classList).find((value) => {
-                  return value.includes(`dragItem`);
-            });
-            if (!inventoryItem) {
-                  //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  return;
+            } else {
+                  // get the mouse cursor position at startup:
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+                  document.onmouseup = closeDragElement;
+                  // call a function whenever the cursor moves:
+                  document.onmousemove = elementDrag;
+                  let inventoryItem = Array.from(elmnt.classList).find((value) => {
+                        return value.includes(`dragItem`);
+                  });
+                  if (!inventoryItem) {
+                        //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
+                  }
             }
       }
 

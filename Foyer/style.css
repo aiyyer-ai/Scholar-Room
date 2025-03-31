@@ -167,10 +167,17 @@ html {
 	top: 265px;
 }
 
-.flatCapItem {
+.fedoraItem {
 	height: 60px;
 	left: 275px;
 	top: 570px;
+}
+
+.flatCapItem {
+	height: 100px;
+	width: 100px;
+	left: 0px;
+	top: 200px;
 }
 
 .bustGlass {
@@ -179,7 +186,7 @@ html {
 	right: 395px;
 	top: 225px;
 	mix-blend-mode: screen;
-	opacity: 70%;
+	opacity: 60%;
 }
 
 .bookTable {
@@ -214,13 +221,6 @@ html {
 	height: 400px;
 	left: calc(50% - (292px / 2));
 	top: -400px;
-}
-
-.fedoraItem {
-	height: 100px;
-	width: 100px;
-	left: 0px;
-	top: 200px;
 }
 
 .table {

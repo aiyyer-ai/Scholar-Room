@@ -426,33 +426,48 @@ function dragElement(elmnt) {
       function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-            let inventoryItem = Array.from(elmnt.classList).find((value) => {
-                  return value.includes(`dragItem`);
-            });
-            if (!inventoryItem) {
-                  //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
-                  if (Array.from(elmnt.classList).includes(`box`)) {
-                        let gameArea = document.getElementById(`gameArea`);
-                        elmnt.classList.add(`position`);
-                        let clickLocation = Object.create(locationObject);
-                        clickLocation.x = e.clientX;
-                        clickLocation.y = e.clientY;
-                        let overMachineSpot = overlayCheck(clickLocation, `slot`)[0];
-                        if (overMachineSpot && overMachineSpot.fill && overMachineSpot.fill.filter((div) => { return div.id == elmnt.id })[0]) {
-                              overMachineSpot.fill = overMachineSpot.fill.filter((div) => {
-                                    return div.id != elmnt.id;
-                              });
-                              currentInput[overMachineSpot.id.replace(`slot`, ``)] -= Number(elmnt.id.replace(`box`, ``));
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        rotatePiece(elmnt);
+                  }
+            } else {
+                  // get the mouse cursor position at startup:
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+                  document.onmouseup = closeDragElement;
+                  // call a function whenever the cursor moves:
+                  document.onmousemove = elementDrag;
+                  let inventoryItem = Array.from(elmnt.classList).find((value) => {
+                        return value.includes(`dragItem`);
+                  });
+                  if (!inventoryItem) {
+                        //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
+                        if (Array.from(elmnt.classList).includes(`box`)) {
+                              let gameArea = document.getElementById(`gameArea`);
+                              elmnt.classList.add(`position`);
+                              let clickLocation = Object.create(locationObject);
+                              clickLocation.x = e.clientX;
+                              clickLocation.y = e.clientY;
+                              let overMachineSpot = overlayCheck(clickLocation, `slot`)[0];
+                              if (overMachineSpot && overMachineSpot.fill && overMachineSpot.fill.filter((div) => { return div.id == elmnt.id })[0]) {
+                                    overMachineSpot.fill = overMachineSpot.fill.filter((div) => {
+                                          return div.id != elmnt.id;
+                                    });
+                                    currentInput[overMachineSpot.id.replace(`slot`, ``)] -= Number(elmnt.id.replace(`box`, ``));
+                              }
+                              gameArea.appendChild(elmnt);
+                              elmnt.style.left = e.clientX - elmnt.clientWidth / 2 + "px";
+                              elmnt.style.top = e.clientY - elmnt.clientHeight / 2 + "px";
                         }
-                        gameArea.appendChild(elmnt);
-                        elmnt.style.left = e.clientX - elmnt.clientWidth / 2 + "px";
-                        elmnt.style.top = e.clientY - elmnt.clientHeight / 2 + "px";
                   }
             }
       }

@@ -7,11 +7,15 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryLounge`);
       if (!inventory) {
             inventory = {
-                  halfSlipLoungeA: false,
+                  halfSlipLoungeFront: false,
                   tapeRecorder: false,
                   plate1: false,
                   plate2: false,
@@ -57,11 +61,11 @@ window.onload = (event) => {
 
       let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
 
-      if (halfSlipState && !inventory.halfSlipLoungeA) {
-            let halfSlipLoungeA = document.getElementById(`halfSlipLoungeASlider`);
-            halfSlipLoungeA.style.visibility = "visible";
-            halfSlipLoungeA.style.transition = `none`;
-            halfSlipLoungeA.style.transform = `translate(${halfSlipLoungeA.clientWidth / 2}px, 0px)`;
+      if (halfSlipState && !inventory.halfSlipLoungeFront) {
+            let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
+            halfSlipLoungeFront.style.visibility = "visible";
+            halfSlipLoungeFront.style.transition = `none`;
+            halfSlipLoungeFront.style.transform = `translate(${halfSlipLoungeFront.clientWidth / 2}px, 0px)`;
       }
 
 }
@@ -199,15 +203,15 @@ function happyRoomCheck() {
       });
       let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
       if (correctItems && !halfSlipState) {
-            dispenseHalfSlip();
+            dispensehalfSlip();
       }
 }
 
-function dispenseHalfSlip() {
+function dispensehalfSlip() {
       let shelf = document.getElementById(`happyRoomShelf`);
-      let halfSlipLoungeA = document.getElementById(`halfSlipLoungeASlider`);
-      halfSlipLoungeA.style.visibility = "visible";
-      halfSlipLoungeA.style.transform = `translate(${halfSlipLoungeA.clientWidth / 2}px, 0px)`;
+      let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
+      halfSlipLoungeFront.style.visibility = "visible";
+      halfSlipLoungeFront.style.transform = `translate(${halfSlipLoungeFront.clientWidth / 2}px, 0px)`;
       shelf.style.pointerEvents = `none`;
       window.sessionStorage.setItem(`halfSlipState`, JSON.stringify(true));
       printSlip.play();
@@ -530,6 +534,23 @@ function addImg(src, parentElement, imgCallback) {
       }
 }
 
+function flipSlip(halfSlip, rightClick) {
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = './inventoryItems/halfSlips/halfSlipLoungeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = './inventoryItems/halfSlips/halfSlipLoungeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id + "header")) {
@@ -580,9 +601,24 @@ function dragElement(elmnt) {
       function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        return;
+                  }
+            } else {
             // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+            }
             // call a function whenever the cursor moves:
             document.onmousemove = elementDrag;
             if (e.shiftKey) {

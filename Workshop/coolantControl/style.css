@@ -253,6 +253,8 @@ html {
 
 .pipeExit {
 	position: absolute;
+      /* background-image: url(./images/tube.webp);
+      background-size: 100% auto; */
 	background-color: gray;
 	border: 13px solid whitesmoke;
 	z-index: -1;
@@ -264,6 +266,16 @@ html {
 
 .pipeEnd {
 	background-color: red;
+}
+
+.coolantText {
+      display: block;
+      position: relative;
+      color: white;
+      transform: rotate(90deg);
+      font-family: 'Goldman';
+      font-size: 11px;
+      top: 13px;
 }
 
 .shape {

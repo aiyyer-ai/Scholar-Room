@@ -15,7 +15,6 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
-
       //ignores Right Click context Menu
       typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
       window.addEventListener(`contextmenu`, (e) => {
@@ -425,19 +424,24 @@ function addIntersections(board) {
                   newPipeEnd.classList.add(`pipeExit`);
                   newPipeEnd.id = boardHex.id.replace(`slot`, `pipeEnd`);
                   board.appendChild(newPipeEnd);
+                  let borderSize = Number(getComputedStyle(newPipeEnd).getPropertyValue('border').split(" ")[0].replace(`px`, ``));
                   newPipeEnd.style.width = boardHex.clientWidth * .18 + "px";
                   newPipeEnd.style.height = boardHex.clientHeight * .5 + "px";
-                  newPipeEnd.style.top = boardHex.offsetTop - (boardHex.clientHeight / 6) + "px";
-                  newPipeEnd.style.left = boardHex.offsetLeft + boardHex.clientWidth - newPipeEnd.clientWidth / 2 - 13 + "px";
+                  newPipeEnd.style.top = boardHex.offsetTop - (boardHex.clientHeight / 6) - (newPipeEnd.clientHeight - boardHex.clientHeight * .5) + "px";
+                  newPipeEnd.style.left = boardHex.offsetLeft + boardHex.clientWidth - newPipeEnd.clientWidth / 2 - borderSize + "px";
                   let pipeBounds = newPipeEnd.getBoundingClientRect();
                   let hexBounds = boardHex.getBoundingClientRect();
                   let boundsDifference = hexBounds.top - pipeBounds.top;
-                  newPipeEnd.style.transformOrigin = `${-boardHex.clientWidth / 2 + newPipeEnd.clientWidth / 2 + 13}px ${boundsDifference + boardHex.clientHeight / 2}px`;
+                  newPipeEnd.style.transformOrigin = `${-boardHex.clientWidth / 2 + newPipeEnd.clientWidth / 2 + borderSize}px ${boundsDifference + boardHex.clientHeight / 2}px`;
                   newPipeEnd.style.transform = `rotate(${rotationAngle.shift()}deg)`;
                   if (boardHex.id == `1slot` || boardHex.id == `7slot` || boardHex.id == `11slot`) {
                         switch (boardHex.id) {
                               case `1slot`:
                                     newPipeEnd.classList.add(`pipeStart`);
+                                    let coolantText = document.createElement(`span`);
+                                    coolantText.classList.add(`coolantText`);
+                                    coolantText.innerHTML = `COOLANT`;
+                                    newPipeEnd.appendChild(coolantText);
                                     break;
                               case `7slot`:
                               case `11slot`:

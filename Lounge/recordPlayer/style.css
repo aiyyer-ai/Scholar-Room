@@ -1,31 +1,31 @@
 html {
-	background-color: whitesmoke;
-	background-image: url('./images/redwallpaper.webp');
-	font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
-	color: whitesmoke;
-	overflow: hidden;
-    user-select: none;
+      background-color: whitesmoke;
+      background-image: url('./images/redwallpaper.webp');
+      font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua, Georgia, serif;
+      color: whitesmoke;
+      overflow: hidden;
+      user-select: none;
 }
 
 :root {
-    --barWidth: 350px;
-    --barPiece: calc((var(--barWidth) / 12) - 3px);
+      --barWidth: 350px;
+      --barPiece: calc((var(--barWidth) / 12) - 3px);
 }
 
 .inventory {
-	height: 15vh;
-	width: 100%;
-	top: -10vh;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-content: center;
-	gap: 5vw;
-	z-index: 10;
-	background-color: transparent;
+      height: 15vh;
+      width: 100%;
+      top: -10vh;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      gap: 5vw;
+      z-index: 10;
+      background-color: transparent;
       background-image: url(/images/inventoryBackground.webp);
       background-size: 100% 100%;
-	opacity: 50%;
+      opacity: 50%;
 }
 
 
@@ -33,7 +33,7 @@ html {
       height: 70px;
       width: 70px;
       border-radius: 50%;
-	background-color: transparent;
+      background-color: transparent;
       background-image: url(/images/pause.webp);
       background-size: 100% 100%;
       top: calc(50% - 35px);
@@ -109,138 +109,162 @@ html {
 }
 
 .inventoryItem {
-	height: 80%;
-	display: flex;
-	justify-content: center;
-	margin-top: 1vh;
-	margin-bottom: auto;
+      height: 80%;
+      display: flex;
+      justify-content: center;
+      margin-top: 1vh;
+      margin-bottom: auto;
       filter: drop-shadow(-1px 1px 1px rgba(50, 50, 0, 0.5));
 }
 
 .dragItem {
-	position: absolute !important;
-	z-index: 20;
+      position: absolute !important;
+      z-index: 20;
 }
 
 .imgcontainer {
-	/* position: absolute; */
-/*    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));*/
+      /* position: absolute; */
+      /*    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));*/
 }
 
 .imgcontainer img {
-	max-height: 100%;
-	max-width: 100%;
-	pointer-events: none;
-	object-fit: contain;
+      max-height: 100%;
+      max-width: 100%;
+      pointer-events: none;
+      object-fit: contain;
 }
 
 .handwrittenNote {
-    position: absolute;
-    top: 300px;
-    left: 450px;
-    height: 500px;
-    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+      position: absolute;
+      top: 300px;
+      left: 450px;
+      height: 500px;
+      filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
 }
 
 .handwrittenNote img {
-	max-height: 100%;
-	max-width: 100%;
-	pointer-events: none;
-	object-fit: contain;
+      max-height: 100%;
+      max-width: 100%;
+      pointer-events: none;
+      object-fit: contain;
 }
 
 .noteText {
-    width: 50%;
-    margin-top: 15px;
-    left: 50%;
-    font-family: 'GavinScript';
-    color: black;
-    font-size: 25px;
-    line-height: 50px;
+      width: 50%;
+      margin-top: 15px;
+      left: 50%;
+      font-family: 'GavinScript';
+      color: black;
+      font-size: 25px;
+      line-height: 50px;
 }
 
 .bigText {
-    font-weight: bold;
-    font-size: 30px;
+      font-weight: bold;
+      font-size: 30px;
 }
 
 .center {
-	display: flex;
-    top: 0px;
-    left: 0px;
-	width: 100%;
-	height: 100%;
-	margin: auto;
-	justify-content: center;
-    position: absolute;
+      display: flex;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      margin: auto;
+      justify-content: center;
+      position: absolute;
 }
 
 .recordPlayer {
-    width: 650px;
-    right: 5%;
+      width: 650px;
+      right: 5%;
 }
 
 .recordSnap {
-    background-color: transparent;
-    width: 62%;
-    height: 77%;
-    top: 66px;
-    left: 31px;
+      background-color: transparent;
+      width: 62%;
+      height: 77%;
+      top: 66px;
+      left: 31px;
 }
 
 .recordNeedle {
-    width: 101px;
-    left: 6%;
-    top: 0%;
+      width: 101px;
+      left: 6%;
+      top: 0%;
 }
 
 .records {
-    height: 300px;
-    transform-origin: 50% 50%;
+      height: 300px;
+      transform-origin: 50% 50%;
 }
 
 .position {
-    position: absolute;
+      position: absolute;
 }
 
 .imgContainer {
-  position: absolute;
+      position: absolute;
 }
 
 .imgContainer img {
-    max-height: 100%;
-    max-width: 100%;
-    pointer-events: none;
+      max-height: 100%;
+      max-width: 100%;
+      pointer-events: none;
 }
 
 .tapeButton {
-    height: 55px;
-    width: 48px;
-    bottom: 8%;
-    background-color: gray;
-    mix-blend-mode: multiply;
-    opacity: 0%;
-    z-index: 4;
+      /* height: 55px; */
+      height: 40px;
+      width: 48px;
+      bottom: 8%;
+      background-color: gray;
+      mix-blend-mode: multiply;
+      opacity: 0%;
+      z-index: 4;
 }
 
 .tapeBack {
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
-    background-color: darkslategrey;
-    z-index: 1;
-    border-radius: 50px;
+      height: 138px;
+      width: 370px;
+      top: 22px;
+      left: 34px;
+      /* background: linear-gradient(transparent, transparent 48%, red 48%, red 52%, transparent 52%, transparent 100%); */
+      background-color: rgb(20, 34, 34);
+      z-index: 1;
+      display: grid;
+      row-gap: 2px;
+      column-gap: 5px;
+      box-sizing: border-box;
+      padding: 3px;
+      /* border-radius: 50px; */
+}
+
+.soundBox {
+      height: 100%;
+      width: 100%;
+      background-color: darkslategrey;
+      box-sizing: border-box;
+}
+
+.longBar {
+      height: 100%;
+      width: 100%; 
+      grid-column: 1 / 11;
+      grid-row: 7;
+      background-color: transparent;
 }
 
 .tapeSoundBar {
-    height: 25%;
-    top: 10%;
-    background-color: lime;
-    /* transition: 100ms all linear; */
+      height: 25%;
+      top: 10%;
+      background-color: transparent;
+      /* transition: 100ms all linear; */
 }
 
 @font-face {
-    font-family: 'GavinScript'; /*a name to be used later*/
-    src: url('./fonts/GavinScript2-Regular.ttf'); /*URL to font*/
+      font-family: 'GavinScript';
+      /*a name to be used later*/
+      src: url('./fonts/GavinScript2-Regular.ttf');
+      /*URL to font*/
 }

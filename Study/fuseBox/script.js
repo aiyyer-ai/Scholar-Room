@@ -12,6 +12,10 @@ window.onload = function() {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
 	document.onclick = movementCheck;
 	let inventory = window.sessionStorage.getItem(`inventory`);
 	if(!inventory) {

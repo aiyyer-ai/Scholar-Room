@@ -6,6 +6,10 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
 	//debug test state from study
 	let debug = false;
 	if(debug) {

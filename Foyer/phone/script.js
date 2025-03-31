@@ -21,6 +21,10 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
 
       //in case I want to make something run at launch
       document.onclick = movementCheck;
@@ -625,7 +629,7 @@ function nextAudio() {
             `QUESTION 1: WHAT IS THE MAKE AND MODEL OF YOUR CAR? <br> PRESS THE KEYS FOR THE FIRST LETTER OF EACH WORD, AND THEN PRESS STAR.`,
             `QUESTION 2: WHAT UNIVERSITY DID YOU GRADUATE FROM? <br> PRESS THE KEYS FOR THE FIRST LETTER OF EACH WORD, AND THEN PRESS STAR.`,
             `QUESTION 3: WHAT IS YOUR SISTER'S NAME? <br> PRESS THE KEYS FOR THE FIRST LETTER OF EACH WORD, AND THEN PRESS STAR.`,
-            `ACCESS GRANTED <br> *THUNK*`,
+            `ACCESS GRANTED <br> *THUNK OF GLASS BLOCKING BOOKS BELOW DROPPING OUT OF THE WAY*`,
       ];
       if (currentAudio > 0) {
             allAudios[currentAudio - 1].pause();

@@ -6,12 +6,12 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
-      //in case I want to make something run at launch
-      document.onclick = movementCheck;
       typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
       window.addEventListener(`contextmenu`, (e) => {
             e.preventDefault();
       });
+      //in case I want to make something run at launch
+      document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventory`);
       if (!inventory) {
             inventory = {
@@ -422,11 +422,13 @@ function onPin(peg, circle) {
       }
       circle.style.position = "relative";
       circle.appendChild(peg);
-      peg.style.top = `-${peg.clientHeight - circle.clientHeight / 2 - 20}px`;
-      peg.style.left = `-${peg.clientWidth / 2 - circle.clientWidth / 2 + 3}px`;
       peg.style.transformOrigin = "50% 80%";
       peg.style.transform = null;
+      peg.classList.remove(`dragItem`);
+      peg.style.top = `-${peg.clientHeight - circle.clientHeight / 2 - 17}px`;
+      peg.style.left = `-${peg.clientWidth / 2 - circle.clientWidth / 2 + 4}px`;
       peg.onmousedown = false;
+      circle.style.cursor = `url('/cursors/turnAroundOtherWay.webp'), pointer`;
       let wallData = JSON.parse(window.sessionStorage.getItem(`wallInfo`));
       if (wallData[`painting${circle.id.slice(-1)}`] == -1) {
             removeItemFromInv(peg);
@@ -444,7 +446,7 @@ function rotatePeg(button) {
             button.children[0].currentRotation = -(1 / slices);
       }
       button.children[0].currentRotation += (1 / slices);
-      button.children[0].style.transform = `rotate(${button.children[0].currentRotation}turn)`;
+      button.style.transform = `rotate(${button.children[0].currentRotation}turn)`;
       let spotSlice = button.children[0].currentRotation * slices;
       let wallData = JSON.parse(window.sessionStorage.getItem(`wallInfo`));
       wallData[`painting${button.id.slice(-1)}`] = spotSlice;

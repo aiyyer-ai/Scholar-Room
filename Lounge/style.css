@@ -220,9 +220,9 @@ html {
 }
 
 .globe {
-	height: 200px;
-	bottom: calc(var(--wallTableHeight) - 80px);
-	right: 160px;
+	height: 250px;
+	bottom: calc(var(--wallTableHeight) - 130px);
+	right: 140px;
 }
 
 .phone {
@@ -274,7 +274,7 @@ html {
 		max-width: 100%;
 		max-height: 100%;
 	}
-	.halfSlipLoungeASlider {
+	.halfSlipLoungeFrontSlider {
 		visibility: hidden;
 		overflow: hidden;
 		position: relative;
@@ -283,7 +283,7 @@ html {
             width: 150px;
 		transition: 2s ease-in-out;
 	}
-		.halfSlipLoungeAImg {
+		.halfSlipLoungeFrontImg {
 			overflow: hidden;
 			position: relative;
 			height: inherit;

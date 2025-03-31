@@ -3,15 +3,15 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
-      document.onclick = movementCheck;
       typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
       window.addEventListener(`contextmenu`, (e) => {
             e.preventDefault();
       });
+      document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryOffice`);
       if (!inventory) {
             inventory = {
-                  halfSlipTop: true,
+                  halfSlipOfficeFront: true,
                   plate2: true,
                   plate3: true,
                   plate4: true,
@@ -89,7 +89,7 @@ function startUpEvents(div) {
       let halfSlipOfficePosition = window.sessionStorage.getItem(`halfSlipOfficePosition`);
       halfSlipOfficePosition = JSON.parse(halfSlipOfficePosition);
       if (halfSlipOfficePosition) {
-            let halfSlipOfficeDiv = document.getElementById(`halfSlipTop`);
+            let halfSlipOfficeDiv = document.getElementById(`halfSlipOfficeFront`);
             const event = new MouseEvent("mousedown", {
                   clientX: halfSlipOfficePosition.x + 450,
                   clientY: halfSlipOfficePosition.y + 59,
@@ -105,7 +105,7 @@ function startUpEvents(div) {
       if (halfSlipLoungePosition) {
             let mirror = document.getElementById(`mirror`);
             let glass = document.getElementById(`glass`);
-            addImg(`halfSlipLoungeB`, mirror, (div) => {
+            addImg(`halfSlipLoungeBack`, mirror, (div) => {
                   div.classList.add('position');
                   div.style.left = halfSlipLoungePosition.x - mirror.offsetLeft + "px";
                   div.style.top = halfSlipLoungePosition.y - mirror.offsetTop + "px";
@@ -408,6 +408,24 @@ function rotatePiece(piece) {
       piece.rotation = rotation;
 }
 
+function flipSlip(halfSlip, rightClick) {
+      console.log(halfSlip, rightClick);
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id + "header")) {
@@ -465,8 +483,12 @@ function dragElement(elmnt) {
             else if (e.button) {
                   rightclick = (e.button == 2);
             }
-            if (rightclick) {
-                  rotatePiece(elmnt);
+            if(rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        rotatePiece(elmnt);
+                  }
             } else {
                   if (elmnt.onHole) {
                         let mirrorCheck = window.sessionStorage.getItem(`mirrorData`);
@@ -549,6 +571,9 @@ function dragElement(elmnt) {
                         y: elmnt.offsetTop
                   };
                   window.sessionStorage.setItem(`halfSlipOfficePosition`, JSON.stringify(halfSlipPosition));
+                  halfSlipSide = flipSlip(elmnt);
+                  console.log(halfSlipSide);
+                  window.sessionStorage.setItem(`halfSlipOfficeSide`, JSON.stringify(halfSlipSide));
             }
       }
 }

@@ -22,12 +22,16 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryLounge`);
       if (!inventory) {
             inventory = {
-                  halfSlipLoungeA: false,
+                  halfSlipLoungeFront: false,
                   tapeRecorder: false,
                   plate1: false,
                   plate2: false,
@@ -390,7 +394,7 @@ function addGuide(chessBoard) {
 
 function operateDrawer() {
       let inventory = JSON.parse(window.sessionStorage.getItem(`inventoryLounge`));
-      if (!inventory.halfSlipLoungeA) {
+      if (!inventory.halfSlipLoungeFront) {
             return;
       }
       if (drawerOpen == false) {
@@ -458,6 +462,23 @@ function operateDrawer() {
       }
 }
 
+function flipSlip(halfSlip, rightClick) {
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id + "header")) {
@@ -508,6 +529,20 @@ function dragElement(elmnt) {
       function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        return;
+                  }
+            } else {
             let inventoryItem = Array.from(elmnt.classList).find((value) => {
                   return value.includes(`dragItem`);
             });
@@ -520,8 +555,9 @@ function dragElement(elmnt) {
                   elmnt.style.zIndex = Array.from(document.querySelectorAll(`.piece`)).length;
             }
             // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+            }
             document.onmouseup = closeDragElement;
             // call a function whenever the cursor moves:
             document.onmousemove = elementDrag;

@@ -5,6 +5,10 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
 	typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
 	window.addEventListener(`contextmenu`, (e) => {
 		e.preventDefault();
@@ -13,7 +17,7 @@ window.onload = (event) => {
 	let inventory = window.sessionStorage.getItem(`inventoryOffice`);
 	if(!inventory) {
 		inventory = {
-			halfSlipTop: false,
+			halfSlipOfficeFront: false,
 			plate2: false,
 			plate3: false,
 			plate4: false,
@@ -337,6 +341,24 @@ function addImg(src, parentElement, imgCallback) {
 		imgCallback(newDiv);
 	  }
 	}
+}
+
+function flipSlip(halfSlip, rightClick) {
+      console.log(halfSlip, rightClick);
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
 }
 
 function dragElement(elmnt) {

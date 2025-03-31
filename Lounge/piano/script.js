@@ -1,6 +1,6 @@
 var gameArea = document.getElementById('gameArea');
 var keys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
-var numberAudios = [-6, -5, -4, -3, -2, -1, `start`, 1, 2, 3, 4, 5, 6];
+var numberAudios = [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6];
 var audios = [];
 var keyOffset = 0;
 var lastBlank = -1;
@@ -10,7 +10,7 @@ var gearNumbers = [1, 1, 3, 5, 4, 6, 1, 1, 2, 2];
 var rowCount = 4;
 var sideGearRow = 1;
 var correctSolution = [1, -2, 1, -6, -2, -4, 1, 5, 3, 1];
-var currentSolution = [];
+var currentSolution = [[], [], [], [], [], [], [], [], [], []];
 var gearPath = [];
 var gearMemory = {};
 var gearsLoaded = 0;
@@ -28,12 +28,32 @@ var gearNeighbors = {
             1: [[-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1], [1, 2], [2, 1]]
       },
 };
+var gearOverlaps = {
+      1: {
+            2: [[1, 0], [-1, 0], [0, -1], [0, 1]],
+            3.5: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, -1], [0, 1], [2, 0], [0, 2], [-2, 0], [0, -2]]
+      },
+      2: {
+            1: [[1, 0], [-1, 0], [0, -1], [0, 1]],
+            2: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, -1], [0, 1]],
+            3.5: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, -1], [0, 1], [2, 0], [0, 2], [-2, 0], [0, -2], [-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1], [1, 2], [2, 1]]
+      },
+      3.5: {
+            1: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, -1], [0, 1], [2, 0], [0, 2], [-2, 0], [0, -2]],
+            2: [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, -1], [0, 1], [2, 0], [0, 2], [-2, 0], [0, -2], [-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1], [1, 2], [2, 1]]
+      }
+}
+var secretOpen = false;
 var allNoteTimeouts = [];
 var timeStart;
 window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryLounge`);
@@ -46,7 +66,7 @@ window.onload = (event) => {
       }
       if (!inventory) {
             inventory = {
-                  halfSlipLoungeA: false,
+                  halfSlipLoungeFront: false,
                   tapeRecorder: false,
                   plate1: false,
                   plate2: false,
@@ -258,49 +278,41 @@ function goToRoom(div) {
 }
 
 function openSecret() {
-      let holeDivHider = document.createElement(`div`);
-      holeDivHider.classList.add(`position`, `holeHider`);
-      gameArea.appendChild(holeDivHider);
-      let holeDiv = document.createElement(`div`);
-      holeDiv.classList.add(`position`, `hole`);
-      holeDivHider.appendChild(holeDiv);
-      setTimeout(() => {
-            holeDiv.style.left = `0px`;
-      }, 100);
-      let inventory = JSON.parse(window.sessionStorage.getItem(`inventoryLounge`));
-      if (!inventory.plate3) {
-            addImg("plate3", holeDiv, (gear) => {
-                  gear.classList.add(`position`, `plate3Item`);
-                  gear.style.height = holeDiv.clientWidth / 2 + 'px';
-                  gear.style.width = holeDiv.clientWidth / 2 + 'px';
-                  gear.style.left = getRandomInt(gear.clientWidth, holeDiv.clientWidth) - gear.clientWidth + "px";
-                  gear.style.top = getRandomInt(gear.clientHeight, holeDiv.clientHeight) - gear.clientHeight + "px";
-                  gear.style.zIndex = 3;
-                  gear.onclick = takeItem;
-            });
+      if (!secretOpen) {
+            let holeDivHider = document.createElement(`div`);
+            holeDivHider.classList.add(`position`, `holeHider`);
+            gameArea.appendChild(holeDivHider);
+            let holeDiv = document.createElement(`div`);
+            holeDiv.classList.add(`position`, `hole`);
+            holeDivHider.appendChild(holeDiv);
+            setTimeout(() => {
+                  holeDiv.style.left = `0px`;
+            }, 100);
+            let inventory = JSON.parse(window.sessionStorage.getItem(`inventoryLounge`));
+            if (!inventory.plate3) {
+                  addImg("plate3", holeDiv, (gear) => {
+                        gear.classList.add(`position`, `plate3Item`);
+                        gear.style.height = holeDiv.clientWidth / 2 + 'px';
+                        gear.style.width = holeDiv.clientWidth / 2 + 'px';
+                        gear.style.left = getRandomInt(gear.clientWidth, holeDiv.clientWidth) - gear.clientWidth + "px";
+                        gear.style.top = getRandomInt(gear.clientHeight, holeDiv.clientHeight) - gear.clientHeight + "px";
+                        gear.style.zIndex = 3;
+                        gear.onclick = takeItem;
+                  });
+            }
+            if (!inventory.plate5) {
+                  addImg("plate5", holeDiv, (gear) => {
+                        gear.classList.add(`position`, `plate5Item`);
+                        gear.style.height = holeDiv.clientWidth / 2 + 'px';
+                        gear.style.width = holeDiv.clientWidth / 2 + 'px';
+                        gear.style.left = getRandomInt(gear.clientWidth, holeDiv.clientWidth) - gear.clientWidth + "px";
+                        gear.style.top = getRandomInt(gear.clientHeight, holeDiv.clientHeight) - gear.clientHeight + "px";
+                        gear.style.zIndex = 3;
+                        gear.onclick = takeItem;
+                  });
+            }
       }
-      if (!inventory.plate5) {
-            addImg("plate5", holeDiv, (gear) => {
-                  gear.classList.add(`position`, `plate5Item`);
-                  gear.style.height = holeDiv.clientWidth / 2 + 'px';
-                  gear.style.width = holeDiv.clientWidth / 2 + 'px';
-                  gear.style.left = getRandomInt(gear.clientWidth, holeDiv.clientWidth) - gear.clientWidth + "px";
-                  gear.style.top = getRandomInt(gear.clientHeight, holeDiv.clientHeight) - gear.clientHeight + "px";
-                  gear.style.zIndex = 3;
-                  gear.onclick = takeItem;
-            });
-      }
-      // if(!inventory.plate6) {
-      // 	addImg("plate6", holeDiv, (gear) => {
-      // 		gear.classList.add(`position`, `plate6Item`);
-      // 		gear.style.height = holeDiv.clientWidth / 2 + 'px';
-      // 		gear.style.width = holeDiv.clientWidth / 2 + 'px';
-      // 		gear.style.left = getRandomInt(gear.clientWidth,holeDiv.clientWidth) - gear.clientWidth + "px";
-      // 		gear.style.top = getRandomInt(gear.clientHeight,holeDiv.clientHeight) - gear.clientHeight + "px";
-      // 		gear.style.zIndex = 3;
-      // 		gear.onclick = takeItem;
-      // 	});
-      // }
+      secretOpen = true;
 }
 
 function getRandomInt(min, max) {
@@ -323,9 +335,9 @@ function generateGears() {
                   gear.classList.add(`gear`, `position`);
                   gear.size = newGearSize;
                   gear.id = gearCount;
+                  gear.numberValue = gearNumbers[gearCount];
                   addImg(`${gearNumbers[gearCount]}`, gear, (number) => {
                         number.classList.add(`number`, `position`);
-                        gear.numberValue = gearNumbers[gearCount];
                         number.style.height = number.parentElement.clientHeight / 1.66 + 'px';
                         number.style.top = number.parentElement.clientHeight / 2 - number.clientHeight / 2 + "px";
                         number.style.left = number.parentElement.clientWidth / 2 - number.clientWidth / 2 + "px";
@@ -459,9 +471,17 @@ function keyMatch(peg, gear, active, lastGear) {
                   gear.rotateInterval = setInterval(spin, 100, gear, lastGear.direction);
                   if (peg && peg.id.split(',')[0] != keys.length) {
                         if (!currentSolution[peg.id.split(',')[0]]) {
-                              currentSolution[peg.id.split(',')[0]] = 0;
+                              currentSolution[peg.id.split(',')[0]] = [];
                         }
-                        currentSolution[peg.id.split(',')[0]] += gear.numberValue * peg.pitchUp;
+                        currentSolution[peg.id.split(',')[0]].push(gear.numberValue * peg.pitchUp);
+
+                        //deal with the top lights
+                        let rowLight = document.getElementById(`${peg.id.split(',')[0]}Light`);
+                        if(currentSolution[peg.id.split(',')[0]].length != 1) {
+                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        } else {
+                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        }
                   }
             }
       } else {
@@ -471,7 +491,18 @@ function keyMatch(peg, gear, active, lastGear) {
                   gear.style.transform = ``;
                   gear.rotation = 0;
                   if (peg && peg.id.split(',')[0] != keys.length) {
-                        currentSolution[peg.id.split(',')[0]] -= gear.numberValue * peg.pitchUp;
+                        let index = currentSolution[peg.id.split(',')[0]].indexOf(gear.numberValue * peg.pitchUp);
+                        if(index > -1) {
+                              currentSolution[peg.id.split(',')[0]].splice(index, 1);
+                        }
+
+                        //deal with the top lights
+                        let rowLight = document.getElementById(`${peg.id.split(',')[0]}Light`);
+                        if(currentSolution[peg.id.split(',')[0]].length != 1) {
+                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        } else {
+                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        }
                   }
             }
       }
@@ -486,6 +517,38 @@ function solutionCheck(currentGear, currentPeg, lastGear) {
       let allPairs = [];
       for (const [key, value] of Object.entries(gearNeighbors[currentGear.size])) {
             allPairs = allPairs.concat(Object.values(value).flat(0));
+      }
+      let allBans = [];
+      for (const [key, value] of Object.entries(gearOverlaps[currentGear.size])) {
+            allBans = allBans.concat(Object.values(value).flat(0));
+      }
+      for (var coordDifference of allBans) {
+            var checkLocation = currentGear.pegValue.split(",").map(function (num, idx) {
+                  return Number(num) + Number(coordDifference[idx]);
+            });
+            let bannedSizes = [];
+            for (const [key, value] of Object.entries(gearOverlaps[currentGear.size])) {
+                  if (value.includes(coordDifference)) {
+                        bannedSizes.push(key);
+                  }
+            }
+            let checkPeg = document.getElementById(`${checkLocation}`);
+            if (checkLocation == `${keys.length},${sideGearRow + 1}`) {
+                  checkPeg = { id: `${keys.length},${sideGearRow + 1}` };
+            }
+            if (checkPeg) {
+                  let nextGear = Array.from(document.querySelectorAll(`.gear`)).filter((gear) => {
+                        return gear.pegValue == checkPeg.id;
+                  });
+                  if(nextGear[0] && bannedSizes.includes(nextGear[0].size.toString())) {
+                        Array.from(document.querySelectorAll(`.gear`)).forEach((gear) => {
+                              if (gear.pegValue) {
+                                    keyMatch(document.getElementById(gear.pegValue), gear, false);
+                              }
+                        });
+                        return false;
+                  }
+            }
       }
       for (var coordDifference of allPairs) {
             var checkLocation = currentGear.pegValue.split(",").map(function (num, idx) {
@@ -611,6 +674,23 @@ function arraysEqual(a, b) {
       return true;
 }
 
+function flipSlip(halfSlip, rightClick) {
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id + "header")) {
@@ -662,22 +742,39 @@ function dragElement(elmnt) {
             e = e || window.event;
             e.preventDefault();
             // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        return;
+                  }
+            } else {
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+            }
             if (Array.from(e.target.classList).includes(`gear`)) {
                   if(e.target.pegValue) {
-                        let rowLight = document.getElementById(`${e.target.pegValue.split(`,`)[0]}Light`);
-                        if(!rowLight.count) {
-                              rowLight.count = []
-                        }
-                        rowLight.count = rowLight.count.filter((value) => {
-                              return value.id != e.target.id;
-                        });
-                        if(rowLight.count.length == 1) {
-                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
-                        } else {
-                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
-                        }
+                        // let rowLight = document.getElementById(`${e.target.pegValue.split(`,`)[0]}Light`);
+                        // if(!rowLight.count) {
+                        //       rowLight.count = []
+                        // }
+                        // rowLight.count = rowLight.count.filter((value) => {
+                        //       return value.id != e.target.id;
+                        // });
+                        // if(rowLight.count.length == 1) {
+                        //       rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        // } else {
+                        //       rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        // }
+                        let onPeg = document.getElementById(`${e.target.pegValue}`);
+                        keyMatch(onPeg, elmnt, false);
                   }
                   e.target.pegValue = null;
                   let chainCheck = false;
@@ -696,16 +793,16 @@ function dragElement(elmnt) {
                   gearPath.splice(gearPath.indexOf(e.target.id), 1);
                   delete gearMemory[e.target.id];
                   window.sessionStorage.setItem(`gearMemory`, JSON.stringify(gearMemory));
-                  let centerLocation = Object.create(locationObject);
-                  let allowedError = gearBase / 2;
-                  centerLocation.width = allowedError;
-                  centerLocation.height = allowedError;
-                  centerLocation.x = e.target.offsetLeft + (e.target.clientWidth - centerLocation.width) / 2;
-                  centerLocation.y = e.target.offsetTop + (e.target.clientHeight - centerLocation.height) / 2;
-                  let onSquare = overlayCheck(centerLocation, "peg");
-                  if (onSquare[0]) {
-                        keyMatch(onSquare[0], elmnt, false);
-                  }
+                  // let centerLocation = Object.create(locationObject);
+                  // let allowedError = gearBase / 2;
+                  // centerLocation.width = allowedError;
+                  // centerLocation.height = allowedError;
+                  // centerLocation.x = e.target.offsetLeft + (e.target.clientWidth - centerLocation.width) / 2;
+                  // centerLocation.y = e.target.offsetTop + (e.target.clientHeight - centerLocation.height) / 2;
+                  // let onSquare = overlayCheck(centerLocation, "peg");
+                  // if (onSquare[0]) {
+                  //       keyMatch(onSquare[0], elmnt, false);
+                  // }
             }
             // call a function whenever the cursor moves:
             document.onmousemove = elementDrag;
@@ -742,46 +839,51 @@ function dragElement(elmnt) {
             let inventoryItem = Array.from(elmnt.classList).find((value) => {
                   return value.includes(`dragItem`);
             });
-            let overPeg = overlayCheck(centerLocation, `peg`)[0];
-            if (overPeg) {
-                  if (!inventoryItem) {
+            if (!inventoryItem) {
+                  let overPeg = overlayCheck(centerLocation, `peg`)[0];
+                  if (overPeg) {
                         event.target.style.top = overPeg.offsetTop + overPeg.offsetParent.offsetTop + overPeg.offsetHeight / 2 - event.target.offsetHeight / 2 + "px";
                         event.target.style.left = overPeg.offsetLeft + overPeg.offsetParent.offsetLeft + overPeg.offsetWidth / 2 - event.target.offsetWidth / 2 + "px";
                         event.target.pegValue = overPeg.id;
-                        let rowLight = document.getElementById(`${overPeg.id.split(`,`)[0]}Light`);
-                        if(!rowLight.count) {
-                              rowLight.count = [];
-                        }
-                        rowLight.count.push(event.target);
-                        if(rowLight.count.length == 1) {
-                              rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
-                        } else {
-                              rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
-                        }
+                        // let rowLight = document.getElementById(`${overPeg.id.split(`,`)[0]}Light`);
+                        // if(!rowLight.count) {
+                        //       rowLight.count = [];
+                        // }
+                        // rowLight.count.push(event.target);
+                        // if(rowLight.count.length == 1) {
+                        //       rowLight.style.background = `radial-gradient(circle at center, lightgreen, green)`;
+                        // } else {
+                        //       rowLight.style.background = `radial-gradient(circle at center, red, darkred)`;
+                        // }
                         gearMemory[event.target.id] = event.target.pegValue;
                         window.sessionStorage.setItem(`gearMemory`, JSON.stringify(gearMemory));
                   }
-            }
-            if (solutionCheck(document.getElementById(`startGear`), false, { id: -1 })) {
-                  let sideGearEnd = document.getElementById(`startGearEnd`);
-                  if(sideGearEnd.rotateInterval && overPeg && !inventoryItem) {
-                        let timeoutDelay = 0;
-                        allNoteTimeouts.forEach((timeoutID) => {
-                              clearTimeout(timeoutID);
+                  if (solutionCheck(document.getElementById(`startGear`), false, { id: -1 })) {
+                        let sideGearEnd = document.getElementById(`startGearEnd`);
+                        let actuallyCurrent = currentSolution.map((gearNum) => {
+                              switch(gearNum.length) {
+                                    case 0:
+                                          return 0;
+                                    case 1:
+                                          return gearNum[0];
+                                    default:
+                                          return [];
+                              }
                         });
-                        allNoteTimeouts = [];
-                        currentSolution.forEach((note) => {
-                              allNoteTimeouts.push(setTimeout(playSong, timeoutDelay, note));
-                              timeoutDelay += 600;
-                        }); 
-                  }
-                  if (arraysEqual(currentSolution, correctSolution)) {
-                        let timeoutDelay = 0;
-                        correctSolution.forEach((note) => {
-                              setTimeout(playSong, timeoutDelay, note);
-                              timeoutDelay += 600;
-                        });
-                        openSecret();
+                        if(sideGearEnd.rotateInterval && overPeg) {
+                              let timeoutDelay = 0;
+                              allNoteTimeouts.forEach((timeoutID) => {
+                                    clearTimeout(timeoutID);
+                              });
+                              allNoteTimeouts = [];
+                              actuallyCurrent.forEach((note) => {
+                                    allNoteTimeouts.push(setTimeout(playSong, timeoutDelay, note));
+                                    timeoutDelay += 600;
+                              }); 
+                        }
+                        if (arraysEqual(actuallyCurrent, correctSolution)) {
+                              openSecret();
+                        }
                   }
             }
             let clickLocation = Object.create(locationObject);

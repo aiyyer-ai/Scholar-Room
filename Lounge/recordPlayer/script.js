@@ -3,12 +3,16 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryLounge`);
       if (!inventory) {
             inventory = {
-                  halfSlipLoungeA: false,
+                  halfSlipLoungeFront: false,
                   tapeRecorder: false,
                   plate1: false,
                   plate2: false,
@@ -42,11 +46,11 @@ var correctSolution = [1, -2, 1, -6, -2, -4, 1, 5, 3, 1];
 var pauseTimeStart;
 
 function save() {
-      let jsonData = {...window.sessionStorage};
+      let jsonData = { ...window.sessionStorage };
       jsonData.lastRoom = `${window.location.pathname}`;
       function download(content, fileName, contentType) {
             var a = document.createElement("a");
-            var file = new Blob([content], {type: contentType});
+            var file = new Blob([content], { type: contentType });
             a.href = URL.createObjectURL(file);
             a.download = fileName;
             a.click();
@@ -192,7 +196,7 @@ function enterInventoryEntry(item, itemValue) {
                         imgDiv.id = item;
                         imgDiv.classList.add(`inventoryItem`);
                         // if(imgDiv.clientWidth > 200) {
-                              addInv(`${item}Alt`, imgDiv, (altImgDiv) => {
+                        addInv(`${item}Alt`, imgDiv, (altImgDiv) => {
                               if (altImgDiv) {
                                     imgDiv.appendChild(altImgDiv.children[0]);
                                     altImgDiv.remove();
@@ -233,6 +237,7 @@ function addRecords() {
             let recordCount = i;
             addImg(`record${i}`, gameArea, (record) => {
                   record.classList.add(`records`);
+                  record.classList.add(`zIndexLift`);
                   if (recordCount == 1) {
                         record.allAudios = correctSolution.map((num) => {
                               if (num == 0) {
@@ -251,7 +256,7 @@ function addRecords() {
                   let offsetDistance = (window.innerHeight - (Number(Math.max(...recordTopLocations)) + Number(recordHeight.replace("px", "")))) / 2;
                   let topPosition = recordTopLocations[recordCount - 1];
                   let leftPosition = 100;
-                  record.style.zIndex = topPosition / 100;
+                  record.style.zIndex = topPosition / 100 + 1;
                   record.id = recordCount;
                   record.style.top = topPosition + offsetDistance + `px`;
                   record.style.left = leftPosition + `px`;
@@ -262,6 +267,7 @@ function addRecords() {
 function addTapeUnit() {
       addImg(`tapeUnit`, gameArea, (unit) => {
             unit.classList.add(`tapeUnit`, `position`);
+            unit.classList.add(`zIndexLift`);
             unit.id = `tapeUnit`;
             dragElement(unit);
             unit.style.height = `300px`;
@@ -272,30 +278,51 @@ function addTapeUnit() {
             unit.recordedTimeouts = [];
             unit.currentNote = 0;
             let buttonOrder = [`rec`, `play`, `pause`, `previous`, `current`, `next`];
-            for (i = 0; i < 6; i++) {
+            let buttonCount = 1;
+            for (i = 0; i < buttonCount; i++) {
                   let newButton = document.createElement(`div`);
                   newButton.classList.add(`position`, `tapeButton`);
                   unit.appendChild(newButton);
                   newButton.id = buttonOrder[i];
                   newButton.onclick = tapeButtonPress;
                   newButton.style.left = `calc(50% + ${(newButton.clientWidth + 3) * i}px - ${newButton.clientWidth * 3.2}px)`;
+                  newButton.style.width = 6 / buttonCount * (newButton.clientWidth + 3) + "px";
             }
             let backgroundDiv = document.createElement(`div`);
             backgroundDiv.classList.add(`tapeBack`, `position`);
             unit.appendChild(backgroundDiv);
-            let soundBar = document.createElement(`div`);
-            soundBar.id = `tapeSoundBar`;
-            soundBar.classList.add(`tapeSoundBar`, `position`);
-            backgroundDiv.appendChild(soundBar);
-            soundBar.style.width = 12 + 'px';
-            centerDiv(soundBar, backgroundDiv, 50, 10);
-            soundBar.originalLeft = soundBar.offsetLeft;
+            let gapSize = Number(getComputedStyle(backgroundDiv).getPropertyValue('row-gap').replace("px", ""));
+            let padding = Number(getComputedStyle(backgroundDiv).getPropertyValue('padding').replace("px", ""));
+            let middleGap = 3;
+            let noteCount = 10;
+            let possibleNotes = 12;
+            let columnStyle = `auto `;
+            unit.maxNotes = noteCount;
+            let rowStyle = `${(backgroundDiv.clientHeight - (gapSize * possibleNotes) - (padding * 2) - middleGap) / possibleNotes}px `;
+            backgroundDiv.style.gridTemplateColumns = columnStyle.repeat(noteCount);
+            backgroundDiv.style.gridTemplateRows = rowStyle.repeat(Math.floor(possibleNotes / 2)) + (middleGap + "px ") + rowStyle.repeat(Math.floor(possibleNotes / 2));
+            for (k = Math.floor(possibleNotes / 2); k >= Math.floor(possibleNotes / 2) * -1; k--) {
+                  if( k == 0 ) {
+                       continue;
+                  }
+                  for (i = 0; i < noteCount; i++) {
+                        if(k == 1 && i == 0) {
+                              let longBar = document.createElement(`div`);
+                              longBar.classList.add(`longBar`);
+                              longBar.id = `tapeSeperator`;
+                              backgroundDiv.appendChild(longBar);
+                        }
+                        let newBoxDiv = document.createElement(`div`);
+                        newBoxDiv.classList.add(`soundBox`);
+                        newBoxDiv.id = `${i}/${k}`;
+                        backgroundDiv.appendChild(newBoxDiv);
+                  }
+            }
             centerDiv(unit, gameArea, 90, 90);
       });
 }
 
 function tapeButtonPress(event) {
-      let soundBar = document.getElementById(`tapeSoundBar`);
       Array.from(document.querySelectorAll(`.tapeButton`)).forEach((button) => {
             if (button.id != this.id) {
                   button.style.opacity = "";
@@ -308,13 +335,30 @@ function tapeButtonPress(event) {
             switch (this.id) {
                   case `rec`:
                         this.parentElement.recording = !this.parentElement.recording;
+                        if(this.parentElement.recording) {
+                              Array.from(document.getElementsByClassName(`soundBox`)).forEach((soundBox) => {
+                                    soundBox.style.backgroundColor = ``;
+                              })
+                        }
+                        // if (this.parentElement.recording && currentRecord) {
+                        //       let audioPlaying = currentRecord.allAudios.filter((audio) => {
+                        //             return !audio.paused;
+                        //       });
+                        //       if (audioPlaying.length > 0) {
+                        //             this.parentElement.recordedSong = currentRecord.allAudios;
+                        //             this.parentElement.recording = false;
+                        //             setTimeout(() => {
+                        //                   this.style.opacity = '';
+                        //                   this.pressed = false;
+                        //                   this.parentElement.currentNote = 0;
+                        //             }, 600 * (currentRecord.allAudios.length - (currentRecord.allAudios.indexOf(audioPlaying[0]) + 1)));
+                        //       }
+                        // }
                         break;
                   case `play`:
                         if (tapeUnit.recordedSong) {
-                              playTune(tapeUnit.recordedSong.slice(tapeUnit.currentNote, tapeUnit.recordedSong.length), tapeUnit.recordedTimeouts, soundBar);
+                              playTune(tapeUnit.recordedSong.slice(tapeUnit.currentNote, tapeUnit.recordedSong.length), tapeUnit.recordedTimeouts);
                               tapeUnit.recordedTimeouts.push(setTimeout(() => {
-                                    soundBar.style.width = `12px`;
-                                    soundBar.style.left = soundBar.originalLeft + "px";
                                     tapeUnit.currentNote = 0;
                                     this.style.opacity = ``;
                                     this.pressed = false;
@@ -330,14 +374,14 @@ function tapeButtonPress(event) {
                   case `previous`:
                         if (tapeUnit.recordedSong) {
                               tapeUnit.currentNote = Math.max(tapeUnit.currentNote - 1, 0);
-                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote], soundBar);
+                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote]);
                               tapeUnit.currentNote--;
                         }
                         untapButton(this);
                         break;
                   case `current`:
                         if (tapeUnit.recordedSong) {
-                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote], soundBar);
+                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote]);
                               tapeUnit.currentNote--;
                         }
                         untapButton(this);
@@ -345,7 +389,7 @@ function tapeButtonPress(event) {
                   case `next`:
                         if (tapeUnit.recordedSong) {
                               tapeUnit.currentNote = Math.min(tapeUnit.currentNote + 1, tapeUnit.recordedSong.length - 1);
-                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote], soundBar);
+                              playNote(tapeUnit.recordedSong[tapeUnit.currentNote]);
                               tapeUnit.currentNote--;
                         }
                         untapButton(this);
@@ -376,39 +420,52 @@ function placeRecord(elmnt) {
       let recordSnapBounds = document.getElementById(`recordSnap`).getBoundingClientRect();
       currentRecord.style.top = recordSnapBounds.bottom - recordSnapBounds.height / 2 - currentRecord.clientHeight / 2 + "px";
       currentRecord.style.left = recordSnapBounds.right - recordSnapBounds.width / 2 - currentRecord.clientWidth / 2 + "px";
-      needle.style.zIndex = "25";
+      currentRecord.currentNote = 0;
+      needle.style.zIndex = "9";
       let tapeUnit = document.getElementById(`tapeUnit`);
-      if (tapeUnit.recording) {
-            tapeUnit.recordedSong = elmnt.allAudios;
-            tapeUnit.recording = false;
-            setTimeout(() => {
-                  let recordButton = document.getElementById(`rec`);
-                  recordButton.style.opacity = '';
-                  recordButton.pressed = false;
-                  tapeUnit.currentNote = 0;
-            }, 600 * elmnt.allAudios.length);
-      }
       playTune(elmnt.allAudios, elmnt.timeouts, false);
+      // if (tapeUnit.recording) {
+      //       tapeUnit.recordedSong = elmnt.allAudios;
+      //       tapeUnit.recording = false;
+      //       setTimeout(() => {
+      //             let recordButton = document.getElementById(`rec`);
+      //             recordButton.style.opacity = '';
+      //             recordButton.pressed = false;
+      //             tapeUnit.currentNote = 0;
+      //       }, 600 * elmnt.allAudios.length);
+      // }
       spin(currentRecord);
 }
 
-function playTune(allAudios, timeouts, soundBar) {
+function playTune(allAudios, timeouts) {
       let timeoutDelay = 0;
       allAudios.forEach((audio) => {
-            timeouts.push(setTimeout(playNote, timeoutDelay, audio, soundBar));
+            timeouts.push(setTimeout(playNote, timeoutDelay, audio));
             timeoutDelay += 600;
       });
 }
 
-function playNote(audio, soundBar) {
-      if (soundBar) {
+function playNote(audio) {
             let noteNumber = audio.src.split(`/`).pop().split(`.`)[0];
             let tapeUnit = document.getElementById(`tapeUnit`);
-            tapeUnit.currentNote++;
-            soundBar.style.width = 6 + (Math.abs(noteNumber) * 27) + "px";
-            soundBar.style.left = noteNumber > 0 ? soundBar.originalLeft + "px" : soundBar.originalLeft + (noteNumber * 27) + 6 + "px";
-            // soundBar.style.backgroundColor = noteNumber > 0 ? `lime` : `red`;
-      }
+            let iterationMultiplier = noteNumber > 0 ? 1 : -1;
+            if (tapeUnit.recording) {
+                  for(i = 1; i <= Math.abs(noteNumber); i++) {
+                        let soundBox = document.getElementById(`${tapeUnit.currentNote}/${i * iterationMultiplier}`);
+                        soundBox.style.backgroundColor = `lime`;
+                  }
+                  tapeUnit.currentNote++;
+            }
+            if(currentRecord) {
+                  currentRecord.currentNote++;
+            }
+            if((currentRecord && currentRecord.currentNote >= tapeUnit.maxNotes) || tapeUnit.currentNote >= tapeUnit.maxNotes) {
+                  tapeUnit.recording = false;
+                  let recordButton = document.getElementById(`rec`);
+                  recordButton.style.opacity = '';
+                  recordButton.pressed = false;
+                  tapeUnit.currentNote = 0;   
+            }
       audio.pause();
       audio.currentTime = 0;
       audio.play();
@@ -418,7 +475,8 @@ function randomAudio() {
       let audioOrder = randomIntArrayInRange(-6, 6, 10);
       return audioOrder.map((num) => {
             if (num == 0) {
-                  num = `start`;
+                  //num = `start`;
+                  num = 1;
             }
             let audio = new Audio(`./audio/${num}.wav`);
             audio.playbackRate = 0.8;
@@ -508,6 +566,23 @@ function addImgInv(src, parentElement, imgCallback) {
       }
 }
 
+function flipSlip(halfSlip, rightClick) {
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       if (document.getElementById(elmnt.id + "header")) {
@@ -556,42 +631,57 @@ function dragElement(elmnt) {
       }
 
       function dragMouseDown(e) {
-            let inventoryItem = Array.from(elmnt.classList).find((value) => {
-                  return value.includes(`dragItem`);
-            });
-            if (!inventoryItem) {
-                  let isRecord = Array.from(elmnt.classList).find((value) => {
-                        return value.includes(`records`);
-                  });
-                  if (isRecord) {
-                        elmnt.style.transform = "scale(calc(4/3))";
-                  }
-                  Array.from(document.querySelectorAll(`.imgContainer`)).forEach((div) => {
-                        if (div.style.zIndex > elmnt.style.zIndex && div.id != elmnt.id) {
-                              div.style.zIndex = div.style.zIndex - 1;
-                        }
-                  });
-                  if (elmnt == currentRecord) {
-                        needle.style.zIndex = "1";
-                        currentRecord = null;
-                        clearInterval(elmnt.spinInterval);
-                        elmnt.style.transform = "";
-                        elmnt.timeouts.forEach((timeoutID) => {
-                              clearTimeout(timeoutID);
-                        });
-                        elmnt.timeouts = [];
-
-                  }
-                  elmnt.style.zIndex = Array.from(document.querySelectorAll(`.imgContainer`)).length;
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
             }
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        rotatePiece(elmnt);
+                  }
+            } else {
+                  let inventoryItem = Array.from(elmnt.classList).find((value) => {
+                        return value.includes(`dragItem`);
+                  });
+                  if (!inventoryItem) {
+                        let isRecord = Array.from(elmnt.classList).find((value) => {
+                              return value.includes(`records`);
+                        });
+                        if (isRecord) {
+                              elmnt.style.transform = "scale(calc(4/3))";
+                        }
+                        Array.from(document.querySelectorAll(`.zIndexLift`)).forEach((div) => {
+                              if (div.style.zIndex > elmnt.style.zIndex && div.id != elmnt.id) {
+                                    div.style.zIndex = div.style.zIndex - 1;
+                              }
+                        });
+                        if (elmnt == currentRecord) {
+                              needle.style.zIndex = "1";
+                              currentRecord = null;
+                              clearInterval(elmnt.spinInterval);
+                              elmnt.style.transform = "";
+                              elmnt.timeouts.forEach((timeoutID) => {
+                                    clearTimeout(timeoutID);
+                              });
+                              elmnt.timeouts = [];
+
+                        }
+                        elmnt.style.zIndex = Array.from(document.querySelectorAll(`.zIndexLift`)).length;
+                  }
+                  e = e || window.event;
+                  e.preventDefault();
+                  // get the mouse cursor position at startup:
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+                  document.onmouseup = closeDragElement;
+                  // call a function whenever the cursor moves:
+                  document.onmousemove = elementDrag;
+            }
       }
 
       function elementDrag(e) {

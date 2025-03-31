@@ -3,12 +3,16 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventoryOffice`);
       if (!inventory) {
             inventory = {
-                  halfSlipTop: false,
+                  halfSlipOfficeFront: false,
                   plate2: false,
                   plate3: false,
                   plate4: false,
@@ -559,28 +563,41 @@ function closest(goal, arr) {
 }
 
 function dispenseSlip() {
-      let halfSlipTop = document.getElementsByClassName(`halfSlipTop`)[0];
-      // let halfSlipBottom = document.getElementById(`halfSlipBottom`);
+      let halfSlipOfficeFront = document.getElementsByClassName(`halfSlipOfficeFront`)[0];
       let hider = document.getElementById(`halfSlipHider`);
       let board = document.getElementById(`gameArea`);
       let boardBounds = board.getBoundingClientRect();
       hider.style.left = boardBounds.left - hider.clientWidth - 48 + "px";
       hider.style.top = window.innerHeight / 2 - hider.clientHeight / 2 + "px";
       let hiderBounds = hider.getBoundingClientRect();
-      halfSlipTop.style.visibility = "visible";
-      halfSlipTop.style.left = hider.clientWidth + 'px';
-      halfSlipTop.style.transition = `2s ease-in-out`;
-      halfSlipTop.style.transform = `translate(-${halfSlipTop.clientWidth / 2}px, 0px)`
+      halfSlipOfficeFront.style.visibility = "visible";
+      halfSlipOfficeFront.style.left = hider.clientWidth + 'px';
+      halfSlipOfficeFront.style.transition = `2s ease-in-out`;
+      halfSlipOfficeFront.style.transform = `translate(-${halfSlipOfficeFront.clientWidth / 2}px, 0px)`
       setTimeout(() => {
-            halfSlipTop.style.transition = '';
-            //dragElement(halfSlipTop);
-            halfSlipTop.classList.add(`halfSlipTopItem`);
-            halfSlipTop.onclick = takeItem;
+            halfSlipOfficeFront.style.transition = '';
+            //dragElement(halfSlipOfficeFront);
+            halfSlipOfficeFront.classList.add(`halfSlipOfficeFrontItem`);
+            halfSlipOfficeFront.onclick = takeItem;
       }, "2000");
-      // halfSlipBottom.style.visibility = "visible";
-      // halfSlipBottom.style.left = hider.clientWidth + 'px';
-      // halfSlipBottom.style.transform = `translate(-${halfSlipBottom.clientWidth / 2}px, 0px)`
+}
 
+function flipSlip(halfSlip, rightClick) {
+      console.log(halfSlip, rightClick);
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipOfficeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
 }
 
 function dragElement(elmnt) {
@@ -633,28 +650,34 @@ function dragElement(elmnt) {
       function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // let halfSlipTop = Array.from(elmnt.classList).find((value) => {
-            //   return value.includes(`halfSlipTop`);
-            // });
-            // if (halfSlipTop) {
-            //   gameArea.appendChild(elmnt);
-            //   console.log(elmnt);
-            //   elmnt.style.left = elmnt.endBounds.left + 'px';
-            //   elmnt.style.top = elmnt.endBounds.top + 'px';
-            // }
-            let inventoryItem = Array.from(elmnt.classList).find((value) => {
-                  return value.includes(`dragItem`);
-            });
-            if (!inventoryItem) {
-                  e.target.style.zIndex = 4;
-                  elmnt.style.backgroundImage = `none`;
+            var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
             }
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        return;
+                  }
+            } else {
+                  // get the mouse cursor position at startup:
+                  pos3 = e.clientX;
+                  pos4 = e.clientY;
+                  let inventoryItem = Array.from(elmnt.classList).find((value) => {
+                        return value.includes(`dragItem`);
+                  });
+                  if (!inventoryItem) {
+                        e.target.style.zIndex = 4;
+                        elmnt.style.backgroundImage = `none`;
+                  }
+                  document.onmouseup = closeDragElement;
+                  // call a function whenever the cursor moves:
+                  document.onmousemove = elementDrag;
+            }
       }
 
       function elementDrag(e) {

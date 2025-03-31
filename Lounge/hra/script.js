@@ -12,8 +12,8 @@ var pageData = [
 	Items cannot be in the same row or column as another item.<brb>
 	Paintings must be hung where there is <span class="large">▮</span> <span class="scribbles one">1</span> hook to the left and <span class="large">▮</span> <span class="scribbles two">2</span> hooks to the right.<brb>
 	Plants must always touch a wall.<brb>
-	Candles must be at least <span class="large">▮</span> <span class="scribbles three">3</span> squares away from the nearest door. <brb>
-	When given the option, Statues should be as close to Plants as possible. <brb>
+	Candles must be at least <span class="large">▮</span> <span class="scribbles three">3</span> squares away from any wall with a painting. <brb>
+	Statues should be as far from Candles as possible. <brb>
 	`},
 	{innerHTML:`
 	<div class="row pamphlet">
@@ -32,11 +32,15 @@ turnToPage(0);
 var timeStart;
 window.onload = () => {
       timeStart = Date.now();
+	typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
 	document.onclick = movementCheck;
 	let inventory = window.sessionStorage.getItem(`inventoryLounge`);
 	if(!inventory) {
             inventory = {
-                  halfSlipLoungeA: false,
+                  halfSlipLoungeFront: false,
                   tapeRecorder: false,
                   plate1: false,
                   plate2: false,
@@ -53,11 +57,11 @@ window.onload = () => {
 	  enterInventoryEntry(item, inventory[item]);
 	}
 	let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
-	let halfSlip = document.getElementById(`halfSlipLoungeA`);
-	if (!inventory.halfSlipLoungeA) {
+	let halfSlip = document.getElementById(`halfSlipLoungeFront`);
+	if (!inventory.halfSlipLoungeFront) {
 		if (halfSlipState) {
 			halfSlip.style.visibility = "visible";
-			halfSlip.classList.add(`halfSlipLoungeAItem`);
+			halfSlip.classList.add(`halfSlipLoungeFrontItem`);
 			halfSlip.onclick = takeItem;
 		}
 	}
@@ -404,6 +408,23 @@ function lastPage() {
 	turnToPage(Number(text.pageID) - 1);
 }
 
+function flipSlip(halfSlip, rightClick) {
+      if (halfSlip.firstChild.src.includes`Front`) {
+            halfSlip.currentSide = 'front';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeBack.webp'
+                  halfSlip.currentSide = 'back';
+            }
+      } else if (halfSlip.firstChild.src.includes`Back`) {
+            halfSlip.currentSide = 'back';
+            if (rightClick) {
+                  halfSlip.firstChild.src = '../inventoryItems/halfSlips/halfSlipLoungeFront.webp'
+                  halfSlip.currentSide = 'front';
+            }
+      }
+      return halfSlip.currentSide;
+}
+
 function dragElement(elmnt) {
 	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 	if (document.getElementById(elmnt.id + "header")) {
@@ -454,18 +475,33 @@ function dragElement(elmnt) {
 	function dragMouseDown(e) {
 		e = e || window.event;
 		e.preventDefault();
-		// get the mouse cursor position at startup:
-		pos3 = e.clientX;
-		pos4 = e.clientY;
-		let inventoryItem = Array.from(elmnt.classList).find((value) => {
-			return value.includes(`dragItem`);
-		  });
-		  if(!inventoryItem) {
-			currentPosition[e.target.id] = [-1,-1];
-		  }
-		document.onmouseup = closeDragElement;
-		// call a function whenever the cursor moves:
-		document.onmousemove = elementDrag;
+		var rightclick;
+            if (e.which) {
+                  rightclick = (e.which == 3);
+            }
+            else if (e.button) {
+                  rightclick = (e.button == 2);
+            }
+            if (rightclick) {
+                  if (elmnt.id.includes('halfSlip')) {
+                        flipSlip(elmnt, rightclick);
+                  } else {
+                        return;
+                  }
+            } else {
+			// get the mouse cursor position at startup:
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			let inventoryItem = Array.from(elmnt.classList).find((value) => {
+				return value.includes(`dragItem`);
+			});
+			if(!inventoryItem) {
+				currentPosition[e.target.id] = [-1,-1];
+			}
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+		}
 	}
 
 	function elementDrag(e) {

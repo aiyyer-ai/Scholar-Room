@@ -71,6 +71,10 @@ window.onload = (event) => {
       //time recording code
       timeStart = Date.now();
       //end time recording code
+      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
+      window.addEventListener(`contextmenu`, (e) => {
+            e.preventDefault();
+      });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventory`);
@@ -92,10 +96,6 @@ window.onload = (event) => {
             inputString = `{"base":{"0,0":{"1,0":1,"cyan":1},"1,0":{"1,1":1,"0,0":1},"2,0":{"3,0":1,"magenta":1},"3,0":{"4,0":1,"3,1":42000,"2,0":1},"4,0":{"5,0":7000,"3,0":1},"5,0":{"6,0":1,"4,0":7000},"6,0":{"6,1":1,"5,0":1,"yellow":1},"0,1":{"1,1":1,"0,2":1},"1,1":{"1,0":1,"2,1":7000,"0,1":1},"2,1":{"3,1":1,"1,1":7000},"3,1":{"3,0":42000,"4,1":1,"3,2":1000,"2,1":1},"4,1":{"4,2":1000,"3,1":1},"5,1":{"6,1":1,"5,2":1000},"6,1":{"6,0":1,"5,1":1},"0,2":{"0,1":1,"1,2":7000,"0,3":1},"1,2":{"2,2":1,"1,3":1,"0,2":7000},"2,2":{"2,3":1,"1,2":1},"3,2":{"3,1":1000,"4,2":7000,"3,3":1},"4,2":{"4,1":1000,"5,2":1,"3,2":7000},"5,2":{"5,1":1000,"5,3":1,"4,2":1},"0,3":{"0,2":1,"1,3":1000,"0,4":1},"1,3":{"1,2":1,"0,3":1000},"2,3":{"2,2":1,"3,3":1},"3,3":{"3,2":1,"4,3":7000,"2,3":1},"4,3":{"5,3":1000,"3,3":7000,"white":1},"5,3":{"5,2":1,"4,3":1000},"0,4":{"0,3":1},"cyan":{"0,0":1},"magenta":{"2,0":1},"yellow":{"6,0":1},"white":{"4,3":1}},"filters":{"cyan":[],"magenta":[],"yellow":[],"blue":["5,2/5,3"],"red":[],"green":["4,1/4,2"],"black":[]}}`;
       }
       document.addEventListener("mousedown", mouseClick);
-      typeof window.addEventListener === `undefined` && (window.addEventListener = (e, cb) => window.attachEvent(`on${e}`, cb));
-      window.addEventListener(`contextmenu`, (e) => {
-            e.preventDefault();
-      });
 
       //changePipeParent();
       makeButtonHolder();
