@@ -329,9 +329,42 @@ function loadItems(totalImages) {
 			default:
 				console.log(`oh no`);
 		}
-		let placementSquare = document.getElementById(currentPosition[imgContainer.id].join());
-		imgContainer.style.top = placementSquare.offsetTop + placementSquare.offsetHeight / 2 - imgContainer.offsetHeight / 2 + "px";
-		imgContainer.style.left = placementSquare.offsetLeft + placementSquare.offsetWidth / 2 - imgContainer.offsetWidth / 2 + "px";
+            let miniHRAPositions = window.sessionStorage.getItem(`miniHRAPositions`);
+            if(!miniHRAPositions) {
+                  miniHRAPositions = {
+                        painting: {
+                              x: false,
+                              y: false
+                        },
+                        statue: {
+                              x: false,
+                              y: false
+                        },
+                        plant: {
+                              x: false,
+                              y: false
+                        },
+                        cup: {
+                              x: false,
+                              y: false
+                        },
+                        candle: {
+                              x: false,
+                              y: false
+                        }
+                  }
+                  window.sessionStorage.setItem(`miniHRAPositions`, JSON.stringify(miniHRAPositions));
+            } else {
+                  miniHRAPositions = JSON.parse(miniHRAPositions);
+            }
+            if (miniHRAPositions[imgContainer.id].x) {
+                  imgContainer.style.top = miniHRAPositions[imgContainer.id].y + "px";
+                  imgContainer.style.left = miniHRAPositions[imgContainer.id].x + "px";
+            } else {
+                  let placementSquare = document.getElementById(currentPosition[imgContainer.id].join());
+                  imgContainer.style.top = placementSquare.offsetTop + placementSquare.offsetHeight / 2 - imgContainer.offsetHeight / 2 + "px";
+                  imgContainer.style.left = placementSquare.offsetLeft + placementSquare.offsetWidth / 2 - imgContainer.offsetWidth / 2 + "px";
+            }
 		dragElement(imgContainer);
   }
 }
@@ -544,6 +577,37 @@ function dragElement(elmnt) {
 				// 	allData.innerHTML = `YAY`;
 				// }
 			}
+                  let miniHRAPositions = window.sessionStorage.getItem(`miniHRAPositions`);
+                  if(!miniHRAPositions) {
+                        miniHRAPositions = {
+                              painting: {
+                                    x: false,
+                                    y: false
+                              },
+                              statue: {
+                                    x: false,
+                                    y: false
+                              },
+                              plant: {
+                                    x: false,
+                                    y: false
+                              },
+                              cup: {
+                                    x: false,
+                                    y: false
+                              },
+                              candle: {
+                                    x: false,
+                                    y: false
+                              }
+                        }
+                        window.sessionStorage.setItem(`miniHRAPositions`, JSON.stringify(miniHRAPositions));
+                  } else {
+                        miniHRAPositions = JSON.parse(miniHRAPositions);
+                  }
+                  miniHRAPositions[elmnt.id].x = elmnt.offsetLeft;
+                  miniHRAPositions[elmnt.id].y = elmnt.offsetTop;
+                  window.sessionStorage.setItem(`miniHRAPositions`, JSON.stringify(miniHRAPositions));
 		}
 	}
 }

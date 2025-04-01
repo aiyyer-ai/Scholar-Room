@@ -102,7 +102,7 @@ let pieceList = {
                   ],
             number: 35,
             color: [245, 66, 66],
-            startRotation: 0,
+            startRotation: 270,
       },
       pieceB:
       {
@@ -114,7 +114,7 @@ let pieceList = {
                   ],
             number: 1,
             color: [245, 161, 66],
-            startRotation: 0,
+            startRotation: 90,
       },
       pieceC:
       {

@@ -80,8 +80,14 @@ window.onload = (event) => {
 		window.sessionStorage.setItem(`wallInfo`, JSON.stringify(wallData));
 	} else {
             let takenFedora = JSON.parse(window.sessionStorage.getItem(`wallLightsDone`));
+            wallData = JSON.parse(wallData);
+            for (let [paintingID, value] of Object.entries(wallData)) {
+                  if(value != -1) {
+                        let painting = document.getElementById(paintingID);
+                        painting.src = painting.src.replace(".webp", "Peg.webp");
+                  }
+            }
 		if (!takenFedora) {
-			wallData = JSON.parse(wallData);
 			currentCombination = [Number(wallData.paintingA), Number(wallData.paintingB), Number(wallData.paintingC), Number(wallData.paintingD)];
 			if(arraysEqual(currentCombination, correctCombination)) {
 				let chandelier = document.getElementById("chandelier");

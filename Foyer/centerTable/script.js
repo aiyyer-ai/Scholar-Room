@@ -333,7 +333,10 @@ function loadImages() {
                   imgContainer.style.width = `800px`;
             }
             if (imgContainer.id == 7) {
-                  imgContainer.style.width = `300px`;
+                  imgContainer.style.width = `200px`;
+            }
+            if (imgContainer.id == 1) {
+                  imgContainer.style.width = `400px`;
             }
             imgContainer.style.top = topPosition + `px`;
             imgContainer.style.left = leftPosition + `px`;

@@ -131,7 +131,7 @@ html {
 }
 
 .lower {
-      height: 5vh;
+      height: 2vh;
       width: 100%;
 }
 
@@ -148,6 +148,7 @@ html {
   background-size: contain;
   background-repeat:no-repeat;
   grid-column-gap: 60px;
+  scale: 0.9;
 }
 
 .hat {

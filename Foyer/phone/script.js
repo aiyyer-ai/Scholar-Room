@@ -533,15 +533,17 @@ function voicemail(button) {
       } else {
             voicemailaudio.started = true;
             screenText.innerHTML = `Playing . . .`;
+            voicemailaudio.playbackRate = 1.2;
             voicemailaudio.play();
             voicemailaudio.onended = voicemail;
+            // 0, 3492, 9686, 15193, 20598, 25700
             let transcriptData = {
-                  0: `UGH, STRAIGHT TO VOICEMAIL... OKAY.`,
-                  3000: `HEY IT'S LISA, JUST CALLING TO LET YOU KNOW THAT I'LL BE SWINGING BY WITH GROCERIES LATER.`,
-                  7200: `CAN I SKIP THE BOOK THING THIS TIME THOUGH? I STILL STRUGGLE WITH THE THREE RULES FOR IT.`,
-                  12000: `I KNOW, I KNOW! "EACH RULE IS JUST ONE ASPECT THAT AFFECTS ALL THE BOOKS" AND I APPRECIATE YOU PUTTING IN THE LIGHTS FOR ME, BUT I ALWAYS FORGET HOW TO GET THEM ALL ON AT ONCE.`,
-                  21900: `I JUST DON'T GET YOUR OBSESSION WITH ORGANIZING YOUR YEARBOOKS WITH DICTIONARIES AND AN ATLAS?? IT DOESN'T MAKE ANY SENSE!`,
-                  27900: `I JUST WISH YOU'D SORT THINGS NORMALLY FOR ONCE. *INTERRUPTED* LISA, THE GOVERNOR'S STILL WAITING ON LINE 3— UGH! HE CAN WAIT! GOTTA GO... LOVE YOU, BYE`,
+                  0: `WOW... STRAIGHT TO VOICEMAIL... OKAY.`,
+                  2910: `HEY IT'S LISA, LISTEN, MOM'S WORRIED ABOUT YOU, SO I'M BRINGING YOU GROCERIES TOMORROW.`,
+                  8071: `CAN I SKIP THE BOOK THING THIS TIME THOUGH? I STILL STRUGGLE WITH THE THREE PATTERNS FOR ORGANIZING THOSE GENRES.`,
+                  12660: `I APPRECIATE THE LIGHTS YOU PUT IN FOR ME— BUT I ALWAYS FORGET HOW TO COMBINE THE PATTERNS SO THE LIGHTS ALL TURN ON...`,
+                  17165: `AND WHY YEARBOOKS WITH DICTIONARIES AND AN ATLAS? I SO WISH YOU'D SORT THINGS NORMALLY FOR ONCE.`,
+                  21416: ` *INTERRUPTED* LISA, THE GOVERNOR'S STILL WAITING ON LINE 3— UGH! GOTTA GO... LOVE YOU, BYE!`,
             }
             voicemailTranscript(voicemailaudio, transcriptData, Object.keys(transcriptData)[0]);
       }

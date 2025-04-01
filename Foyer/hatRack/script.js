@@ -127,8 +127,9 @@ function afterInventory() {
                   if (peg) {
                         hatDiv.style.left = peg.offsetLeft - hatDiv.clientWidth / 2 + peg.clientWidth / 2 + "px";
                         if (hatDiv.id == `visor`) {
-                              peg.style.zIndex = 7;
+                              peg.style.zIndex = 4;
                               hatDiv.hookedOn = peg;
+                              hatDiv.style.zIndex = 3;
                         }
                         let topDist = peg.offsetTop - hatHooks[hatDiv.id];
                         hatDiv.style.top = topDist + "px";
@@ -485,11 +486,12 @@ function dragElement(elmnt) {
                   this.onPage = true;
                   placedItem.originalItem = this;
             }
-            document.body.children[0].appendChild(placedItem);
+            playArea.appendChild(placedItem);
             placedItem.classList.remove(`inventoryItem`);
             placedItem.classList.add(`dragItem`);
-            placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
-            placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
+            let playAreaBounds = playArea.getBoundingClientRect();
+            placedItem.style.left = (event.clientX - playAreaBounds.left - placedItem.clientWidth / 2)  + "px";
+            placedItem.style.top = (event.clientY - playAreaBounds.top - placedItem.clientHeight / 2) + "px";
             dragElement(placedItem);
             elmnt = placedItem;
             dragMouseDown(event);
@@ -506,13 +508,14 @@ function dragElement(elmnt) {
                   elmnt.hookedOn.style.zIndex = 2;
             }
 
+            elmnt.style.zIndex = 6;
+
             Array.from(document.querySelectorAll(`.hat`)).forEach((div) => {
-                  if (div.style.zIndex > elmnt.style.zIndex && div.id != elmnt.id) {
+                  if (div.style.zIndex >= elmnt.style.zIndex && div.id != elmnt.id) {
                         div.style.zIndex = div.style.zIndex - 1;
                   }
             });
 
-            elmnt.style.zIndex = 6;
             if (elmnt.gravity) {
                   clearInterval(elmnt.gravity);
                   elmnt.gravity = false;
@@ -590,8 +593,9 @@ function hook(pegArray, hat) {
                   window.sessionStorage.setItem(`hatRackData`, JSON.stringify(hatData));
                   window.sessionStorage.setItem(`inventory`, JSON.stringify(inventory));
                   if (hat.id == `visor`) {
-                        peg.style.zIndex = 7;
+                        peg.style.zIndex = 4;
                         hat.hookedOn = peg;
+                        hat.style.zIndex = 3;
                   }
                   let topDist = peg.offsetTop - hatHooks[hat.id];
                   if (Math.abs(hat.style.top - topDist) < 100) {
