@@ -11,6 +11,11 @@ window.onload = (event) => {
       let nametag = document.getElementById(`nametag`);
       nametag.style.width = nametag.children[0].clientWidth + "px";
 
+      let letter = document.getElementById(`letter`);
+      letter.style.width = letter.children[0].clientWidth + "px";
+      letter.style.height = letter.children[0].clientHeight + "px";
+      letter.style.left = (window.innerWidth - letter.clientWidth) / 2 + "px";
+
       const fileSelect = document.getElementById("fileSelect");
       const fileElem = document.getElementById("fileElem");
       
@@ -26,6 +31,10 @@ window.onload = (event) => {
 
       fileElem.addEventListener("change", handleFiles, false);
 
+}
+
+function dismissMe(div) {
+      div.style.display = `none`;
 }
 
 function acceptName() {
