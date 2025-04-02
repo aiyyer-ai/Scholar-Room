@@ -186,6 +186,7 @@ html {
       display: flex;
       justify-content: center;
 	align-content: center;
+      transition: 0.2s all ease-in;
 }
 
 .thermometerBar {
@@ -196,6 +197,7 @@ html {
       background: linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1));
       /* background: red; */
       z-index: 1;
+      transition: 0.2s all ease-in;
 }
 
 .thermometerScale {

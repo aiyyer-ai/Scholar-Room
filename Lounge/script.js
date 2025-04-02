@@ -663,7 +663,11 @@ function dragElement(elmnt) {
                               }
                         }
                         let HRAItemPositions = JSON.parse(window.sessionStorage.getItem(`HRAItemPositions`));
-                        HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = elmnt.offsetLeft;
+                        if(lookingAtFireplace) {
+                              HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = window.innerWidth - elmnt.offsetLeft;
+                        } else {
+                              HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = elmnt.offsetLeft;
+                        }
                         HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].y = elmnt.offsetTop;
                         window.sessionStorage.setItem(`HRAItemPositions`, JSON.stringify(HRAItemPositions));
                         event.target.style.transform = ``;

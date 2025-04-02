@@ -510,6 +510,7 @@ function pieceDisplay(board) {
       thermometerBase.style.left = pieceHolderLeft.getBoundingClientRect().right + (board.getBoundingClientRect().left - pieceHolderLeft.getBoundingClientRect().right - thermometerBase.clientWidth) / 2 + `px`;
       thermometerBase.style.top = (window.innerHeight - 576) / 2 + 576 - thermometerBase.clientHeight / 2 + `px`;
       thermometerBase.style.zIndex = -2;
+      thermometerBase.id = `thermometerBase`;
       let thermometer = document.createElement(`div`);
       thermometer.classList.add(`thermometer`);
       thermometer.id = `thermometer`;
@@ -1264,6 +1265,21 @@ function dragElement(elmnt) {
                         });
                         let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
                         thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
+                        let thermometerBase = document.getElementById(`thermometerBase`);
+                        if(totalTemp > 33) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgba(139, 0, 0, 1) 50%, rgb(71, 0, 0))`;
+                              thermometerBar.style.background = `linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1))`;
+                        } else if (totalTemp < 31) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(0, 72, 139) 50%, rgb(0, 33, 71))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(0, 162, 255), rgb(0, 72, 139))`;
+                        } else if (totalTemp == 32) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(22, 146, 38) 50%, rgb(13, 90, 10))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(0, 255, 64), rgb(22, 146, 38))`;
+                        } else {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(3, 92, 0) 50%, rgb(0, 58, 14))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(15, 109, 39), rgb(3, 92, 0))`;
+                        }
+                        
                         let thermometerNumber = document.getElementById(`thermometerNumber`);
                         if(totalTemp == 0) {
                               thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
@@ -1471,6 +1487,22 @@ function dragElement(elmnt) {
                         });
                         let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
                         thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
+
+                        let thermometerBase = document.getElementById(`thermometerBase`);
+                        if(totalTemp > 33) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgba(139, 0, 0, 1) 50%, rgb(71, 0, 0))`;
+                              thermometerBar.style.background = `linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1))`;
+                        } else if (totalTemp < 31) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(0, 72, 139) 50%, rgb(0, 33, 71))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(0, 162, 255), rgb(0, 72, 139))`;
+                        } else if (totalTemp == 32) {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(22, 146, 38) 50%, rgb(13, 90, 10))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(0, 255, 64), rgb(22, 146, 38))`;
+                        } else {
+                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(3, 92, 0) 50%, rgb(0, 58, 14))`;
+                              thermometerBar.style.background = `linear-gradient(rgb(15, 109, 39), rgb(3, 92, 0))`;
+                        }
+
                         let thermometerNumber = document.getElementById(`thermometerNumber`);
                         if(totalTemp == 0) {
                               thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
