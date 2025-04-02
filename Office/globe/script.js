@@ -278,6 +278,9 @@ function roll() {
             tetrisBag = [2, 3, 4, 5, 6, 7];
       }
       rollResult = tetrisBag[Math.floor(Math.random() * tetrisBag.length)];
+      if(tetrisBag.length == 6) {
+            rollResult = 7;
+      }
       tetrisBag = tetrisBag.filter((value, index) => value != rollResult);
       die.style.transform = `${faceRotations[rollResult]}`;
       facing = document.getElementById(`${rollResult}`);

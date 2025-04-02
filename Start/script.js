@@ -1,3 +1,5 @@
+var ringTest = new Audio('./audio/ring.wav');
+
 var timeStart;
 window.onload = (event) => {
       //time recording code
@@ -31,6 +33,16 @@ window.onload = (event) => {
 
       fileElem.addEventListener("change", handleFiles, false);
 
+}
+
+function testSound() {
+      if(!ringTest.paused) {
+          ringTest.pause();
+          ringTest.currentTime = 0;
+      } else {
+            ringTest.volume = 0.5;
+            ringTest.play();
+      }
 }
 
 function dismissMe(div) {
