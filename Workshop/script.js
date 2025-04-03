@@ -70,6 +70,7 @@ window.onload = (event) => {
 function createCSV(div) {
       let timingDictionary = JSON.parse(window.sessionStorage.getItem(`timeData`));
       let playerName = JSON.parse(window.sessionStorage.getItem(`playerName`));
+      let playerExperience = JSON.parse(window.sessionStorage.getItem(`escapeCount`));
       let csvContent = ``;
       let allRooms = {
             Foyer: [],
@@ -81,7 +82,10 @@ function createCSV(div) {
       if(!playerName) {
             playerName = `PlayerName`;
       }
-      let allRows = [["", playerName]];
+      if(!playerExperience) {
+            playerExperience = `?`;
+      }
+      let allRows = [["", playerName], ["", playerExperience]];
       let currentRow = [];
 
       for (let room of Object.entries(timingDictionary)) {

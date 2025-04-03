@@ -394,6 +394,7 @@ function movementCheck(event) {
       clickLocation.y = event.clientY;
       if (Array.from(event.target.classList).includes(`leave`)) {
             if (!lookingAtFireplace) {
+                  setTimeSpent();
                   window.location.href = `../Foyer/index.html`;
             } else {
                   lookAtMirror();

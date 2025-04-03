@@ -13,7 +13,8 @@ var pageData = [
 	Paintings must be hung where there is <span class="large">▮</span> <span class="scribbles one">1</span> hook to the left and <span class="large">▮</span> <span class="scribbles two">2</span> hooks to the right.<brb>
 	Plants must always touch a wall.<brb>
 	Candles must be at least <span class="large">▮</span> <span class="scribbles three">3</span> squares away from any wall with a painting. <brb>
-	Statues should be as far from Candles as possible. <brb>
+	Statues should be as far from Candles as possible. <brb><brb>
+	(Online: The best place to observe the fireplace is sitting on the couch)
 	`},
 	{innerHTML:`
 	<div class="row pamphlet">

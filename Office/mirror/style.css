@@ -18,6 +18,9 @@ html {
 :root {
 	--mirrorSize: 80%;
 	--mirrorOffset: 10%;
+	--tapeWidth: 175px;
+	--tapeHeight: 50px;
+	--slipWidth: 900px;
 	--holeHeight: 150px;
 	--holeWidth: 150px;
 	--gaugeHeight: 400px;
@@ -143,6 +146,13 @@ html {
 	height: 100%;
 	width: var(--mirrorSize);
 	left: var(--mirrorOffset);
+}
+
+.tape {
+	height: var(--tapeHeight);
+	width: var(--tapeWidth);
+	left: calc(50% - calc(var(--tapeWidth) / 2));
+	top: calc(30% - calc(var(--tapeHeight) / 2));
 }
 
 #frame {

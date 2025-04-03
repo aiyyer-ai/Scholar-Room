@@ -27,7 +27,6 @@ window.onload = (event) => {
       for (item in inventory) {
             enterInventoryEntry(item, inventory[item]);
       }
-
 }
 
 function startUpEvents(div) {
@@ -87,43 +86,14 @@ function startUpEvents(div) {
                   }
             }
       }
-      // if(mirrorCheck.lounge) {
-      //   let plateID = `plate${mirrorCheck.lounge[0]}`;
-      //   let plateRotation = mirrorCheck.lounge[1];
-      //   if(plateID == div.id) {
-      //     let plateDiv = document.getElementById(plateID);
-      //     let holeDiv = document.getElementById(`hole`);
-      //     const event = new MouseEvent("mousedown", {
-      //       clientX: holeDiv.offsetLeft + holeDiv.parentElement.offsetLeft + holeDiv.clientWidth / 2,
-      //       clientY: holeDiv.offsetTop + holeDiv.parentElement.offsetTop + holeDiv.clientHeight / 2,
-      //       shiftKey: true,
-      //       view: window,
-      //       bubbles: true,
-      //       cancelable: true,
-      //     });
-      //     plateDiv.dispatchEvent(event);
-      //     let newPlate = Array.from(document.getElementsByClassName(`dragItem`)).filter((element) => {return element.id == plateID})[0];
-      //     for(i=0; i<plateRotation/90;i++) {
-      //       const event = new MouseEvent("mousedown", {
-      //         clientX: holeDiv.offsetLeft + holeDiv.parentElement.offsetLeft + holeDiv.clientWidth / 2,
-      //         clientY: holeDiv.offsetTop + holeDiv.parentElement.offsetTop + holeDiv.clientHeight / 2,
-      //         button: 2,
-      //         shiftKey: true,
-      //         view: window,
-      //         bubbles: true,
-      //         cancelable: true,
-      //       });
-      //       newPlate.dispatchEvent(event);
-      //     }
-      //   }
-      // }
       let halfSlipLoungePosition = window.sessionStorage.getItem(`halfSlipLoungePosition`);
       halfSlipLoungePosition = JSON.parse(halfSlipLoungePosition);
       if (halfSlipLoungePosition) {
             let halfSlipLoungeDiv = document.getElementById(`halfSlipLoungeFront`);
+            console.log(halfSlipLoungeDiv);
             const event = new MouseEvent("mousedown", {
-                  clientX: halfSlipLoungePosition.x + 450,
-                  clientY: halfSlipLoungePosition.y + 59,
+                  clientX: halfSlipLoungePosition.x,
+                  clientY: halfSlipLoungePosition.y,
                   shiftKey: true,
                   view: window,
                   bubbles: true,
@@ -495,8 +465,13 @@ function dragElement(elmnt) {
             document.body.children[0].appendChild(placedItem);
             placedItem.classList.remove(`inventoryItem`);
             placedItem.classList.add(`dragItem`);
-            placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
-            placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
+            if (event.shiftKey) {
+                  placedItem.style.left = event.clientX + "px";
+                  placedItem.style.top = event.clientY + "px"; 
+            } else {
+                  placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
+                  placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";   
+            }
             dragElement(placedItem);
             elmnt = placedItem;
             dragMouseDown(event);
@@ -519,6 +494,9 @@ function dragElement(elmnt) {
                         rotatePiece(elmnt);
                   }
             } else {
+                  if (elmnt.id.includes('halfSlip')) {
+                        document.getElementById('tape').style.zIndex = '';
+                  }
                   if (elmnt.onHole) {
                         let mirrorCheck = window.sessionStorage.getItem(`mirrorData`);
                         mirrorCheck = JSON.parse(mirrorCheck);
@@ -595,13 +573,20 @@ function dragElement(elmnt) {
                   checkPlates(mirrorCheck);
             }
             if (elmnt.id.includes(`halfSlip`) && !overInventory) {
+                  let overTape = overlayCheck(elmnt, `tape`)[0];
+                  if (overTape) {
+                        let tapeBounds = overTape.getBoundingClientRect();
+                        elmnt.style.left = (tapeBounds.left + (overTape.clientWidth / 2)) - elmnt.clientWidth / 2 + 'px';
+                        elmnt.style.top = (tapeBounds.top + (overTape.clientHeight / 3)) + 'px';
+                        overTape.style.zIndex = 10;
+                        elmnt.style.zIndex = 9;
+                  }
                   halfSlipPosition = {
                         x: elmnt.offsetLeft,
                         y: elmnt.offsetTop
                   };
                   window.sessionStorage.setItem(`halfSlipLoungePosition`, JSON.stringify(halfSlipPosition));
                   halfSlipSide = flipSlip(elmnt);
-                  console.log(halfSlipSide);
                   window.sessionStorage.setItem(`halfSlipLoungeSide`, JSON.stringify(halfSlipSide));
             }
       }

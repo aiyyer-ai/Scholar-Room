@@ -52,6 +52,11 @@ function dismissMe(div) {
 function acceptName() {
       let playerName = document.getElementById(`playerName`);
       window.sessionStorage.setItem(`playerName`, JSON.stringify(playerName.value));
+      let playerExperience = document.getElementById(`escapeCount`)
+      window.sessionStorage.setItem(`escapeCount`, JSON.stringify(playerExperience.value));
+      playerName.value = null;
+      playerExperience.value = null;
+      //add something that makes the ID card pretty with info given.
 }
 
 function handleFiles() {

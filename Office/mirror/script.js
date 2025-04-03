@@ -86,32 +86,39 @@ function startUpEvents(div) {
                   }
             }
       }
+      if (div.id.includes('halfSlip')) {
+            let tape = document.getElementById('tape');
+            let tapeBounds = tape.getBoundingClientRect();
+            console.log(div, div.children[0]);
+            let slipWidth = getComputedStyle(document.documentElement).getPropertyValue('--slipWidth');
+            tape.style.top = tapeBounds.top - (slipWidth.replace("px", "") * div.children[0].naturalHeight / div.children[0].naturalWidth) + 'px';
+            let halfSlipLoungePosition = window.sessionStorage.getItem(`halfSlipLoungePosition`);
+            halfSlipLoungePosition = JSON.parse(halfSlipLoungePosition);
+            if (halfSlipLoungePosition) {
+                  let mirror = document.getElementById(`mirror`);
+                  let glass = document.getElementById(`glass`);
+                  addImg(`halfSlipLoungeBack`, mirror, (div) => {
+                        div.classList.add('position');
+                        div.style.left = halfSlipLoungePosition.x - mirror.offsetLeft + "px";
+                        div.style.top = halfSlipLoungePosition.y - mirror.offsetTop + "px";
+                        div.style.width = 900 + "px";
+                        mirror.insertBefore(div, glass);
+                  });
+            }
+      }
       let halfSlipOfficePosition = window.sessionStorage.getItem(`halfSlipOfficePosition`);
       halfSlipOfficePosition = JSON.parse(halfSlipOfficePosition);
       if (halfSlipOfficePosition) {
             let halfSlipOfficeDiv = document.getElementById(`halfSlipOfficeFront`);
             const event = new MouseEvent("mousedown", {
-                  clientX: halfSlipOfficePosition.x + 450,
-                  clientY: halfSlipOfficePosition.y + 59,
+                  clientX: halfSlipOfficePosition.x,
+                  clientY: halfSlipOfficePosition.y,
                   shiftKey: true,
                   view: window,
                   bubbles: true,
                   cancelable: true,
             });
             halfSlipOfficeDiv.dispatchEvent(event);
-      }
-      let halfSlipLoungePosition = window.sessionStorage.getItem(`halfSlipLoungePosition`);
-      halfSlipLoungePosition = JSON.parse(halfSlipLoungePosition);
-      if (halfSlipLoungePosition) {
-            let mirror = document.getElementById(`mirror`);
-            let glass = document.getElementById(`glass`);
-            addImg(`halfSlipLoungeBack`, mirror, (div) => {
-                  div.classList.add('position');
-                  div.style.left = halfSlipLoungePosition.x - mirror.offsetLeft + "px";
-                  div.style.top = halfSlipLoungePosition.y - mirror.offsetTop + "px";
-                  div.style.width = 900 + "px";
-                  mirror.insertBefore(div, glass);
-            });
       }
 }
 
@@ -454,7 +461,9 @@ function dragElement(elmnt) {
                   placedItem.children[1].style.display = `none`;
             }
             if (placedItem.id.includes(`halfSlip`)) {
-                  placedItem.style.width = 900 + "px";
+                  let slipWidth = getComputedStyle(document.documentElement).getPropertyValue('--slipWidth');
+                  console.log(slipWidth);
+                  placedItem.style.width = slipWidth;
                   placedItem.style.height = placedItem.style.width.replace("px", "") * this.children[0].naturalHeight / this.children[0].naturalWidth + "px";
             } else {
                   placedItem.style.height = Math.min(150 * this.children[0].naturalHeight / this.children[0].naturalWidth, this.children[0].naturalHeight) + "px";
@@ -466,8 +475,13 @@ function dragElement(elmnt) {
             document.body.children[0].appendChild(placedItem);
             placedItem.classList.remove(`inventoryItem`);
             placedItem.classList.add(`dragItem`);
-            placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
-            placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
+            if (event.shiftKey) {
+                  placedItem.style.left = event.clientX + "px";
+                  placedItem.style.top = event.clientY + "px"; 
+            } else {
+                  placedItem.style.left = event.clientX - placedItem.clientWidth / 2 + "px";
+                  placedItem.style.top = event.clientY - placedItem.clientHeight / 2 + "px";
+            }
             dragElement(placedItem);
             elmnt = placedItem;
             dragMouseDown(event);
@@ -490,6 +504,9 @@ function dragElement(elmnt) {
                         rotatePiece(elmnt);
                   }
             } else {
+                  if (elmnt.id.includes('halfSlip')) {
+                        document.getElementById('tape').style.zIndex = '';
+                  }
                   if (elmnt.onHole) {
                         let mirrorCheck = window.sessionStorage.getItem(`mirrorData`);
                         mirrorCheck = JSON.parse(mirrorCheck);
@@ -566,6 +583,14 @@ function dragElement(elmnt) {
                   checkPlates(mirrorCheck);
             }
             if (elmnt.id.includes(`halfSlip`) && !overInventory) {
+                  let overTape = overlayCheck(elmnt, `tape`)[0];
+                  if (overTape) {
+                        let tapeBounds = overTape.getBoundingClientRect();
+                        elmnt.style.left = (tapeBounds.left + (overTape.clientWidth / 2)) - elmnt.clientWidth / 2 + 'px';
+                        elmnt.style.top = (tapeBounds.top + (overTape.clientHeight / 3)) + 'px';
+                        overTape.style.zIndex = 10;
+                        elmnt.style.zIndex = 9;
+                  }
                   halfSlipPosition = {
                         x: elmnt.offsetLeft,
                         y: elmnt.offsetTop

@@ -16,7 +16,8 @@
       <div class="position bottomLeft" onclick="startGame()"></div>
       <div class="position nametag" id="nametag">
             <img src="./images/nametag.webp" class="position" height='100%' draggable='false'>
-            <input type="text" class="nameInput position" autofocus="true" placeholder="Name" id="playerName">
+            <input type="text" class="nameInput position" placeholder="Name" id="playerName">
+            <input type="number" class="escapeInput position" placeholder="# Escaped" id="escapeCount">
             <button class="submitInput position" onclick="acceptName()">SUBMIT</button>
       </div>
       <div class="position phone" id="phone" onclick="testSound()">
@@ -66,7 +67,11 @@
                         <div class="instructions face" id="faceFiveBig"></div>
                         <div class="instructions face" id="faceSixBig"></div>
                   </div>
-                  <span class="instructText"> When you are ready, Click the bottom of the screen. <br> (feet) </span>
+                  <span class="instructText"> 
+                        You can ask for a hint at any time if you feel stuck. <br>
+                        When you are ready, Click the bottom of the screen. <br> 
+                        (feet) 
+                  </span>
             </div>
       </div>
       <div class="letter position" id="letter" onclick="dismissMe(this)">
