@@ -381,7 +381,6 @@ function capture(piece) {
 function addGuide(chessBoard) {
       addImg("guide", gameArea, (guide) => {
             guide.classList.add(`guide`, `position`);
-            guide.style.aspectRatio = "0.48346";
             guide.style.height = (chessBoard.clientHeight / 1.25) + "px";
             if (guide.clientWidth > (window.innerWidth - chessBoard.clientWidth) / 2) {
                   guide.style.height = ``;

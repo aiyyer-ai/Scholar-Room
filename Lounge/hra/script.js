@@ -17,7 +17,7 @@ var pageData = [
 	(Online: The best place to observe the fireplace is sitting on the couch)
 	`},
 	{innerHTML:`
-	<div class="row pamphlet">
+	<div class="row2 pamphlet">
 	<div class="sideText">
 	Items should be arranged in height to bring the eye naturally from floor to ceiling.<brb>
 	Try a height arrangement like the following:<brb>
@@ -415,17 +415,25 @@ function createGrid(width, height) {
 function turnToPage(pageNumber) {
 	let nextButton = document.getElementById(`nextButton`);
 	let lastButton = document.getElementById(`lastButton`);
+      let guideBGIMG = document.getElementById(`guideBG`);
+      let boundingPad = document.getElementById(`pad`);
 	let text = document.getElementById(`notePad`);
+      let text2 = document.getElementById(`notePad2`);
 	if(pageData[pageNumber]) {
 		if(pageNumber == 0) {
 			lastButton.style.visibility = `hidden`;
 			nextButton.style.visibility = `visible`;
-		} else if (pageNumber == pageData.length - 1) {
-			nextButton.style.visibility = `hidden`;
-			lastButton.style.visibility = `visible`;
+                  guideBGIMG.src = `./images/list.webp`;
+                  boundingPad.style.width = `400px`;
+                  text2.innerHTML = ``;
+                  text.classList.remove(`textA`);
 		} else {
 			lastButton.style.visibility = `visible`;
-			nextButton.style.visibility = `visible`;
+			nextButton.style.visibility = `hidden`;
+                  guideBGIMG.src = `./images/listPage2.webp`;
+                  boundingPad.style.width = `800px`;
+                  text2.innerHTML = pageData[pageNumber + 1].innerHTML;
+                  text.classList.add(`textA`);
 		}
 		text.pageID = pageNumber;
 		text.innerHTML = pageData[pageNumber].innerHTML;

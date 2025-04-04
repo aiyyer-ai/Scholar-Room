@@ -329,7 +329,7 @@ function generateGears() {
       for (size in gearSizes) {
             let newGearSize = gearSizes[size];
             let gearCount = size;
-            addImg(`gear`, gameArea, (gear) => {
+            addImg(`gear${newGearSize.toString().replace(".","")}`, gameArea, (gear) => {
                   gear.style.height = gearBase * newGearSize + 'px';
                   gear.style.width = gearBase * newGearSize + 'px';
                   gear.classList.add(`gear`, `position`);

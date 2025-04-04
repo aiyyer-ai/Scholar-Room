@@ -44,6 +44,11 @@ window.onload = (event) => {
       for (item in inventory) {
             enterInventoryEntry(item, inventory[item]);
       }
+      let scholarCallVoicemail = JSON.parse(window.sessionStorage.getItem(`scholarCallVoicemail`));
+      if(scholarCallVoicemail) {
+            voicemailaudio = scholarCall;
+            voicemailaudio.isScholar = true;
+      }
 }
 
 var pauseTimeStart;
@@ -455,16 +460,22 @@ function sendFaxSlip(faxSlip) {
                   scholarCall.volume = 0.5;
                   scholarCall.play();
                   scholarCall.started = true;
+                  scholarCall.onended = voicemail;
                   let transcriptData = {
                         0: `*RING* *RING*`,
                         3367: `OH, HELLO! I’M SO THANKFUL THAT YOU’VE TAKEN CARE OF REESE.`,
                         6375: `I’LL SEND BACK YOUR PAPERWORK AND LEAVE A GLOWING REVIEW WITH THE AGENCY.`,
                         9500: `- *WELL… THESE PEOPLE MIGHT BE MY ONLY CHANCE…* -`,
                         12000: `HOLD ON! YOU COULD LEAVE, OR I COULD LET YOU INTO THE STRANGE WORLD OF MY WORK.`,
-                        16000: `IF YOU’RE WILLING, TAKE A NEW LOOK AT THE BOOKS BELOW YOU WHILE I PREPARE TO FAX YOU MY EXPEDITION DATA.`,
-                        20371: `THE REST SHOULD BECOME CLEAR.`,
+                        16000: `IF YOU’RE WILLING, TRY AND REORGANIZE THE BOOKS BELOW YOU WITH A NEW PERSPECTIVE WHILE I PREPARE TO FAX YOU MY EXPEDITION DATA.`,
+                        21552: `THE REST SHOULD BECOME CLEAR.`,
                   }
                   voicemailTranscript(scholarCall, transcriptData, Object.keys(transcriptData)[0]);
+                  voicemailaudio = scholarCall;
+                  voicemailaudio.isScholar = true;
+                  let screenText = document.getElementById('text');
+                  screenText.innerHTML = `SAVING TO VOICEMAIL`;
+                  window.sessionStorage.setItem(`scholarCallVoicemail`, JSON.stringify(true));
             }, 5000);
             // setTimeout(() => {
             //       // inventory[`faxPaper`] = true;
@@ -533,18 +544,32 @@ function voicemail(button) {
       } else {
             voicemailaudio.started = true;
             screenText.innerHTML = `Playing . . .`;
-            voicemailaudio.playbackRate = 1.2;
+            let transcriptData = {};
+            if(voicemailaudio.isScholar) {
+                  transcriptData = {
+                        0: `*RING* *RING*`,
+                        3367: `OH, HELLO! I’M SO THANKFUL THAT YOU’VE TAKEN CARE OF REESE.`,
+                        6375: `I’LL SEND BACK YOUR PAPERWORK AND LEAVE A GLOWING REVIEW WITH THE AGENCY.`,
+                        9500: `- *WELL… THESE PEOPLE MIGHT BE MY ONLY CHANCE…* -`,
+                        12000: `HOLD ON! YOU COULD LEAVE, OR I COULD LET YOU INTO THE STRANGE WORLD OF MY WORK.`,
+                        16000: `IF YOU’RE WILLING, TRY AND REORGANIZE THE BOOKS BELOW YOU WITH A NEW PERSPECTIVE WHILE I PREPARE TO FAX YOU MY EXPEDITION DATA.`,
+                        21552: `THE REST SHOULD BECOME CLEAR.`,
+                  }
+            } else {
+                  voicemailaudio.playbackRate = 1.2;
+                  transcriptData = {
+                        0: `WOW... STRAIGHT TO VOICEMAIL... OKAY.`,
+                        2910: `HEY IT'S LISA, LISTEN, MOM'S WORRIED ABOUT YOU, SO I'M BRINGING YOU GROCERIES TOMORROW.`,
+                        8071: `CAN I SKIP THE BOOK THING THIS TIME THOUGH? I STILL STRUGGLE WITH THE THREE PATTERNS FOR ORGANIZING THOSE GENRES.`,
+                        12660: `I APPRECIATE THE LIGHTS YOU PUT IN FOR ME— BUT I ALWAYS FORGET HOW TO COMBINE THE PATTERNS SO THE LIGHTS ALL TURN ON...`,
+                        17165: `AND WHY YEARBOOKS WITH DICTIONARIES AND AN ATLAS? I SO WISH YOU'D SORT THINGS NORMALLY FOR ONCE.`,
+                        21416: ` *INTERRUPTED* LISA, THE GOVERNOR'S STILL WAITING ON LINE 3— UGH! GOTTA GO... LOVE YOU, BYE!`,
+                  }
+            }
             voicemailaudio.play();
             voicemailaudio.onended = voicemail;
             // 0, 3492, 9686, 15193, 20598, 25700
-            let transcriptData = {
-                  0: `WOW... STRAIGHT TO VOICEMAIL... OKAY.`,
-                  2910: `HEY IT'S LISA, LISTEN, MOM'S WORRIED ABOUT YOU, SO I'M BRINGING YOU GROCERIES TOMORROW.`,
-                  8071: `CAN I SKIP THE BOOK THING THIS TIME THOUGH? I STILL STRUGGLE WITH THE THREE PATTERNS FOR ORGANIZING THOSE GENRES.`,
-                  12660: `I APPRECIATE THE LIGHTS YOU PUT IN FOR ME— BUT I ALWAYS FORGET HOW TO COMBINE THE PATTERNS SO THE LIGHTS ALL TURN ON...`,
-                  17165: `AND WHY YEARBOOKS WITH DICTIONARIES AND AN ATLAS? I SO WISH YOU'D SORT THINGS NORMALLY FOR ONCE.`,
-                  21416: ` *INTERRUPTED* LISA, THE GOVERNOR'S STILL WAITING ON LINE 3— UGH! GOTTA GO... LOVE YOU, BYE!`,
-            }
+
             voicemailTranscript(voicemailaudio, transcriptData, Object.keys(transcriptData)[0]);
       }
 }

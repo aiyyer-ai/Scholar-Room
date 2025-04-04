@@ -14,9 +14,6 @@
 
 <body>
       <main>
-            <div class='leave'
-                  style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;">
-            </div>
             <div class="pauseOverlay position" id="pauseOverlay">
                   <button class="unpauseButton saveButton position" onclick="save()">SAVE?</button>
                   <div class="unpause position">PAUSED <br> <button class="unpauseButton unpauseButt position" onclick="unpause()">UNPAUSE?</button></div>
@@ -28,11 +25,11 @@
                   <div class="row">
                         <div class="pad imgcontainer" id="pad">
                               <img class="stamp" src="./images/gavstamp.webp">
-                              <span class="text" id="notePad">
-                              </span>
+                              <span class="text" id="notePad"></span>
+                              <span class="text textB" id="notePad2"></span>
                               <button class="textButton" id="lastButton" onclick="lastPage()">← Previous Page</button>
                               <button class="textButton" id="nextButton" onclick="nextPage()">Next Page →</button>
-                              <img src="./images/list.webp">
+                              <img src="./images/list.webp" id="guideBG" height="100%" draggable="false">
                         </div>
                         <!-- <img class="mapEdge" id="mapEdge" src="./images/roomMapEdge.webp"> -->
                         <div class="grid" id="mainGrid"></div>
@@ -42,6 +39,7 @@
                               draggable="false">
                   </div>
             </div>
+            <div class='leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 0; cursor: url('/cursors/steps.webp'), pointer;"></div>
             <script src="script.js"></script>
       </main>
 </body>
