@@ -171,6 +171,42 @@ html {
 	border: 7px outset rgba(0, 0, 0, 0.6);
 }
 
+.resetLabel {
+	position: absolute;
+	color:black;
+	top: 560px;
+	left: calc((1490px - 1360px - 50px) / 2 + 1365px);
+	font-size: 20px;
+	font-family: "Lucida Console", "Courier New", monospace;
+	background-color: whitesmoke;
+	padding: 5px 10px;
+	box-sizing: border-box;
+}
+
+.reset {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	z-index: 10;
+	/* 1360 is bound left 1490 is bound right*/
+	left: calc((1490px - 1360px - 50px) / 2 + 1380px);
+	top: 600px;
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+	color: white;
+	background-color: #ca1616;
+	border-radius: 50%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	border: 7px outset rgba(0, 0, 0, 0.6);
+}
+
+.reset:active {
+	background-color: #650909;
+	color: black;
+}
+
 .tempButton {
 	z-index: -2;
 	position: absolute;

@@ -34,15 +34,34 @@ window.onload = function () {
             enterInventoryEntry(item, inventory[item]);
       }
 
+      let gridIDs = window.sessionStorage.getItem(`fuseBoxState`);
+      let createGridIDs = false;
+      if(!gridIDs) {
+            createGridIDs = true;
+            gridIDs = {};
+      } else {
+            gridIDs = JSON.parse(gridIDs);
+      }
       for (let i1 = 0; i1 < rows; i1++) {
             for (let i2 = 0; i2 < columns; i2++) {
                   var light = document.createElement(`div`);
                   light.classList.add(`grid`);
-                  light.style.backgroundColor = hexToRGB(colors.dark);
                   light.id = `${i1},${i2}`;
+                  if(createGridIDs) {
+                        gridIDs[`${i1},${i2}`] = false;
+                        light.style.backgroundColor = hexToRGB(colors.dark);
+                  } else {
+                        if(gridIDs[`${i1},${i2}`]) {
+                              light.style.backgroundColor = hexToRGB(colors.light);
+                        } else {
+                              light.style.backgroundColor = hexToRGB(colors.dark);
+                        }
+                        
+                  }
                   fuseBox.appendChild(light);
             }
       }
+      window.sessionStorage.setItem(`fuseBoxState`, JSON.stringify(gridIDs));
       let allGrid = document.getElementsByClassName('grid');
 
       // let tempButton = document.getElementById(`tempButton`);
@@ -425,13 +444,26 @@ function longsOut(event) {
       }
 }
 
+function resetFuse() {
+      let gridIDs = JSON.parse(window.sessionStorage.getItem(`fuseBoxState`)); 
+      Array.from(document.getElementsByClassName(`grid`)).forEach((light) => {
+            light.style.backgroundColor = hexToRGB(colors.dark);
+            gridIDs[light.id] = false;
+      });
+      window.sessionStorage.setItem(`fuseBoxState`, JSON.stringify(gridIDs));
+}
+
 function swapColor(div) {
       if (div && div.tagName == `DIV`) {
+            let gridIDs = JSON.parse(window.sessionStorage.getItem(`fuseBoxState`)); 
             if (div.style.backgroundColor == hexToRGB(colors.light)) {
                   div.style.backgroundColor = hexToRGB(colors.dark);
+                  gridIDs[div.id] = false;
             } else {
                   div.style.backgroundColor = hexToRGB(colors.light);
+                  gridIDs[div.id] = true;
             }
+            window.sessionStorage.setItem(`fuseBoxState`, JSON.stringify(gridIDs));
       }
 }
 
