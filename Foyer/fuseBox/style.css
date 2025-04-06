@@ -174,12 +174,12 @@ html {
 .resetLabel {
 	position: absolute;
 	color:black;
-	top: 560px;
+	top: 565px;
 	left: calc((1490px - 1360px - 50px) / 2 + 1365px);
 	font-size: 20px;
 	font-family: "Lucida Console", "Courier New", monospace;
 	background-color: whitesmoke;
-	padding: 5px 10px;
+	padding: 2px 10px;
 	box-sizing: border-box;
 }
 

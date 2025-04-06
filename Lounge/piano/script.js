@@ -870,7 +870,7 @@ function dragElement(elmnt) {
                                           return [];
                               }
                         });
-                        if(sideGearEnd.rotateInterval && overPeg) {
+                        if(sideGearEnd.rotateInterval && overPeg && !event.shiftKey) {
                               let timeoutDelay = 0;
                               allNoteTimeouts.forEach((timeoutID) => {
                                     clearTimeout(timeoutID);
