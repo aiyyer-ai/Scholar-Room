@@ -233,7 +233,7 @@ function movementCheck(event) {
 	clickLocation.x = event.clientX;
 	clickLocation.y = event.clientY;
 	if(Array.from(event.target.classList).includes(`leave`)) {
-	  window.location.href = `../Foyer/index.html`;
+	  window.location.href = `../Lounge/index.html`;
 	}
 }
   

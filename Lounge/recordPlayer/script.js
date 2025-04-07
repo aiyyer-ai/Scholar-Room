@@ -273,7 +273,7 @@ function addTapeUnit() {
             unit.style.height = `300px`;
             unit.firstChild.style.position = `relative`;
             unit.firstChild.style.zIndex = 3;
-            unit.recording = false;
+            unit.recording = true;
             unit.recordedSong = null;
             unit.recordedTimeouts = [];
             unit.currentNote = 0;
@@ -334,7 +334,7 @@ function tapeButtonPress(event) {
             this.pressed = true;
             switch (this.id) {
                   case `rec`:
-                        this.parentElement.recording = !this.parentElement.recording;
+                        // this.parentElement.recording = !this.parentElement.recording;
                         if(this.parentElement.recording) {
                               Array.from(document.getElementsByClassName(`soundBox`)).forEach((soundBox) => {
                                     soundBox.style.backgroundColor = ``;
@@ -423,6 +423,10 @@ function placeRecord(elmnt) {
       currentRecord.currentNote = 0;
       needle.style.zIndex = "9";
       let tapeUnit = document.getElementById(`tapeUnit`);
+      Array.from(document.getElementsByClassName(`soundBox`)).forEach((soundBox) => {
+            soundBox.style.backgroundColor = ``;
+      })
+      tapeUnit.currentNote = 0; 
       playTune(elmnt.allAudios, elmnt.timeouts, false);
       // if (tapeUnit.recording) {
       //       tapeUnit.recordedSong = elmnt.allAudios;
@@ -460,7 +464,7 @@ function playNote(audio) {
                   currentRecord.currentNote++;
             }
             if((currentRecord && currentRecord.currentNote >= tapeUnit.maxNotes) || tapeUnit.currentNote >= tapeUnit.maxNotes) {
-                  tapeUnit.recording = false;
+                  tapeUnit.recording = true;
                   let recordButton = document.getElementById(`rec`);
                   recordButton.style.opacity = '';
                   recordButton.pressed = false;

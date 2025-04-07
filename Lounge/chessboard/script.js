@@ -13,8 +13,6 @@ var boardStats = {
       rowLabels: [`1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`],
       columnLabels: [`A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`]
 };
-var correctSquare = 'square4,3';
-var correctPiece = `whiteBishop`;
 var drawerOpen = false;
 
 var timeStart;
@@ -323,7 +321,7 @@ function createBoard() {
       // });
       chessBoard.bounds = chessBoard.getBoundingClientRect();
       placePieces(chessBoard);
-      addGuide(chessBoard);
+      //addGuide(chessBoard);
 }
 
 function placePieces(board) {
@@ -601,7 +599,7 @@ function dragElement(elmnt) {
                         if (otherPiece) {
                               capture(otherPiece);
                               console.log(elmnt.id.toLowerCase(), otherPiece.id.toLowerCase());
-                              if (elmnt.id.toLowerCase() == "whitebishop" && otherPiece.id.toLowerCase() == "blackrook") {
+                              if (elmnt.id.toLowerCase() == "whiteknight" && otherPiece.id.toLowerCase() == "blackrook") {
                                     operateDrawer();
                               }
                         }

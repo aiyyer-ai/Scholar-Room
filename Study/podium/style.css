@@ -183,7 +183,7 @@ html {
 .onePage {
       height: 550px;
       transform-style: preserve-3d;
-      bottom:-10px;
-      left: 450px;
+      bottom:0px;
+      left: 275px;
       transform: rotateX(20deg);
 }

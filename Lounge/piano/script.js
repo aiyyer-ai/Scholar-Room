@@ -45,6 +45,12 @@ var gearOverlaps = {
 }
 var secretOpen = false;
 var allNoteTimeouts = [];
+
+var forcedNote = true;
+var forcedGearID = 8;
+var forcedPeg = `4,3`;
+
+
 var timeStart;
 window.onload = (event) => {
       //time recording code
@@ -332,7 +338,8 @@ function generateGears() {
             addImg(`gear${newGearSize.toString().replace(".","")}`, gameArea, (gear) => {
                   gear.style.height = gearBase * newGearSize + 'px';
                   gear.style.width = gearBase * newGearSize + 'px';
-                  gear.classList.add(`gear`, `position`);
+                  gear.classList.add(`gear`, `position`, `zIndexLift`);
+                  gear.style.zIndex = 3;
                   gear.size = newGearSize;
                   gear.id = gearCount;
                   gear.numberValue = gearNumbers[gearCount];
@@ -349,9 +356,12 @@ function generateGears() {
                   gear.style.left = window.innerWidth - 80 - (gearBase * gearNumArray.slice(gearNumArray.indexOf(newGearSize), gearNumArray.length).reduce((a, b) => a + b, 0)) + 'px';
                   gear.style.top = 40 + (gearBase * newGearSize) * totalGears[newGearSize] + `px`;
                   totalGears[newGearSize] += 1;
-                  if (`${gear.id}` in gearMemory) {
-                        gearsLoaded++;
+                  if (`${gear.id}` in gearMemory || (forcedNote && gear.id == forcedGearID)) {
                         let matchingPeg = document.getElementById(gearMemory[`${gear.id}`]);
+                        if(forcedNote && gear.id == forcedGearID) {
+                              matchingPeg = document.getElementById(forcedPeg);
+                        }
+                        //gearsLoaded++;
                         // console.log(matchingPeg);
                         gear.style.top = matchingPeg.offsetTop + matchingPeg.offsetParent.offsetTop + matchingPeg.offsetHeight / 2 - gear.offsetHeight / 2 + "px";
                         gear.style.left = matchingPeg.offsetLeft + matchingPeg.offsetParent.offsetLeft + matchingPeg.offsetWidth / 2 - gear.offsetWidth / 2 + "px";
@@ -366,6 +376,10 @@ function generateGears() {
                                     cancelable: true,
                               });
                               gear.dispatchEvent(event);
+                              if(forcedNote && gear.id == forcedGearID) {
+                                    gear.onmousedown = null;
+                                    gear.style.zIndex = 1;
+                              }
                         //}
                   }
 
@@ -760,6 +774,12 @@ function dragElement(elmnt) {
                   pos4 = e.clientY;
             }
             if (Array.from(e.target.classList).includes(`gear`)) {
+                  Array.from(document.querySelectorAll(`.gear`)).forEach((div) => {
+                        if (div.style.zIndex > elmnt.style.zIndex && div.id != elmnt.id) {
+                              div.style.zIndex = div.style.zIndex - 1;
+                        }
+                  });
+                  elmnt.style.zIndex = Array.from(document.querySelectorAll(`.zIndexLift`)).length + 3;
                   if(e.target.pegValue) {
                         // let rowLight = document.getElementById(`${e.target.pegValue.split(`,`)[0]}Light`);
                         // if(!rowLight.count) {
@@ -841,7 +861,10 @@ function dragElement(elmnt) {
             });
             if (!inventoryItem) {
                   let overPeg = overlayCheck(centerLocation, `peg`)[0];
-                  if (overPeg) {
+                  let pegInUse = Array.from(document.querySelectorAll(`.gear`)).filter((gearDiv) => {
+                        return gearDiv.pegValue == overPeg.id;
+                  })[0];
+                  if (overPeg && !pegInUse) {
                         event.target.style.top = overPeg.offsetTop + overPeg.offsetParent.offsetTop + overPeg.offsetHeight / 2 - event.target.offsetHeight / 2 + "px";
                         event.target.style.left = overPeg.offsetLeft + overPeg.offsetParent.offsetLeft + overPeg.offsetWidth / 2 - event.target.offsetWidth / 2 + "px";
                         event.target.pegValue = overPeg.id;

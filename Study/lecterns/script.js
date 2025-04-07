@@ -36,10 +36,10 @@ var lecternTitles = {
       k: {
             1: `Push the Limits`,
             2: `Look out!`,
-            3: `Place setting etiquette`,
+            3: `Pull your weight`,
             4: `Click of a Gun`,
             5: `Open Up: a Guide to Your Feelings`,
-            6: `Pull your weight`
+            6: `Place setting etiquette`
       },
       q: {
             1: `Left Alone`,
@@ -50,17 +50,17 @@ var lecternTitles = {
             6: `At the Ballgame`
       },
       r: {
-            1: `On my toes`,
+            1: `Medicine Habits`,
             2: `Our New Home`,
             3: `Cat Attack!`,
             4: `Table that Idea`,
             5: `Lamp Magazine`,
-            6: `Medicine Habits`
+            6: `On my toes`
       },
       b: {
-            1: `Over the Rainbow`,
+            1: `Podium: Third Place`,
             2: `Painting for Beginners`,
-            3: `Podium: Third Place`,
+            3: `Over the Rainbow`,
             4: `Door to Another World`,
             5: `Head over Heels`,
             6: `Machine Building`

@@ -165,7 +165,8 @@ function generateHappyRoom() {
                   item.dispatchEvent(event);
                   if(HRAItemPositions[Array.from(item.classList)[0]].fireplace) {
                         item.onFireplace = true;
-                        item.style.visibility = `hidden`;   
+                        item.style.visibility = `hidden`;
+                        item.classList.add('yesFireplace');
                   } else {
                         item.onFireplace = false;
                   }
@@ -178,7 +179,7 @@ function generateHappyRoom() {
             gameArea.appendChild(newSnap);
       });
       let newSnap = document.createElement(`div`);
-      newSnap.classList.add(`fireplaceSnap`, `position`);
+      newSnap.classList.add(`snap`, `fireplaceSnap`, `position`);
       newSnap.id = `fireplaceSnap`;
       gameArea.appendChild(newSnap);
 }
@@ -186,7 +187,7 @@ function generateHappyRoom() {
 function happyRoomCheck() {
       let correctItems = true;
       Array.from(document.querySelectorAll(`.HRA`)).forEach((item) => {
-            let onSnap = overlayCheck(item, `snap`)[0];
+            let onSnap = overlayCheck(item, `snap`).filter((snapDiv) => { return !Array.from(snapDiv.classList).includes(`fireplaceSnap`) })[0];
             if (Array.from(item.classList).includes(`statue`)) {
                   if (!item.onFireplace) {
                         correctItems = false;
@@ -208,16 +209,21 @@ function happyRoomCheck() {
 }
 
 function dispensehalfSlip() {
-      let shelf = document.getElementById(`happyRoomShelf`);
-      let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
-      halfSlipLoungeFront.style.visibility = "visible";
-      halfSlipLoungeFront.style.transform = `translate(${halfSlipLoungeFront.clientWidth / 2}px, 0px)`;
-      shelf.style.pointerEvents = `none`;
-      window.sessionStorage.setItem(`halfSlipState`, JSON.stringify(true));
-      printSlip.play();
-      setTimeout(() => {
-            shelf.style.pointerEvents = ``;
-      }, "2000");
+      if (lookingAtFireplace) {
+            window.sessionStorage.setItem(`halfSlipState`, JSON.stringify(true));
+            printSlip.play();
+      } else {
+            let shelf = document.getElementById(`happyRoomShelf`);
+            let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
+            halfSlipLoungeFront.style.visibility = "visible";
+            halfSlipLoungeFront.style.transform = `translate(${halfSlipLoungeFront.clientWidth / 2}px, 0px)`;
+            shelf.style.pointerEvents = `none`;
+            window.sessionStorage.setItem(`halfSlipState`, JSON.stringify(true));
+            printSlip.play();
+            setTimeout(() => {
+                  shelf.style.pointerEvents = ``;
+            }, "2000");     
+      }
 }
 
 function lookAtFireplace() {
@@ -227,6 +233,10 @@ function lookAtFireplace() {
       let disappearingObjects = document.getElementsByClassName(`notFireplace`);
       Array.from(disappearingObjects).forEach((object) => {
             object.style.visibility = `hidden`;
+      });
+      let appearingObjects = document.getElementsByClassName(`yesFireplace`);
+      Array.from(appearingObjects).forEach((object) => {
+            object.style.visibility = `visible`;
       });
       let flippedObjects = document.getElementsByClassName(`fireplaceFlip`);
       Array.from(flippedObjects).forEach((object) => {
@@ -242,19 +252,97 @@ function lookAtFireplace() {
                   object.style.left = distanceFromRight + "px";
             }
       });
+
+      let piano = document.getElementsByClassName(`piano`)[0];
+      let recordPlayer = document.getElementsByClassName(`recordPlayer`)[0];
+      let recordPlayerRight = Number(getComputedStyle(recordPlayer).getPropertyValue(`right`).replace(`px`, ``));
+      let recordPlayerBottom = Number(getComputedStyle(recordPlayer).getPropertyValue(`bottom`).replace(`px`, ``));
+      let pianoRight = Number(getComputedStyle(piano).getPropertyValue(`right`).replace(`px`, ``));
+      let pianoBottom = Number(getComputedStyle(piano).getPropertyValue(`bottom`).replace(`px`, ``));
+
+      piano.originalBottom = pianoBottom;
+      piano.originalLeft = pianoRight;
+      piano.style.bottom = recordPlayerBottom / 3 + "px";
+      // piano.style.right = recordPlayerRight * 0.1 + "px";
+      piano.style.zIndex = 1;
+
+      recordPlayer.originalBottom = recordPlayerBottom;
+      recordPlayer.originalLeft = recordPlayerRight;
+      recordPlayer.style.bottom = pianoBottom + "px";
+      recordPlayer.style.right = pianoRight + "px";
+      recordPlayer.style.zIndex = 2;
+
+      let globe = document.getElementsByClassName(`globe`)[0];
+      let phone = document.getElementsByClassName(`phone`)[0];
+      let desk = document.getElementsByClassName(`wallTable`)[0];
+      let deskBottom = Number(getComputedStyle(desk).getPropertyValue(`bottom`).replace(`px`, ``));
+      let globeLeft = Number(getComputedStyle(globe).getPropertyValue(`left`).replace(`px`, ``));
+      let globeBottom = Number(getComputedStyle(globe).getPropertyValue(`bottom`).replace(`px`, ``));
+      let phoneLeft = Number(getComputedStyle(phone).getPropertyValue(`left`).replace(`px`, ``));
+      let phoneBottom = Number(getComputedStyle(phone).getPropertyValue(`bottom`).replace(`px`, ``));
+
+      phone.originalBottom = phoneBottom;
+      phone.originalLeft = phoneLeft;
+      phone.style.bottom = globeBottom + phone.clientHeight / 3 + "px";
+      phone.style.left = globeLeft + phone.clientWidth / 2 + "px";
+      phone.style.zIndex = 1;
+
+      globe.originalBottom = globeBottom;
+      globe.originalLeft = globeLeft;
+      globe.style.bottom = phoneBottom + "px";
+      globe.style.left = phoneLeft - globe.clientWidth / 3 + "px";
+      globe.style.zIndex = 2;
+
       let touchObjects = document.getElementsByClassName(`HRA`);
       Array.from(touchObjects).forEach((object) => {
-            if (Array.from(object.classList).includes(`painting`)) {
-                  return;
-            }
             let objectStyles = window.getComputedStyle(object);
             let distanceFromRight = Number(objectStyles.getPropertyValue(`right`).replace(`px`, ``));
+            let distanceFromTop = Number(objectStyles.getPropertyValue(`top`).replace(`px`, ``));
             object.style.right = `auto`;
             object.style.left = distanceFromRight + "px";
-            if (object.onFireplace) {
-                  object.style.visibility = `visible`;
+            // if (object.onFireplace) {
+            //       object.style.visibility = `visible`;
+            // }
+      });      
+
+      let flippedSnaps = document.getElementsByClassName(`snap`);
+      Array.from(flippedSnaps).forEach((snapBox) => {
+            if(Array.from(snapBox.classList).includes(`fireplaceSnap`)) {
+                  return;
             }
+            let snapBoxStyles = window.getComputedStyle(snapBox);
+            let distanceFromRight = Number(snapBoxStyles.getPropertyValue(`right`).replace(`px`, ``));
+            let distanceFromLeft = Number(snapBoxStyles.getPropertyValue(`left`).replace(`px`, ``));
+            let distanceFromTop = Number(snapBoxStyles.getPropertyValue(`top`).replace(`px`, ``));
+
+            snapBox.style.right = `auto`;
+            snapBox.style.left = distanceFromRight + "px";
+
+            if(snapBox.id == 2) {
+                  let allObjectsOnSnap = overlayCheck(snapBox, `HRA`);
+                  snapBox.originalTop = distanceFromTop;
+                  snapBox.originalLeft = distanceFromLeft;
+                  snapBox.style.top = `auto`;
+                  snapBox.style.bottom = deskBottom / 2 + "px";
+                  snapBox.style.left = distanceFromRight - snapBox.clientWidth * 0.66 + "px";
+                  allObjectsOnSnap.forEach((object) => {
+                        object.style.top = object.offsetTop + (snapBox.offsetTop - snapBox.originalTop) + "px";
+                        object.style.left = object.offsetLeft + (snapBox.offsetLeft - distanceFromRight) + "px";
+                  });
+            }
+
+            if(snapBox.id == 0) {
+                  let allObjectsOnSnap = overlayCheck(snapBox, `HRA`);
+                  allObjectsOnSnap.forEach((object) => {
+                        object.style.top = object.offsetTop - Math.abs(pianoBottom - recordPlayerBottom / 3) + "px";
+                  });
+                  snapBox.originalTop = distanceFromTop;
+                  snapBox.style.top = distanceFromTop - Math.abs(pianoBottom - recordPlayerBottom / 3) + "px";
+                  snapBox.style.bottom = `auto`;
+            }
+
       });
+
       let fireplace = document.getElementById(`fireplace`);
       fireplace.style.visibility = `visible`;
 }
@@ -265,9 +353,13 @@ function lookAtMirror() {
       leaveDiv.style.cursor = "url('/cursors/steps.webp'), pointer";
       let fireplace = document.getElementById(`fireplace`);
       fireplace.style.visibility = `hidden`;
-      let disappearingObjects = document.getElementsByClassName(`notFireplace`);
-      Array.from(disappearingObjects).forEach((object) => {
+      let appearingObjects = document.getElementsByClassName(`notFireplace`);
+      Array.from(appearingObjects).forEach((object) => {
             object.style.visibility = `visible`;
+      });
+      let disappearingObjects = document.getElementsByClassName(`yesFireplace`);
+      Array.from(disappearingObjects).forEach((object) => {
+            object.style.visibility = `hidden`;
       });
       let flippedObjects = document.getElementsByClassName(`fireplaceFlip`);
       Array.from(flippedObjects).forEach((object) => {
@@ -283,27 +375,90 @@ function lookAtMirror() {
                   object.style.left = distanceFromRight + "px";
             }
       });
+
+      let piano = document.getElementsByClassName(`piano`)[0];
+      let recordPlayer = document.getElementsByClassName(`recordPlayer`)[0];
+
+      piano.style.bottom = piano.originalBottom + "px";
+      piano.style.left = piano.originalLeft + "px";
+      piano.style.zIndex = 2;
+
+      recordPlayer.style.bottom = recordPlayer.originalBottom + "px";
+      recordPlayer.style.left = recordPlayer.originalLeft + "px";
+      recordPlayer.style.zIndex = 1;
+
+      let globe = document.getElementsByClassName(`globe`)[0];
+      let phone = document.getElementsByClassName(`phone`)[0];
+
+      phone.style.bottom = phone.originalBottom + "px";
+      phone.style.right = phone.originalLeft + "px";
+      phone.style.zIndex = 2;
+
+      globe.style.bottom = globe.originalBottom + "px";
+      globe.style.right = globe.originalLeft + "px";
+      globe.style.zIndex = 1;
+
       let touchObjects = document.getElementsByClassName(`HRA`);
-      let HRAItemPositions = JSON.parse(window.sessionStorage.getItem(`HRAItemPositions`));
+      // let HRAItemPositions = JSON.parse(window.sessionStorage.getItem(`HRAItemPositions`));
       Array.from(touchObjects).forEach((object) => {
-            if (Array.from(object.classList).includes(`painting`)) {
-                  return;
-            }
             let objectStyles = window.getComputedStyle(object);
             let distanceFromRight = Number(objectStyles.getPropertyValue(`right`).replace(`px`, ``));
             object.style.right = `auto`;
             object.style.left = distanceFromRight + "px";
-            if (overlayCheck(object, `fireplaceSnap`)[0]) {
-                  object.onFireplace = true;
-                  object.style.visibility = `hidden`;
-                  HRAItemPositions[Array.from(object.classList)[0]].fireplace = true;
-            } else {
-                  object.onFireplace = false;
-                  HRAItemPositions[Array.from(object.classList)[0]].fireplace = false;
-            }
+            // if (overlayCheck(object, `fireplaceSnap`)[0]) {
+            //       object.onFireplace = true;
+            //       object.style.visibility = `hidden`;
+            //       HRAItemPositions[Array.from(object.classList)[0]].fireplace = true;
+            // } else {
+            //       object.onFireplace = false;
+            //       HRAItemPositions[Array.from(object.classList)[0]].fireplace = false;
+            // }
       });
-      window.sessionStorage.setItem(`HRAItemPositions`, JSON.stringify(HRAItemPositions));
+      // window.sessionStorage.setItem(`HRAItemPositions`, JSON.stringify(HRAItemPositions));
+
+      let flippedSnaps = document.getElementsByClassName(`snap`);
+      Array.from(flippedSnaps).forEach((snapBox) => {
+            if(Array.from(snapBox.classList).includes(`fireplaceSnap`)) {
+                  return;
+            }
+            let snapBoxStyles = window.getComputedStyle(snapBox);
+            let distanceFromRight = Number(snapBoxStyles.getPropertyValue(`right`).replace(`px`, ``));
+
+            snapBox.style.right = `auto`;
+            snapBox.style.left = distanceFromRight + "px";
+
+            if(snapBox.id == 2) {
+                  let allObjectsOnSnap = overlayCheck(snapBox, `HRA`);
+                  allObjectsOnSnap.forEach((object) => {
+                        object.style.top = object.offsetTop - (snapBox.offsetTop - snapBox.originalTop) + "px";
+                        object.style.left = object.offsetLeft - (snapBox.offsetLeft - snapBox.originalLeft) + "px";
+                  });
+                  snapBox.style.top = snapBox.originalTop + "px";
+                  snapBox.style.bottom = `auto`;
+                  snapBox.style.left = snapBox.originalLeft + "px";
+                  snapBox.style.right = `auto`;
+            }
+
+            if(snapBox.id == 0) {
+                  let allObjectsOnSnap = overlayCheck(snapBox, `HRA`);
+                  allObjectsOnSnap.forEach((object) => {
+                        object.style.top = object.offsetTop - (snapBox.offsetTop - snapBox.originalTop) + "px";
+                  });
+                  snapBox.style.top = snapBox.originalTop + "px";
+                  snapBox.style.bottom = `auto`;
+            }
+
+      });
+
       happyRoomCheck();
+      let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
+      if (halfSlipState == true) {
+            let shelf = document.getElementById(`happyRoomShelf`);
+            let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
+            halfSlipLoungeFront.style.visibility = "visible";
+            halfSlipLoungeFront.style.transition = ``;
+            halfSlipLoungeFront.style.transform = `translate(${halfSlipLoungeFront.clientWidth / 2}px, 0px)`;
+      }
 }
 // TODO
 //add memory of where HRA items placed
@@ -395,7 +550,7 @@ function movementCheck(event) {
       if (Array.from(event.target.classList).includes(`leave`)) {
             if (!lookingAtFireplace) {
                   setTimeSpent();
-                  window.location.href = `../Foyer/index.html`;
+                  window.location.href = `../Office/index.html`;
             } else {
                   lookAtMirror();
             }
@@ -631,6 +786,9 @@ function dragElement(elmnt) {
             }
             let parentClasslist = Array.from(e.target.parentElement.classList);
             if (parentClasslist.includes(`HRA`)) {
+                  if (Array.from(elmnt.classList).includes('yesFireplace')) {
+                        elmnt.classList.remove('yesFireplace');
+                  }
                   e.target.style.transform = `scale(1.2,1.2)`;
             }
       }
@@ -658,14 +816,24 @@ function dragElement(elmnt) {
                         if (parentClasslist.includes(`painting`)) {
                               let paintingWillSnap = overlayCheck(elmnt, `hook`)[0];
                               if (paintingWillSnap) {
-                                    let paintingSnapPoint = overlayCheck(elmnt, `snap`)[0];
+                                    let paintingSnapPoint = overlayCheck(elmnt, `snap`).filter((snapDiv) => { return !Array.from(snapDiv.classList).includes(`fireplaceSnap`) })[0];
+                                    //let paintingSnapPoint = overlayCheck(elmnt, `snap`)[0];
                                     elmnt.style.top = paintingSnapPoint.offsetTop + paintingSnapPoint.clientHeight - elmnt.clientHeight + "px";
                                     elmnt.style.left = paintingSnapPoint.offsetLeft + paintingSnapPoint.clientWidth / 2 - elmnt.clientWidth / 2 + "px";
                               }
                         }
                         let HRAItemPositions = JSON.parse(window.sessionStorage.getItem(`HRAItemPositions`));
                         if(lookingAtFireplace) {
-                              HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = window.innerWidth - elmnt.offsetLeft;
+                              console.log(elmnt);
+                              HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = window.innerWidth - elmnt.offsetLeft - elmnt.clientWidth;
+                              if (overlayCheck(elmnt, 'fireplaceSnap')[0]) {
+                                    elmnt.onFireplace = true;
+                                    elmnt.classList.add('yesFireplace');
+                                    HRAItemPositions[Array.from(elmnt.classList)[0]].fireplace = true;
+                              } else {
+                                    elmnt.onFireplace = false;
+                                    HRAItemPositions[Array.from(elmnt.classList)[0]].fireplace = false;
+                              }
                         } else {
                               HRAItemPositions[Array.from(event.target.parentElement.classList)[0]].x = elmnt.offsetLeft;
                         }

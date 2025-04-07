@@ -346,11 +346,13 @@ html {
 	position: absolute;
 	z-index: 20;
 	pointer-events: none;
+	background-color: red;
+	opacity: 50%;
 }
 
 .fireplaceSnap {
-	width: 750px;
-	height: 100px;
+	width: 760px !important;
+	height: 100px !important;
 	/* background-color: red;
 	opacity: 50%; */
 	position: absolute;
@@ -377,7 +379,7 @@ html {
 .snap2 {
 	/* Phone Floor */
 	width: 275px;
-	right: calc(var(--tableLeft) - 250px);
+	right: calc(var(--tableLeft) - 350px);
 	bottom: calc(var(--tableHeight) / 2);	
 }
 
