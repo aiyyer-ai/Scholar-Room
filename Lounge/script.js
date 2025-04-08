@@ -452,7 +452,8 @@ function lookAtMirror() {
 
       happyRoomCheck();
       let halfSlipState = JSON.parse(window.sessionStorage.getItem(`halfSlipState`));
-      if (halfSlipState == true) {
+      console.log(Array.from(inventory));
+      if (halfSlipState == true && !inventory.halfSlipLoungeFront) {
             let shelf = document.getElementById(`happyRoomShelf`);
             let halfSlipLoungeFront = document.getElementById(`halfSlipLoungeFrontSlider`);
             halfSlipLoungeFront.style.visibility = "visible";

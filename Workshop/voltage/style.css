@@ -4,6 +4,7 @@ html {
       background-size: 100vw 100vh;
       font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua, Georgia, serif;
       color: whitesmoke;
+      user-select: none;
 }
 
 :root {
@@ -406,6 +407,7 @@ html {
 
 .gridButton:hover {
       cursor: pointer;
+      background-color: #bad5f7;
 }
 
 .gridButton:active {}
@@ -443,6 +445,13 @@ html {
 .gridButton:focus {
       outline: none;
 }
+
+/* .pileHolder {
+      top: 100px;
+      left: 280px;
+      height: 100px;
+      filter: drop-shadow(-1px 1px 1px rgba(50, 50, 0, 1));
+} */
 
 /* .buttonHolder {
       height: 100px;

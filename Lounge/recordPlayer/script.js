@@ -278,7 +278,7 @@ function addTapeUnit() {
             unit.recordedTimeouts = [];
             unit.currentNote = 0;
             let buttonOrder = [`rec`, `play`, `pause`, `previous`, `current`, `next`];
-            let buttonCount = 1;
+            let buttonCount = 0;
             for (i = 0; i < buttonCount; i++) {
                   let newButton = document.createElement(`div`);
                   newButton.classList.add(`position`, `tapeButton`);
@@ -465,9 +465,9 @@ function playNote(audio) {
             }
             if((currentRecord && currentRecord.currentNote >= tapeUnit.maxNotes) || tapeUnit.currentNote >= tapeUnit.maxNotes) {
                   tapeUnit.recording = true;
-                  let recordButton = document.getElementById(`rec`);
-                  recordButton.style.opacity = '';
-                  recordButton.pressed = false;
+                  // let recordButton = document.getElementById(`rec`);
+                  // recordButton.style.opacity = '';
+                  // recordButton.pressed = false;
                   tapeUnit.currentNote = 0;   
             }
       audio.pause();

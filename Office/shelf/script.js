@@ -37,11 +37,11 @@ window.onload = (event) => {
 var pauseTimeStart;
 
 function save() {
-      let jsonData = {...window.sessionStorage};
+      let jsonData = { ...window.sessionStorage };
       jsonData.lastRoom = `${window.location.pathname}`;
       function download(content, fileName, contentType) {
             var a = document.createElement("a");
-            var file = new Blob([content], {type: contentType});
+            var file = new Blob([content], { type: contentType });
             a.href = URL.createObjectURL(file);
             a.download = fileName;
             a.click();
@@ -397,6 +397,12 @@ function populateGrid() {
       generatePath();
       generateTheRestOfTheOwl();
       // console.log(tilePath);
+      let colorPanel = document.getElementById(`colorPanel`);
+      let pieShare = 360 / Object.values(allLocationColors).length;
+      let gradientInfo = Object.values(allLocationColors).map((colorHex, idx) => {
+            return `${colorHex} ${pieShare * idx}deg ${pieShare * (idx + 1)}deg`;
+      })
+      colorPanel.style.background = `conic-gradient(${gradientInfo.join(`, `)})`;
       let playerDot = document.createElement(`div`);
       playerDot.classList.add(`player`);
       hexHolder.append(playerDot);
@@ -699,7 +705,7 @@ function closeDragElement(event) {
             return value.includes(`dragItem`);
       });
       if (!inventoryItem) {
-            let nextColor = document.getElementById(`colorPanel`);
+            let nextColor = document.getElementById(`colorHider`);
             let playerBounds = event.target.getBoundingClientRect();
             let playerCenter = [(playerBounds.left + playerBounds.right) / 2, (playerBounds.top + playerBounds.bottom) / 2];
             let topLocation = closest(playerCenter[1], snapPointsY);
@@ -713,10 +719,13 @@ function closeDragElement(event) {
                         // event.target.style.color = `#000000`;
                         event.target.innerHTML = ``;
                         pathProgress = 0;
-                        nextColor.style.backgroundColor = `#ffffff`;
+                        nextColor.style.backgroundColor = `#000000`;
                         dispenseSlip();
                   } else {
-                        nextColor.style.backgroundColor = tilePath[`move${pathProgress}`][2].nextTile[2].style.backgroundColor;
+                        //nextColor.style.backgroundColor = tilePath[`move${pathProgress}`][2].nextTile[2].style.backgroundColor;
+                        let pieShare = 360 / Object.values(allLocationColors).length;
+                        let rotationAmount = Object.values(allLocationColors).indexOf(RGBSTRINGtoHex(tilePath[`move${pathProgress}`][2].nextTile[2].style.backgroundColor));
+                        nextColor.style.transform = `rotate(${pieShare * rotationAmount}deg)`;
                         event.target.style.backgroundImage = `url("./images/${allLocationFileNames[tilePath[`move${pathProgress}`][2].distanceToNext]}")`;
                         event.target.style.backgroundSize = `70%`;
                         event.target.style.backgroundRepeat = `no-repeat`;
@@ -725,7 +734,10 @@ function closeDragElement(event) {
                   }
             } else {
                   pathProgress = 0;
-                  nextColor.style.backgroundColor = tilePath[`move${pathProgress}`][2].style.backgroundColor;
+                  //nextColor.style.backgroundColor = tilePath[`move${pathProgress}`][2].style.backgroundColor;
+                  let pieShare = 360 / Object.values(allLocationColors).length;
+                  let rotationAmount = Object.values(allLocationColors).indexOf(RGBSTRINGtoHex(tilePath[`move${pathProgress}`][2].style.backgroundColor));
+                  nextColor.style.transform = `rotate(${pieShare * rotationAmount}deg)`;
             }
 
             event.target.style.top = topLocation - event.target.clientHeight / 2 + "px";
@@ -797,4 +809,12 @@ const locationObject = {
       getBoundingClientRect() {
             return { right: (this.x + this.width), left: (this.x), top: (this.y), bottom: (this.y + this.height) };
       }
+}
+
+function RGBSTRINGtoHex(rgb) {
+      let rgbArray = rgb.split(`,`);
+      let r = Number(rgbArray[0].replace(/\D/g,''));
+      let g = Number(rgbArray[1].replace(/\D/g,''));
+      let b = Number(rgbArray[2].replace(/\D/g,''));
+      return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
 }

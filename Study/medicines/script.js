@@ -60,15 +60,46 @@ function generateBoxes() {
 		newBox.classList.add(`box`);
 		boxSpot.appendChild(newBox);
 		newBox.id = `box${foodList[i]}`;
+
 		let dosageText = document.createElement(`div`);
 		dosageText.classList.add(`dosage`);
 		dosageText.innerHTML = `${foodList[i]}mg`;
 		newBox.appendChild(dosageText);
+
+            // var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            // var path = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+            // var text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            // var textPath = document.createElementNS("http://www.w3.org/2000/svg", 'textPath');
+            // var textNode = document.createTextNode(`${foodList[i]}mg`);
+            // svg.setAttribute('viewbox', `0 0 ${newBox.clientWidth} 60`);
+            // svg.setAttribute('width', `${newBox.clientWidth}`);
+            // svg.setAttribute('height', '60');
+            // svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+            // path.setAttribute('d', `M0 30 q ${newBox.clientWidth / 2} 20 ${newBox.clientWidth} 0`);
+            // // path.setAttribute('stroke', 'black');
+            // path.setAttribute('fill', 'none');
+            // path.setAttribute('id', 'curve');
+            // text.setAttribute('width', `${newBox.clientWidth}`);
+            // text.setAttribute('text-anchor', `middle`);
+            // textPath.setAttribute('side', `left`);
+            // textPath.setAttribute('href', `#curve`);
+            // textPath.setAttribute('startOffset', `50%`);
+            // textPath.appendChild(textNode);
+            // text.appendChild(textPath);
+            // svg.appendChild(path);
+            // svg.appendChild(text);
+            // svg.classList.add(`dosageSVG`);
+            // newBox.appendChild(svg);
+
 		newBox.values = [foodList[i] % 7, foodList[i] - (foodList[i] % 7)];
 		if(newBox.values.includes(0)) {
 			newBox.style.backgroundImage = `url("./images/halfBottle.webp")`;
 			newBox.style.height = newBox.clientHeight / 2 + "px";
 			newBox.bottleSize = 1;
+                  // svg.classList.remove(`dosageSVG`);
+                  // svg.classList.add(`dosageSVGHalf`);
+                  dosageText.classList.remove(`dosage`);
+                  dosageText.classList.add(`dosageHalf`);
 		} else {
 			newBox.bottleSize = 2;
 		}

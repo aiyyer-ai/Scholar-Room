@@ -179,7 +179,7 @@ html {
 
 .thermometerBase {
       position: absolute;
-      background: radial-gradient(circle at top, rgba(139, 0, 0, 1) 50%, rgb(71, 0, 0));
+      background: radial-gradient(circle at top, rgb(0, 72, 139) 50%, rgb(0, 33, 71));
       /* background: rgba(139, 0, 0, 1); */
       border: 2px solid black;
       border-radius: 50%;
@@ -194,7 +194,7 @@ html {
       bottom: 0px;
       width: 100%;
       height: var(--thermometerBaseHeight);
-      background: linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1));
+      background: linear-gradient(rgb(0, 162, 255), rgb(0, 72, 139));
       /* background: red; */
       z-index: 1;
       transition: 0.2s all ease-in;

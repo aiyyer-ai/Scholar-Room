@@ -193,6 +193,14 @@ html {
 	padding: 20px;
 }
 
+.gaugeIMG {
+      mix-blend-mode: overlay;
+	place-self: center center;
+	height: var(--gaugeHeight);
+	width: 180px;
+	display: flex;
+}
+
 .gauge {
 	place-self: center center;
 	height: var(--gaugeHeight);
