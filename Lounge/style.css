@@ -346,8 +346,8 @@ html {
 	position: absolute;
 	z-index: 20;
 	pointer-events: none;
-	background-color: red;
-	opacity: 50%;
+	/* background-color: red;
+	opacity: 50%; */
 }
 
 .fireplaceSnap {
