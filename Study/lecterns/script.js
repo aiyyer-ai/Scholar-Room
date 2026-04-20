@@ -36,32 +36,32 @@ var lecternTitles = {
       k: {
             1: `Push the Limits`,
             2: `Look out!`,
-            3: `Pull your weight`,
-            4: `Click of a Gun`,
+            3: `Click of a Gun`,
+            4: `Pull your weight`,
             5: `Open Up: a Guide to Your Feelings`,
             6: `Place setting etiquette`
       },
       q: {
             1: `Left Alone`,
-            2: `Down and Out`,
+            2: `Up and At 'Em`,
             3: `Right Away`,
             4: `The Founding Fathers`,
-            5: `Up and At 'Em`,
+            5: `Down and Out`,
             6: `At the Ballgame`
       },
       r: {
-            1: `Medicine Habits`,
+            1: `On my toes`,
             2: `Our New Home`,
             3: `Cat Attack!`,
             4: `Table that Idea`,
             5: `Lamp Magazine`,
-            6: `On my toes`
+            6: `Medicine Habits`
       },
       b: {
-            1: `Podium: Third Place`,
+            1: `Door to Another World`,
             2: `Painting for Beginners`,
             3: `Over the Rainbow`,
-            4: `Door to Another World`,
+            4: `Podium: Third Place`,
             5: `Head over Heels`,
             6: `Machine Building`
       }
@@ -138,20 +138,20 @@ function generateLecterns() {
                               closedBookDiv.style.filter = `hue-rotate(${bookColorRand * 360}deg)`;
                         });
                   }
-                  addImg(`book`, newFace, (book) => {
+                  addImg(`/pngs/book${lectern.toUpperCase()}${bookNum}`, newFace, (book) => {
                         book.classList.add(`book`, `lecternContainer`);
-                        let bookText = document.createElement(`div`);
-                        bookText.classList.add(`position`, `page`);
+                        // let bookText = document.createElement(`div`);
+                        // bookText.classList.add(`position`, `page`);
                         book.children[0].classList.add(`position`, `openImage`);
-                        let wordArray = lecternList[lecternData][bookNumber].split(" ");
-                        let firstWord = wordArray.shift();
-                        let otherWords = wordArray.join(" ");
-                        bookText.innerHTML = `${firstWord} ${otherWords}`;
-                        book.appendChild(bookText);
+                        // let wordArray = lecternList[lecternData][bookNumber].split(" ");
+                        // let firstWord = wordArray.shift();
+                        // let otherWords = wordArray.join(" ");
+                        // bookText.innerHTML = `${firstWord} ${otherWords}`;
+                        // book.appendChild(bookText);
                         book.style.width = book.children[0].clientWidth + "px";
                         book.style.left = (newFace.clientWidth - book.clientWidth) / 4 + 'px';
-                        let textAdjustment = window.getComputedStyle(bookText).getPropertyValue('margin-left').replace("px", "");
-                        bookText.style.width = book.children[0].clientWidth - (textAdjustment * 2) + "px";
+                        // let textAdjustment = window.getComputedStyle(bookText).getPropertyValue('margin-left').replace("px", "");
+                        // bookText.style.width = book.children[0].clientWidth - (textAdjustment * 2) + "px";
                         if (backWithDiary) {
                               book.onmousedown = closeBook;
                         }
@@ -188,14 +188,14 @@ function generateLecterns() {
             rightWall.classList.add(`wall`, `rightWall`);
             rightWall.style.left = newLectern.clientWidth / 2 - rightWall.clientWidth / 2 + "px";
             rightWall.style.top = newLectern.clientHeight / 2 - rightWall.clientHeight / 2 + "px";
-            rightWall.style.backgroundImage = `url('./images/wallplank${lectern.toUpperCase()}.webp')`;
+            rightWall.style.backgroundImage = `url('./images/wallplank1.webp')`;
             rightWall.currentRotation = 0;
             let leftWall = document.createElement(`div`);
             newLectern.appendChild(leftWall);
             leftWall.classList.add(`wall`, `leftWall`);
             leftWall.style.left = newLectern.clientWidth / 2 - leftWall.clientWidth / 2 + "px";
             leftWall.style.top = newLectern.clientHeight / 2 - leftWall.clientHeight / 2 + "px";
-            leftWall.style.backgroundImage = `url('./images/wallplank${lectern.toUpperCase()}.webp')`;
+            leftWall.style.backgroundImage = `url('./images/wallplank1.webp')`;
             leftWall.currentRotation = 0;
             let matchingPlaque = document.getElementById(`plaque${lectern.toUpperCase()}`)
             let leftlecternBounds = leftWall.getBoundingClientRect();

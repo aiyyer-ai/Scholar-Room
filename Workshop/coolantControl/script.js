@@ -3,8 +3,21 @@ var correctNumber = [32];
 //degrees Farenheit, I guess...
 
 //var allNumbers = testNumbers();
-var allNumbers = [ 8, 10, 14, 19, 7, 9, 21, 12, 20, 18 ];
+var hexGrid = [
+      [false, true, true, true, true],
+      [true, true, true, true, true],
+      [true, true, true, true, true, true],
+      [true, true, true, true, true],
+      [false, true, true, true, true]
+]
+var yBorder = 250;
+var hexSize = (window.innerHeight - yBorder) / hexGrid.length;
+let gameArea = document.getElementById('gameArea');
+
+var allNumbers = [8, 10, 14, 19, 7, 9, 21, 12, 20, 18];
 var correctPiecePositions = [1, 6, 8];
+
+var input
 var correctNumbers = allNumbers.slice(0, 3);
 allNumbers.splice(0, 3);
 
@@ -39,8 +52,8 @@ window.onload = (event) => {
       }
 
       let board = populateGrid();
-      pieceDisplay(board);
-      addIntersections(board);
+      generatePieceDisplay(board);
+      // addIntersections(board);
       liquidColor = getComputedStyle(document.getElementsByClassName('pipeStart')[0]).getPropertyValue('background-color');
       flowLiquid();
 }
@@ -54,9 +67,9 @@ function testNumbers() {
       let goalNumber = 32;
 
       let startNumberList = pickGoalNumbers(minGroupSize);
-      for( i = 0; i < totalInputs - minGroupSize; i++) {
+      for (i = 0; i < totalInputs - minGroupSize; i++) {
             let potentialNumber = minNumSize;
-            while(startNumberList.indexOf(potentialNumber) != -1) {
+            while (startNumberList.indexOf(potentialNumber) != -1) {
                   potentialNumber++;
             }
             startNumberList = checkApplicableNumber(startNumberList, potentialNumber);
@@ -69,24 +82,24 @@ function testNumbers() {
             potentialNewArray.push(number);
             let allPairs = arrayCreate(potentialNewArray, minGroupSize);
             let allGoalPairs = checkArray(allPairs);
-            if(allGoalPairs.length > 1) {
+            if (allGoalPairs.length > 1) {
                   number++;
-                  while(array.indexOf(number) != -1) {
+                  while (array.indexOf(number) != -1) {
                         number++;
                   }
                   return checkApplicableNumber(array, number);
             } else {
                   return potentialNewArray;
             }
-            
+
       }
 
       function pickGoalNumbers(numberCount) {
             let remainingNumber = goalNumber;
             let goalNumberList = [];
-            for( i = 0; i < numberCount - 1; i++) {
+            for (i = 0; i < numberCount - 1; i++) {
                   let goalNumber = Math.floor(Math.random() * ((remainingNumber - (numberCount - i) * minNumSize) - minNumSize + 1) + minNumSize);
-                  while(goalNumberList.indexOf(goalNumber) != -1) {
+                  while (goalNumberList.indexOf(goalNumber) != -1) {
                         goalNumber = Math.floor(Math.random() * ((remainingNumber - (numberCount - i) * minNumSize) - minNumSize + 1) + minNumSize);
                   }
                   remainingNumber -= goalNumber;
@@ -117,7 +130,7 @@ function testNumbers() {
             let allGoals = [];
             array.forEach((group) => {
                   let groupSum = group.reduce((partialSum, a) => partialSum + a, 0);
-                  if(groupSum == goalNumber) {
+                  if (groupSum == goalNumber) {
                         allGoals.push(group);
                   }
             });
@@ -127,33 +140,33 @@ function testNumbers() {
       function arrayCreate(array, size) {
             var result = [];
             array.forEach(function iter(parts) {
-                return function (v) {
-                    var temp = parts.concat(v);
-                    if (parts.includes(v)) {
-                        return;
-                    }
-                    if (temp.length === size) {
-                        let alreadyHas = false;
-                        result.forEach((group) => {
-                              let sortedGroup = [...group];
-                              sortedGroup.sort(function(a, b) {
-                                    return a - b;
-                              });
-                              let sortedTemp = [...temp];
-                              sortedTemp.sort(function(a, b) {
-                                    return a - b;
-                              });
-                              if(arraysEqual(sortedGroup, sortedTemp)) {
-                                    alreadyHas = true;
-                              }
-                        });
-                        if(!alreadyHas) {
-                              result.push(temp);
+                  return function (v) {
+                        var temp = parts.concat(v);
+                        if (parts.includes(v)) {
+                              return;
                         }
-                        return;
-                    }
-                    array.forEach(iter(temp));
-                }
+                        if (temp.length === size) {
+                              let alreadyHas = false;
+                              result.forEach((group) => {
+                                    let sortedGroup = [...group];
+                                    sortedGroup.sort(function (a, b) {
+                                          return a - b;
+                                    });
+                                    let sortedTemp = [...temp];
+                                    sortedTemp.sort(function (a, b) {
+                                          return a - b;
+                                    });
+                                    if (arraysEqual(sortedGroup, sortedTemp)) {
+                                          alreadyHas = true;
+                                    }
+                              });
+                              if (!alreadyHas) {
+                                    result.push(temp);
+                              }
+                              return;
+                        }
+                        array.forEach(iter(temp));
+                  }
             }([]));
             return result;
       }
@@ -163,11 +176,11 @@ function testNumbers() {
 var pauseTimeStart;
 
 function save() {
-      let jsonData = {...window.sessionStorage};
+      let jsonData = { ...window.sessionStorage };
       jsonData.lastRoom = `${window.location.pathname}`;
       function download(content, fileName, contentType) {
             var a = document.createElement("a");
-            var file = new Blob([content], {type: contentType});
+            var file = new Blob([content], { type: contentType });
             a.href = URL.createObjectURL(file);
             a.download = fileName;
             a.click();
@@ -190,7 +203,7 @@ function unpause() {
       let pauseTimeEnd = Date.now();
       let pauseTimeSpent = (pauseTimeEnd - pauseTimeStart) / 1000;
       let timing_dict = JSON.parse(window.sessionStorage.getItem(`timeData`));
-      if(!timing_dict) {
+      if (!timing_dict) {
             timing_dict = {};
       }
 
@@ -205,7 +218,7 @@ function unpause() {
             }
             timing_dict_level = timing_dict_level[url_part];
       }
-      if(!timing_dict_level["time_spent_paused"]) {
+      if (!timing_dict_level["time_spent_paused"]) {
             timing_dict_level["time_spent_paused"] = 0;
       }
       timing_dict_level["time_spent_paused"] += Math.round(pauseTimeSpent);
@@ -356,678 +369,384 @@ function addInv(src, parentElement, imgCallback) {
       }
 }
 
-var totalHexes = 12;
-var hexSize = 175;
-let gameArea = document.getElementById('gameArea');
-
 function populateGrid() {
-      let hexHolder = document.createElement('div');
-      hexHolder.classList.add(`board`);
-      hexHolder.id = `board`;
-      hexHolder.style.width = hexSize * 4 + `px`;
-      gameArea.appendChild(hexHolder);
-      for (i = 0; i < totalHexes; i++) {
-            let newHex = document.createElement(`div`);
-            newHex.classList.add(`hexElement`, `outerHex`);
-            newHex.classList.add(`slot`);
-            newHex.id = `${i}slot`;
-            hexHolder.appendChild(newHex);
-            if (i == 0 || i == 7) {
-                  newHex.style.marginLeft = `${(100 / 4) / 2}%`;
-            }
-            if (i == 10) {
-                  newHex.style.marginLeft = `${100 / 4}%`;
-            }
-            newHex.style.width = 100 / 4 + "%";
-            newHex.style.marginBottom = -(100 / 4) / 3 + "%";
-            let newInnerHex = document.createElement(`div`);
-            newInnerHex.classList.add(`hexElement`, `innerHex`);
-            newHex.appendChild(newInnerHex);
-            newInnerHex.style.width = '85%';
-            newInnerHex.style.top = 50 - Math.ceil(newInnerHex.clientHeight / (newHex.clientHeight * 2) * 100) + "%";
-            newInnerHex.style.left = 50 - Math.ceil(newInnerHex.clientWidth / (newHex.clientWidth * 2) * 100) + "%";
-      }
-      return hexHolder;
-}
+      let fullBoard = document.createElement('div');
+      fullBoard.classList.add(`board`);
+      fullBoard.id = `board`;
+      gameArea.appendChild(fullBoard);
+      let longestRowCount = Math.max(...hexGrid.map(array => array.length));
+      let totalRowCount = hexGrid.length;
+      fullBoard.style.height = totalRowCount * hexSize + "px";
+      fullBoard.style.width = (longestRowCount + 1) * (hexSize * (Math.cos(30 * (Math.PI / 180)))) + "px";
+      // let testDot = document.createElement(`div`);
+      // testDot.classList.add(`dot`);
+      // gameArea.appendChild(testDot);
+      // testDot.style.left = `calc(50% - ${testDot.clientWidth / 2}px)`;
+      // testDot.style.top = `calc(50% - ${testDot.clientHeight / 2}px)`;
+      let iterator = 0
+      hexGrid.forEach((rowData, rowPosition) => {
+            rowData.forEach((hexExists, slotPosition) => {
+                  if (hexExists) {
+                        //create and place the hex adjusted to center of page
+                        let newHex = document.createElement(`div`);
+                        newHex.classList.add(`hexElement`);
+                        newHex.classList.add(`slot`);
+                        newHex.id = `${slotPosition}, ${rowPosition}`;
+                        let hexHolder = document.createElement(`div`);
+                        hexHolder.classList.add(`paddedHex`);
+                        hexHolder.appendChild(newHex);
+                        newHex.style.height = hexSize + "px";
+                        hexHolder.style.height = hexSize + "px";
+                        hexHolder.style.width = hexSize + "px";
+                        fullBoard.appendChild(hexHolder);
+                        hexHolder.hexDistance = hexHolder.clientWidth - newHex.clientWidth;
+                        hexHolder.style.left = hexHolder.clientWidth * (slotPosition + rowPosition % 2 * 0.5) + (fullBoard.clientWidth - longestRowCount * hexHolder.clientWidth) / 2 + (hexHolder.hexDistance / 2) + "px";
+                        hexHolder.style.top = hexHolder.clientHeight * (Math.sqrt(3) / 2) * rowPosition + (fullBoard.clientHeight - ((totalRowCount - 1) * hexHolder.clientHeight * (3 / 4) + hexHolder.clientHeight)) / 4 + "px";
 
-function addIntersections(board) {
-      let rotationAngle = [0, 0, 60, 300, 120, 240, 120, 240, 180];
-      for (let boardHex of Array.from(board.children)) {
-            //1 7 11
-            for (i = 0; i < 3; i++) {
-                  let newIntersection = document.createElement(`div`);
-                  newIntersection.classList.add(`intersection`);
-                  board.appendChild(newIntersection);
-                  newIntersection.style.width = boardHex.clientWidth * .25 + "px";
-                  newIntersection.style.height = boardHex.clientHeight * .10 + "px";
-                  newIntersection.style.top = boardHex.offsetTop + boardHex.clientHeight / 2 - newIntersection.clientHeight / 2 + "px";
-                  newIntersection.style.left = boardHex.offsetLeft + boardHex.clientWidth - newIntersection.clientWidth / 2 + "px";
-                  newIntersection.style.transformOrigin = `${-boardHex.clientWidth / 2 + newIntersection.clientWidth / 2}px ${newIntersection.clientHeight / 2}px`;
-                  newIntersection.style.transform = `rotate(${i * 60}deg)`;
-                  let actualIntersection = document.createElement(`div`);
-                  actualIntersection.classList.add(`actualIntersection`);
-                  newIntersection.appendChild(actualIntersection);
-                  actualIntersection.style.width = `68%`;
-                  actualIntersection.style.height = `430%`;
-                  actualIntersection.style.top = newIntersection.clientHeight / 2 - actualIntersection.clientHeight / 2 + "px";
-                  actualIntersection.style.left = newIntersection.clientWidth / 2 - actualIntersection.clientWidth / 2 + "px";
-                  let overTwoHexes = overlayCheck(newIntersection, `slot`);
-                  if (overTwoHexes.length != 2) {
-                        newIntersection.remove();
-                  } else {
-                        newIntersection.id = `${overTwoHexes[0].id}/${overTwoHexes[1].id}`;
-                        newIntersection.style.opacity = `0%`;
-                  }
-            }
-            if (boardHex.id != `4slot` && boardHex.id != `5slot` && boardHex.id != `8slot`) {
-                  let newPipeEnd = document.createElement(`div`);
-                  newPipeEnd.classList.add(`pipeExit`);
-                  newPipeEnd.id = boardHex.id.replace(`slot`, `pipeEnd`);
-                  board.appendChild(newPipeEnd);
-                  let borderSize = Number(getComputedStyle(newPipeEnd).getPropertyValue('border').split(" ")[0].replace(`px`, ``));
-                  newPipeEnd.style.width = boardHex.clientWidth * .18 + "px";
-                  newPipeEnd.style.height = boardHex.clientHeight * .5 + "px";
-                  newPipeEnd.style.top = boardHex.offsetTop - (boardHex.clientHeight / 6) - (newPipeEnd.clientHeight - boardHex.clientHeight * .5) + "px";
-                  newPipeEnd.style.left = boardHex.offsetLeft + boardHex.clientWidth - newPipeEnd.clientWidth / 2 - borderSize + "px";
-                  let pipeBounds = newPipeEnd.getBoundingClientRect();
-                  let hexBounds = boardHex.getBoundingClientRect();
-                  let boundsDifference = hexBounds.top - pipeBounds.top;
-                  newPipeEnd.style.transformOrigin = `${-boardHex.clientWidth / 2 + newPipeEnd.clientWidth / 2 + borderSize}px ${boundsDifference + boardHex.clientHeight / 2}px`;
-                  newPipeEnd.style.transform = `rotate(${rotationAngle.shift()}deg)`;
-                  if (boardHex.id == `1slot` || boardHex.id == `7slot` || boardHex.id == `11slot`) {
-                        switch (boardHex.id) {
-                              case `1slot`:
-                                    newPipeEnd.classList.add(`pipeStart`);
-                                    let coolantText = document.createElement(`span`);
-                                    coolantText.classList.add(`coolantText`);
-                                    coolantText.innerHTML = `COOLANT`;
-                                    newPipeEnd.appendChild(coolantText);
-                                    break;
-                              case `7slot`:
-                              case `11slot`:
-                                    newPipeEnd.classList.add(`pipeEnd`);
-                                    break;
-                              default:
-                                    console.log(`ERROR`);
+                        //adds intersections as we go
+                        let pieceRight = hexGrid[rowPosition][slotPosition + 1];
+                        let pieceDownRight = !(hexGrid[rowPosition + 1] == undefined || (rowPosition % 2 == 0 ? !(hexGrid[rowPosition + 1][slotPosition]) : !(hexGrid[rowPosition + 1][slotPosition + 1])));
+                        let pieceDownLeft = !(hexGrid[rowPosition + 1] == undefined || (rowPosition % 2 == 0 ? !(hexGrid[rowPosition + 1][slotPosition - 1]) : !(hexGrid[rowPosition + 1][slotPosition])));
+
+                        // for (i = 0; i < 3; i++) {
+                        for (i = 2; i >= 0; i--) {
+                              let rotation = 60 * i;
+                              if ((rotation == 0 && !pieceRight) || (rotation == 60 && !pieceDownRight) || (rotation == 120 && !pieceDownLeft)) {
+                                    continue;
+                              }
+                              let newIntersection = document.createElement(`div`);
+                              newIntersection.classList.add(`intersection`);
+                              hexHolder.appendChild(newIntersection);
+                              let heightOffset = 20;
+                              let widthOffset = 2;
+                              newIntersection.style.width = hexHolder.hexDistance + widthOffset + "px";
+                              newIntersection.style.height = hexSize * 0.5 + heightOffset + "px";
+                              newIntersection.style.top = (hexSize * 0.5 - heightOffset) / 2 + "px";
+                              newIntersection.style.left = hexSize - hexHolder.hexDistance - widthOffset / 2 + "px";
+                              newIntersection.style.transformOrigin = `${-(hexSize - hexHolder.hexDistance - widthOffset) / 2}px ${((hexSize * 0.5 + heightOffset) / 2)}px`;
+                              newIntersection.style.transform = `rotate(${rotation}deg)`;
+                              newIntersection.id = iterator;
+                              iterator++;
+                              underSection = newIntersection.cloneNode(true);
+                              underSection.classList.remove(`intersection`);
+                              underSection.classList.add(`undersection`);
+                              hexHolder.appendChild(underSection);
+                              if (i == 0) {
+                                    pieceOneRelativeCoords = [1, 1];
+                                    pieceTwoRelativeCoords = [1, -1];
+                              }
+                              else if (i == 1) {
+                                    pieceOneRelativeCoords = [0, 1];
+                                    pieceTwoRelativeCoords = [1, 0];
+                              }
+                              else {
+                                    pieceOneRelativeCoords = [-1, 0];
+                                    pieceTwoRelativeCoords = [1, 1];
+                              }
+                              if (rowPosition % 2 == 0) {
+                                    pieceOneRelativeCoords[0] -= Math.abs(pieceOneRelativeCoords[1]);
+                                    pieceTwoRelativeCoords[0] -= Math.abs(pieceTwoRelativeCoords[1]);
+                              }
+                              let firstPiece = !(hexGrid[rowPosition + pieceOneRelativeCoords[1]] == undefined ||
+                                    !hexGrid[rowPosition + pieceOneRelativeCoords[1]][slotPosition + pieceOneRelativeCoords[0]]);
+                              let secondPiece = !(hexGrid[rowPosition + pieceTwoRelativeCoords[1]] == undefined ||
+                                    !hexGrid[rowPosition + pieceTwoRelativeCoords[1]][slotPosition + pieceTwoRelativeCoords[0]]);
+                              let pushDistance = hexSize / 2;
+                              if (!firstPiece) {
+                                    let direction = 1;
+                                    addOutlet(underSection, rotation, pushDistance, direction);
+                              }
+                              if (!secondPiece) {
+                                    let direction = -1;
+                                    addOutlet(underSection, rotation, pushDistance, direction);
+                              }
                         }
                   }
-            }
-      }
+            });
+      });
+      return fullBoard;
 }
 
-function rotatePiece(piece) {
-      let possibleRotations = [0, 60, 120, 180, 240, 300];
-      let rotationIndex = possibleRotations.indexOf(piece.rotation) + 1 == possibleRotations.length ? 0 : possibleRotations.indexOf(piece.rotation) + 1;
-      let rotation = possibleRotations[rotationIndex];
-      let hexNum = 0;
-      let hasNumber = false;
-      for (const hex of piece.children) {
-            if (tileSystem[piece.id][rotation][hexNum]) {
-                  if (!hasNumber) {
-                        hasNumber = true;
-                        hex.appendChild(piece.numberDisplay);
-                  }
-                  hex.classList.remove(`invisiblePiece`);
-                  hex.classList.add(`placeCheck`);
-                  dragElement(hex);
-            } else {
-                  hex.classList.remove(`placeCheck`);
-                  hex.classList.add(`invisiblePiece`);
-                  hex.onmousedown = null;
-            }
-            hexNum++;
-      }
-      piece.rotation = rotation;
-}
+var iterator = 0;
 
-function pieceDisplay(board) {
-      let pieceHolderLeft = document.createElement(`div`);
-      pieceHolderLeft.classList.add(`pieceHolder`);
-      pieceHolderLeft.id = `leftHolder`;
-      gameArea.appendChild(pieceHolderLeft);
-      pieceHolderLeft.style.width = hexSize * 1.5 + `px`;
-      pieceHolderLeft.style.height = window.innerHeight - hexSize + 'px';
-      pieceHolderLeft.style.left = hexSize / 2 + `px`;
-      pieceHolderLeft.style.top = hexSize / 2 + `px`;
-      generatePiecesFromSystem(pieceHolderLeft);
-      let pieceHolderRight = document.createElement(`div`);
-      pieceHolderRight.classList.add(`pieceHolder`);
-      pieceHolderRight.id = `rightHolder`;
-      gameArea.appendChild(pieceHolderRight);
-      pieceHolderRight.style.width = hexSize * 1.5 + `px`;
-      pieceHolderRight.style.height = window.innerHeight - hexSize + 'px';
-      pieceHolderRight.style.right = hexSize / 2 + `px`;
-      pieceHolderRight.style.top = hexSize / 2 + `px`;
-      generatePiecesFromSystem(pieceHolderRight);
-
-      //temperature Display
-
-      let thermometerBase = document.createElement(`div`);
-      thermometerBase.classList.add(`thermometerBase`);
-      gameArea.appendChild(thermometerBase);
-      thermometerBase.style.width = hexSize * .5 + `px`;
-      thermometerBase.style.height = hexSize * .5 + 'px';
-      thermometerBase.style.left = pieceHolderLeft.getBoundingClientRect().right + (board.getBoundingClientRect().left - pieceHolderLeft.getBoundingClientRect().right - thermometerBase.clientWidth) / 2 + `px`;
-      thermometerBase.style.top = (window.innerHeight - 576) / 2 + 576 - thermometerBase.clientHeight / 2 + `px`;
-      thermometerBase.style.zIndex = -2;
-      thermometerBase.id = `thermometerBase`;
-      let thermometer = document.createElement(`div`);
-      thermometer.classList.add(`thermometer`);
-      thermometer.id = `thermometer`;
-      thermometerBase.appendChild(thermometer);
-      thermometer.style.width = hexSize * .25 + `px`;
-      thermometer.style.height = 576 + 'px';
-      thermometer.style.bottom = hexSize * .5 - 5 + `px`;
-      let thermometerBar = document.createElement(`div`);
-      thermometerBar.classList.add(`thermometerBar`);
-      thermometerBar.id = `thermometerBar`;
-      thermometer.appendChild(thermometerBar);
-      let thermometerScale = document.createElement(`div`);
-      thermometerScale.classList.add(`thermometerScale`);
-      thermometerScale.id = `thermometerScale`;
-      thermometer.appendChild(thermometerScale);
-      thermometerScale.style.zIndex = 2;
-      thermometer.style.zIndex = -1;
-
-      addSVG(`1`, thermometerBase, (div) => {
+function addOutlet(touchingIntersection, rotation, pushDistance, direction) {
+      let referenceHex = touchingIntersection.parentElement;
+      let newOutput = document.createElement(`div`);
+      newOutput.classList.add(`pipeExit`);
+      newOutput.id = `pipeEnd`;
+      board.appendChild(newOutput);
+      let borderSize = Number(getComputedStyle(newOutput).getPropertyValue('border').split(" ")[0].replace(`px`, ``));
+      let heightOffset = 30;
+      let widthOffset = 20;
+      newOutput.style.width = referenceHex.hexDistance + widthOffset + "px";
+      newOutput.style.height = hexSize * 0.5 + heightOffset + "px";
+      newOutput.style.top = referenceHex.offsetTop + (hexSize * 0.5 - heightOffset) / 2 - borderSize + direction * pushDistance * Math.cos(rotation * (Math.PI / 180)) + "px";
+      newOutput.style.left = referenceHex.offsetLeft + hexSize - referenceHex.hexDistance - widthOffset / 2 - borderSize - direction * pushDistance * Math.sin(rotation * (Math.PI / 180)) + "px";
+      newOutput.style.transformOrigin = `${-(hexSize - referenceHex.hexDistance - widthOffset) / 2 + borderSize}px ${((hexSize * 0.5 + heightOffset) / 2 + borderSize)}px`;
+      newOutput.style.transform = `rotate(${rotation}deg)`;
+      let placedNum = [2, 1, 0, 7, 14, 3, 21, 4, 28, 5, 35, 6, 0, 42];
+      newOutput.number = placedNum[iterator];
+      addSVG(placedNum[iterator], newOutput, (div) => {
             div.style.filter = `invert(100%)`;
             div.style.width = 60 + "%";
-            div.style.height = div.clientWidth / thermometerBase.clientHeight * 100 + "%";
-            div.style.top = (thermometerBase.clientHeight - div.clientHeight) / 2 + "px";
-            div.style.left = (thermometerBase.clientWidth - div.clientWidth) / 2 + "px";
+            div.style.height = div.clientWidth / newOutput.clientHeight * 100 + "%";
+            if (direction == 1) {
+                  div.style.top = `calc(100% - ${borderSize}px - ${hexSize * 0.4 / 2}px)`;
+            } else {
+                  div.style.top = 10 + "px";
+            }
+            div.style.left = (newOutput.clientWidth - div.clientWidth) / 2 + "px";
+            div.style.transform = `rotate(${-rotation}deg)`;
             div.firstChild.onload = null;
-            div.style.visibility = `hidden`;
-            div.id = `thermometerNumber`;
             SVGsLoaded++;
-            if(SVGsLoaded == tileSystem.length + 1) {
+            if (SVGsLoaded == tileSystem.length + 1) {
                   placePiecesOnBoard();
             }
       });
+      if (iterator == 2) {
+            newOutput.classList.add(`pipeStart`);
+            let coolantText = document.createElement(`div`);
+            coolantText.classList.add(`inputText`, `pipeText`);
+            coolantText.innerHTML = `INPUT`;
+            newOutput.appendChild(coolantText);
+            touchingIntersection.style.zIndex = -2;
+            coolantText.style.top = borderSize + 13 + "px";
+            coolantText.style.left = (newOutput.clientWidth - coolantText.getBoundingClientRect().height) / 2 + "px";
+      }
+      if (iterator == 12) {
+            newOutput.classList.add(`pipeEnd`);
+            let coolantText = document.createElement(`div`);
+            coolantText.classList.add(`outputText`, `pipeText`);
+            coolantText.innerHTML = `OUTPUT`;
+            newOutput.appendChild(coolantText);
+            coolantText.style.top = `calc(100% - ${coolantText.getBoundingClientRect().width}px - ${borderSize + 18}px)`;
+            coolantText.style.left = (newOutput.clientWidth - coolantText.getBoundingClientRect().height) / 2 + "px";
+      }
+      iterator++;
+}
 
+function rotatePiece(piece) {
+      //WE ARE ODD-R
+      let matrix = piece.currentMatrix;
+      const cubeCoords = [];
+
+      for (row = 0; row < matrix.length; row++) {
+            for (col = 0; col < matrix[row].length; col++) {
+                  if (!matrix[row][col]) continue;
+                  const q = col - (row - (row & 1)) / 2;
+                  const r = row;
+                  const s = - q - r;
+                  cubeCoords.push({ q, r, s });
+            }
+      }
+
+      const rotated = cubeCoords.map(({ q, r, s }) => {
+            return { q: -r, r: -s, s: -q };
+      });
+
+      const minQ = Math.min(...rotated.map(coords => coords.q));
+      const minR = Math.min(...rotated.map(coords => coords.r));
+
+      const normalizedCube = rotated.map(({ q, r, s }) => ({
+            q: q - minQ,
+            r: r - minR,
+            s: - (q - minQ) - (r - minR)
+      }));
+
+      const offsetCoords = normalizedCube.map(({ q, r, s }) => {
+            const row = r;
+            const col = q + (r - (r & 1)) / 2;
+            return {row, col};
+      });
+
+      const minRow = Math.min(...offsetCoords.map(coords => coords.row));
+      const minCol = Math.min(...offsetCoords.map(coords => coords.col));
+
+      const normalized = offsetCoords.map(({ row, col }) => ({
+            row: row - minRow,
+            col: col - minCol
+      }));
+
+      const maxRow = Math.max(...normalized.map(coords => coords.row));
+      const maxCol = Math.max(...normalized.map(coords => coords.col));
+
+      let result = Array(maxRow + 1).fill(false).map(() => Array(maxCol + 1).fill(false));
+      for (coord of normalized) {
+            result[coord.row][coord.col] = true;
+      }
+
+      Array.from(piece.firstChild.children).forEach((hexDiv) => {
+            hexDiv.remove();
+      });
+      let elmnt = makeHexesFromMatrix(result, piece.firstChild, hexSize);
+      piece.currentMatrix = result;
+      return elmnt;
+}
+
+function generatePieceDisplay(board) {
+      let panels = ["left", "right"];
+      for (side of panels) {
+            let displayer = document.createElement(`div`);
+            let marginFromSide = hexSize / 2;
+            displayer.classList.add(`pieceDisplay`);
+            displayer.id = `${side}Display`;
+            gameArea.appendChild(displayer);
+            // pieceDisplay.style.width = (window.innerWidth - board.clientWidth - (sideMargin * 2) - hexSize) / 2 + `px`;
+            displayer.style.width = hexSize * 2 + 'px';
+            displayer.style.height = window.innerHeight - hexSize + 'px';
+            displayer.style.top = marginFromSide + `px`;
+            if (side == "left") {
+                  displayer.style.left = marginFromSide + `px`;
+            } else {
+                  displayer.style.right = marginFromSide + `px`;
+            }
+            generatePiecesFromSystem(displayer);
+      }
 }
 
 var tileSystem = [
-      {
-            0: [
-                  1, 1, 0,
-                  0, 0, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 0, 1, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 0, 1, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  1, 0, 0, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            240: [
-                  1, 0, 0,
-                  1, 0, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            300: [
-                  1, 1, 0,
-                  1, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            number: 24
-      },
-      {
-            0: [
-                  1, 1, 0,
-                  0, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 1, 1, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 1, 1, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  1, 1, 0, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            240: [
-                  1, 0, 0,
-                  1, 1, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            300: [
-                  1, 1, 0,
-                  1, 1, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            number: 17
-      },
-      {
-            0: [
-                  0, 0, 0,
-                  1, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  1, 0, 0,
-                  0, 1, 0, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 1, 0,
-                  0, 1, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  1, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            240: [
-                  1, 0, 0,
-                  0, 1, 0, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            300: [
-                  0, 1, 0,
-                  0, 1, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            number: 22
-      },
-      {
-            0: [
-                  0, 1, 0,
-                  1, 1, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  1, 0, 0,
-                  1, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            120: [
-                  1, 1, 0,
-                  0, 1, 0, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 1, 0,
-                  0, 1, 1, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            240: [
-                  0, 0, 0,
-                  1, 1, 1, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            300: [
-                  1, 0, 0,
-                  0, 1, 0, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            number: 45
-      },
-      {
-            0: [
-                  1, 0, 1,
-                  1, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  1, 1, 0,
-                  0, 1, 0, 0,
-                  0, 1, 1,
-                  0, 0,
-            ],
-            120: [
-                  0, 1, 0,
-                  0, 1, 1, 0,
-                  1, 0, 0,
-                  1, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  0, 1, 1, 1,
-                  1, 0, 1,
-                  0, 0,
-            ],
-            240: [
-                  0, 0, 0,
-                  1, 1, 0, 0,
-                  0, 1, 0,
-                  1, 1,
-            ],
-            300: [
-                  0, 1, 0,
-                  0, 0, 1, 0,
-                  1, 1, 0,
-                  1, 0,
-            ],
-            number: 32
-      },
-      {
-            0: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            240: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            300: [
-                  0, 1, 0,
-                  0, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            number: 8
-      },
-      {
-            0: [
-                  0, 0, 0,
-                  0, 1, 1, 0,
-                  1, 0, 1,
-                  0, 0,
-            ],
-            60: [
-                  0, 0, 0,
-                  0, 1, 1, 0,
-                  0, 0, 1,
-                  0, 1,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 0, 1, 0,
-                  0, 0, 1,
-                  1, 1,
-            ],
-            180: [
-                  0, 0, 0,
-                  0, 0, 0, 0,
-                  1, 0, 1,
-                  1, 1,
-            ],
-            240: [
-                  0, 0, 0,
-                  0, 1, 0, 0,
-                  1, 0, 0,
-                  1, 1,
-            ],
-            300: [
-                  0, 0, 0,
-                  0, 1, 1, 0,
-                  1, 0, 0,
-                  1, 0,
-            ],
-            number: 19
-      },
-      {
-            0: [
-                  1, 1, 0,
-                  0, 0, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 0, 1, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 0, 1, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  1, 0, 0, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            240: [
-                  1, 0, 0,
-                  1, 0, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            300: [
-                  1, 1, 0,
-                  1, 0, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            number: 7
-      },
-      {
-            0: [
-                  1, 1, 0,
-                  0, 0, 1, 0,
-                  0, 0, 1,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 0, 1, 0,
-                  0, 1, 0,
-                  1, 0,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 0, 0, 1,
-                  1, 1, 1,
-                  0, 0,
-            ],
-            180: [
-                  1, 0, 0,
-                  0, 1, 0, 0,
-                  0, 1, 1,
-                  0, 0,
-            ],
-            240: [
-                  0, 1, 0,
-                  0, 1, 0, 0,
-                  1, 0, 0,
-                  1, 0,
-            ],
-            300: [
-                  0, 0, 0,
-                  0, 1, 1, 1,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            number: 12
-      },
-      {
-            0: [
-                  1, 1, 0,
-                  0, 1, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            60: [
-                  0, 1, 0,
-                  0, 1, 1, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            120: [
-                  0, 0, 0,
-                  0, 1, 1, 0,
-                  0, 1, 0,
-                  0, 0,
-            ],
-            180: [
-                  0, 0, 0,
-                  0, 1, 0, 0,
-                  1, 1, 0,
-                  0, 0,
-            ],
-            240: [
-                  0, 0, 0,
-                  1, 1, 0, 0,
-                  1, 0, 0,
-                  0, 0,
-            ],
-            300: [
-                  1, 0, 0,
-                  1, 1, 0, 0,
-                  0, 0, 0,
-                  0, 0,
-            ],
-            number: 27
-      },
+      [
+            [false, true, true],
+            [true],
+      ],
+      [
+            [true, false, true],
+            [true, true],
+      ],
+      [
+            [false, true, true],
+            [true],
+            [true]
+      ],
+      [
+            [false, true],
+            [true, true],
+            [true, true],
+            [true]
+      ],
+      [
+            [true, true],
+            [true, true],
+      ],
+      [
+            [true, true, true],
+      ],
 ];
 
-function generatePiecesFromSystem(parent) {
-      let multiplier = 1.15;
-      let miniHexSize = (hexSize * multiplier) / 4;
-      let boardShape = document.getElementById(`board`);
-      let lastShapeBottom = 0;
-      let parentPieces = parent.id.includes(`left`) ? tileSystem.slice(0, Math.ceil(tileSystem.length / 2)) : tileSystem.slice(Math.ceil(tileSystem.length / 2), tileSystem.length);
-      let totalHeight = 0;
-      for (const piece of parentPieces) {
-            let newShape = boardShape.cloneNode(true);
-            newShape.classList.remove(`board`);
-            newShape.classList.add(`shape`);
-            newShape.classList.add(`selection`);
-            newShape.style.width = miniHexSize * 4 * multiplier + "px";
-            newShape.id = tileSystem.indexOf(piece);
-            if(correctPiecePositions.includes(Number(newShape.id))) {
-                  newShape.numberID = correctNumbers.pop();
+function makeHexesFromMatrix(piece, container, size) {
+      let leftSquareMultiplier = Math.min(...piece.map((array, index) => {
+            if (index % 2 == 0) {
+                  if (array[0] == true) {
+                        return 0;
+                  } else {
+                        return 2;
+                  }
             } else {
-                  newShape.numberID = allNumbers.pop();
+                  if (array[0] == true) {
+                        return 1;
+                  } else {
+                        return 3;
+                  }
             }
-            //newShape.numberID = piece.number;
-            parent.appendChild(newShape);
-            let hexNum = 0;
-            let top, bottom, left, right;
-            top = left = Infinity;
-            bottom = right = 0;
-            for (const hex of newShape.children) {
-                  hex.classList.remove(`slot`);
-                  hex.classList.add(`touchable`);
-                  hex.style.marginBottom = -(100 / 4) / 2.5 + "%";
-                  hex.style.backgroundColor = `black`;
-                  hex.style.backgroundImage = `none`;
-                  hex.firstChild.style.backgroundColor = `black`;
-                  if (piece[0][hexNum]) {
-                        dragElement(hex);
-                        let hexBounds = hex.getBoundingClientRect();
-                        if (hexBounds.top < top) {
-                              top = Math.ceil(hexBounds.top);
+      }));
+      piece.forEach((rowData, rowPosition) => {
+            rowData.forEach((hexExists, slotPosition) => {
+                  if (hexExists) {
+                        //create and place the hex adjusted to center of page
+                        let newHex = document.createElement(`div`);
+                        newHex.classList.add(`hexElement`, 'pieceElement');
+                        newHex.id = `${slotPosition}, ${rowPosition}Piece${tileSystem.indexOf(piece)}`;
+                        let hexHolder = document.createElement(`div`);
+                        hexHolder.classList.add(`paddedHex`);
+                        hexHolder.appendChild(newHex);
+                        newHex.style.height = size + "px";
+                        hexHolder.style.height = size + "px";
+                        hexHolder.style.width = size + "px";
+                        container.appendChild(hexHolder);
+                        hexHolder.hexDistance = hexHolder.clientWidth - newHex.clientWidth;
+                        hexHolder.style.left = hexHolder.clientWidth * (slotPosition + rowPosition % 2 * 0.5) - (hexHolder.clientWidth / 2) * leftSquareMultiplier + "px";
+                        hexHolder.style.top = hexHolder.clientHeight * (Math.sqrt(3) / 2) * rowPosition + (container.clientHeight - ((piece.length - 1) * hexHolder.clientHeight * (3 / 4) + hexHolder.clientHeight)) / 4 + "px";
+
+                        //adds intersections as we go
+                        let pieceRight = piece[rowPosition][slotPosition + 1];
+                        let pieceDownRight = !(piece[rowPosition + 1] == undefined || (rowPosition % 2 == 0 ? !(piece[rowPosition + 1][slotPosition]) : !(piece[rowPosition + 1][slotPosition + 1])));
+                        let pieceDownLeft = !(piece[rowPosition + 1] == undefined || (rowPosition % 2 == 0 ? !(piece[rowPosition + 1][slotPosition - 1]) : !(piece[rowPosition + 1][slotPosition])));
+
+                        // for (i = 0; i < 3; i++) {
+                        for (i = 2; i >= 0; i--) {
+                              let rotation = 60 * i;
+                              if ((rotation == 0 && !pieceRight) || (rotation == 60 && !pieceDownRight) || (rotation == 120 && !pieceDownLeft)) {
+                                    continue;
+                              }
+                              let newIntersection = document.createElement(`div`);
+                              newIntersection.classList.add('pieceElement', `intersectionBlocker`);
+                              hexHolder.appendChild(newIntersection);
+                              let heightOffset = 0;
+                              let widthOffset = 2;
+                              newIntersection.style.width = hexHolder.hexDistance + widthOffset + "px";
+                              newIntersection.style.height = size * 0.5 + heightOffset + "px";
+                              newIntersection.style.top = (size * 0.5 - heightOffset) / 2 + "px";
+                              newIntersection.style.left = size - hexHolder.hexDistance - widthOffset / 2 + "px";
+                              newIntersection.style.transformOrigin = `${-(size - hexHolder.hexDistance - widthOffset) / 2}px ${((size * 0.5 + heightOffset) / 2)}px`;
+                              newIntersection.style.transform = `rotate(${rotation}deg)`;
                         }
-                        if (hexBounds.bottom > bottom) {
-                              bottom = Math.ceil(hexBounds.bottom);
-                        }
-                        if (hexBounds.left < left) {
-                              left = Math.ceil(hexBounds.left);
-                        }
-                        if (hexBounds.right > right) {
-                              right = Math.ceil(hexBounds.right);
-                        }
-                        if (!newShape.pickupPoint) {
-                              newShape.pickupPoint = {
-                                    top: (hexBounds.top - newShape.offsetTop - parent.offsetTop),
-                                    left: (hexBounds.left - newShape.offsetLeft - parent.offsetLeft)
-                              };
-                              addSVG(newShape.numberID, hex, (div) => {
-                                    div.style.filter = `invert(100%)`;
-                                    div.style.width = 60 + "%";
-                                    div.style.height = div.clientWidth / hex.clientHeight * 100 + "%";
-                                    div.style.top = 50 - Math.ceil(div.clientHeight / (hex.clientHeight * 2) * 100) + "%";
-                                    div.style.left = 50 - Math.ceil(div.clientWidth / (hex.clientWidth * 2) * 100) + "%";
-                                    newShape.numberDisplay = div;
-                                    SVGsLoaded++;
-                                    if(SVGsLoaded == tileSystem.length + 1) {
-                                          placePiecesOnBoard();
-                                    }
-                              });
+                  }
+            });
+      });
+      elmnt = undefined;
+      Array.from(container.children).forEach((child) => {
+            if (!elmnt) {
+                  elmnt = child;
+            }
+            dragElement(child);
+      })
+      return elmnt;
+}
+
+function generatePiecesFromSystem(parent) {
+      let parentPieces = parent.id.includes(`left`) ? tileSystem.slice(0, Math.ceil(tileSystem.length / 2)) : tileSystem.slice(Math.ceil(tileSystem.length / 2), tileSystem.length);
+      let longestRowCountOverall = Math.max(...tileSystem.map(piece => Math.max(...piece.map(array => array.length))));
+      parentPieces.forEach((piece) => {
+            let longestPieceRowCount = Math.max(...piece.map(array => array.length));
+            let absolutePiece = document.createElement(`div`);
+            absolutePiece.classList.add('absolutePiece', 'selection');
+            absolutePiece.id = tileSystem.indexOf(piece);
+            let heightGap = 20;
+            let allOtherChildHeights = Array.from(parent.children).map((child) => child.getBoundingClientRect().height).reduce((accumulator, currentValue) => accumulator + currentValue + heightGap, 0);
+            parent.appendChild(absolutePiece);
+            let newPieceHolder = document.createElement(`div`);
+            newPieceHolder.classList.add('pieceHolder');
+            absolutePiece.appendChild(newPieceHolder);
+            let totalRowCount = piece.length;
+            let leftSquareMultiplier = Math.min(...piece.map((array, index) => {
+                  if (index % 2 == 0) {
+                        if (array[0] == true) {
+                              return 0;
+                        } else {
+                              return 2;
                         }
                   } else {
-                        hex.classList.add(`invisiblePiece`);
+                        if (array[0] == true) {
+                              return 1;
+                        } else {
+                              return 3;
+                        }
                   }
-                  hexNum++;
-            }
-            let pieceOffsetTop = ((top - parent.offsetTop) - newShape.offsetTop);
-            let pieceOffsetLeft = ((left - parent.offsetLeft) - newShape.offsetLeft);
-            newShape.style.left = parent.clientWidth / 2 - (right - left) / 2 - pieceOffsetLeft + "px";
-            newShape.style.top = lastShapeBottom - pieceOffsetTop + "px";
-            totalHeight += bottom - top;
-            lastShapeBottom = bottom - top + newShape.offsetTop + pieceOffsetTop;
-      }
-      //pieceGap should be height of parent minus size of all pieces divided by total number of pieces
-      let pieceGap = Math.ceil((parent.clientHeight - totalHeight) / (parentPieces.length + 1));
-      let childIterator = 1;
-      for (let childShape of parent.children) {
-            childShape.style.top = childShape.offsetTop + pieceGap * childIterator + "px";
-            childIterator++
-      }
+            }));
+            newPieceHolder.style.height = totalRowCount * hexSize + "px";
+            newPieceHolder.style.width = longestPieceRowCount * hexSize - (hexSize / 2) * leftSquareMultiplier - (hexSize - hexSize * Math.cos(30 * (Math.PI / 180))) + "px";
+            absolutePiece.style.transformOrigin = `0px 0px`;
+            absolutePiece.style.transform = `scale(${(parent.clientWidth / hexSize) / longestRowCountOverall})`;
+            absolutePiece.style.left = (parent.clientWidth - absolutePiece.clientWidth * ((parent.clientWidth / hexSize) / longestRowCountOverall)) / 2 + "px";
+            absolutePiece.style.top = allOtherChildHeights + "px";
+            makeHexesFromMatrix(piece, newPieceHolder, hexSize);
+            // dragElement(absolutePiece);
+      });
 }
 
 function placePiecesOnBoard() {
       let piecePositions = window.sessionStorage.getItem(`temperaturePieces`);
-      if(!piecePositions) {
+      if (!piecePositions) {
             piecePositions = {};
             Array.from(document.querySelectorAll(`.selection`)).forEach((piece) => {
                   piecePositions[piece.id] = false;
@@ -1037,7 +756,7 @@ function placePiecesOnBoard() {
             piecePositions = JSON.parse(piecePositions);
       }
       for (let locationData of Object.entries(piecePositions)) {
-            if(locationData[1]) {
+            if (locationData[1]) {
                   let pieceSelector = document.getElementById(locationData[0]);
                   const event = new MouseEvent("mousedown", {
                         clientX: locationData[1].x,
@@ -1085,62 +804,88 @@ function placePiecesOnBoard() {
       }
 }
 
-function addSVG(src, parentElement, imgCallback) {
-      let newImg = new Image();
-      newImg.src = `./images/SVGNumbers/${src}.svg`;
-      newImg.onload = addToPage;
+function addSVG(src, parentElement, svgCallback) {
+      let svgObject = document.createElement("object");
+      svgObject.setAttribute("data", `./images/test/${src}.svg`);
+      svgObject.setAttribute('type', "image/svg+xml");
+      svgObject.setAttribute("height", 100 + "%");
+      svgObject.setAttribute("width", 100 + "%");
+      svgObject.onload = addToPage;
+      let newDiv = document.createElement(`div`);
+      if (parentElement) {
+            parentElement.appendChild(newDiv);
+      }
+      newDiv.classList.add(`svgContainer`);
+      newDiv.appendChild(svgObject);
       function addToPage(event) {
-            let newDiv = document.createElement(`div`);
-            if (parentElement) {
-                  parentElement.appendChild(newDiv);
-            }
-            newDiv.classList.add(`hexContainer`);
-            newDiv.appendChild(this);
-            if (imgCallback) {
-                  imgCallback(newDiv);
+            if (svgCallback) {
+                  svgCallback(newDiv);
             }
       }
 }
 
 function flowLiquid() {
-
+      let correctSolution = true;
       Array.from(document.querySelectorAll(`.intersection`)).forEach((intersection) => {
-            if(intersection.firstChild.style.backgroundColor != `black`) {
-                  intersection.firstChild.style.backgroundColor = `whitesmoke`;
-            }
+            intersection.style.opacity = 0;
+            intersection.blocked = false;
       });
 
       Array.from(document.querySelectorAll(`.pipeStart`)).forEach((pipeStart) => {
             let touchingIntersection = overlayCheck(pipeStart, `intersection`);
-            if (touchingIntersection[0] && touchingIntersection[0].firstChild.style.backgroundColor == `whitesmoke`) {
-                  runLiquid(touchingIntersection[0].firstChild);
-            }
+            runLiquid(touchingIntersection[0]);
 
-            function runLiquid(actualIntersection) {
-                  actualIntersection.parentElement.style.opacity = `100%`;
-                  actualIntersection.style.backgroundColor = liquidColor;
-                  let nextIntersections = overlayCheck(actualIntersection, `actualIntersection`).filter((result) => {
-                        return result.style.backgroundColor == `whitesmoke`;
-                  });
-                  nextIntersections.forEach(runLiquid);
+            function runLiquid(intersection) {
+                  let blockers = overlayCheck(intersection, `snappedIntersection`);
+                  for (blocker of blockers) {
+                        if(blocker) {
+                              let intersectionBounds = intersection.getBoundingClientRect();
+                              let blockerBounds = blocker.getBoundingClientRect();
+                              let dx = Math.abs(blockerBounds.left - intersectionBounds.left);
+                              let dy = Math.abs(blockerBounds.top - intersectionBounds.top);
+                              let distance = Math.sqrt(dx * dx + dy * dy);
+                              if(distance < 20 || !distance) {
+                                    intersection.blocked = true;
+                              }
+                        }
+                  }
+                  if(!intersection.blocked) {
+                        intersection.style.backgroundColor = liquidColor;
+                        intersection.style.opacity = 100;
+                        let nextIntersections = overlayCheck(intersection, `intersection`).filter((result) => {
+                              return result.style.opacity == 0 && !result.blocked;
+                        });
+                        nextIntersections.forEach(runLiquid);
+                  }
             }
 
             Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
                   let touchingIntersection = overlayCheck(pipeExit, `intersection`);
-                  if (touchingIntersection[0] && touchingIntersection[0].firstChild.style.backgroundColor == liquidColor) {
-                        if(Array.from(pipeExit.classList).includes(`pipeEnd`)) {
-                              pipeExit.style.backgroundColor = `green`;
-                        } else if(Array.from(pipeExit.classList).includes(`pipeStart`)) {
-                              pipeExit.style.backgroundColor = liquidColor;
-                        } else {
-                              pipeExit.style.backgroundColor = `red`;
-                        }
+                  if (touchingIntersection[0] && touchingIntersection[0].style.opacity == `100`) {
+                        pipeExit.style.backgroundColor = liquidColor;
                   } else {
                         pipeExit.style.backgroundColor = ``;
                   }
+                  if(((pipeExit.number != 4 && pipeExit.number != 28 && pipeExit.number != 0) && pipeExit.style.backgroundColor) || ((pipeExit.number == 4 || pipeExit.number == 28 || pipeExit.number == 0) && !pipeExit.style.backgroundColor)) {
+                        correctSolution = false;
+                  }
             });
-
       });
+      if(correctSolution) {
+            let workshopData =  window.sessionStorage.getItem(`workshopData`);
+            if(!workshopData) {
+                  workshopData = {
+                        voltage: false,
+                        temperature: false,
+                        pipes: false,
+                  }
+                  window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
+            } else {
+                  workshopData = JSON.parse(workshopData);
+            }
+            workshopData[`temperature`] = true;
+            window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
+      }
 }
 
 function dragElement(elmnt) {
@@ -1150,15 +895,16 @@ function dragElement(elmnt) {
             document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
       } else {
             // otherwise, move the DIV from anywhere inside the DIV:
-            let selectionItem = Array.from(elmnt.parentElement.classList).find((value) => {
+            let elmntParent = elmnt.parentElement.parentElement;
+            let selectionItem = Array.from(elmntParent.classList).find((value) => {
                   return value.includes(`selection`);
             });
             let inventoryItem = Array.from(elmnt.classList).find((value) => {
                   return value.includes(`inventoryItem`);
             });
             if (selectionItem) {
-                  elmnt.onmousedown = copyAndDrag;
-            } else if(inventoryItem) {
+                  elmntParent.onmousedown = copyAndDrag;
+            } else if (inventoryItem) {
                   elmnt.onmousedown = copyAndDragInv;
             } else {
                   elmnt.onmousedown = dragMouseDown;
@@ -1166,38 +912,30 @@ function dragElement(elmnt) {
       }
 
       function copyAndDrag(event) {
-            if(this.parentElement.taken) {
+            if (this.taken) {
                   return;
             }
-            let newPiece = this.parentElement.cloneNode(true);
-            this.parentElement.taken = true;
-            this.parentElement.style.filter = `opacity(50%)`;
+            let newPiece = this.cloneNode(true);
+            this.taken = true;
+            this.style.filter = `opacity(50%)`;
             gameArea.appendChild(newPiece);
             newPiece.classList.add(`dragHex`);
             newPiece.classList.remove(`selection`);
-            newPiece.style.width = 4 * hexSize + "px";
-            newPiece.style.left = (this.parentElement.parentElement.offsetLeft + this.parentElement.offsetLeft + this.offsetLeft) - (this.parentElement.pickupPoint.left * 4) + "px";
-            newPiece.style.top = (this.parentElement.parentElement.offsetTop + this.parentElement.offsetTop + this.offsetTop) - (this.parentElement.pickupPoint.top * 4) + "px";
-            newPiece.originalPiece = this.parentElement;
+            newPiece.style.transform = null;
+            let oldBounds = this.getBoundingClientRect();
+            let newBounds = newPiece.getBoundingClientRect();
+            newPiece.style.left = event.x - (event.x - oldBounds.left) * Math.round(newBounds.width / oldBounds.width) + "px";
+            newPiece.style.top = event.y - (event.y - oldBounds.top) * Math.round(newBounds.width / oldBounds.width) + "px";
+            newPiece.originalPiece = this;
+            newPiece.currentMatrix = tileSystem[this.id];
             newPiece.rotation = 0;
-            newPiece.numberID = this.parentElement.numberID;
-            for (let child of newPiece.children) {
-                  if (child.children.length >= 2) {
-                        newPiece.numberDisplay = child.lastChild;
+            elmnt = undefined;
+            Array.from(newPiece.firstChild.children).forEach((child) => {
+                  if(!elmnt) {
+                        elmnt = child;
                   }
-            }
-            elmnt = null;
-            for (let hex of Array.from(newPiece.children)) {
-                  if (!Array.from(hex.classList).includes(`invisiblePiece`)) {
-                        hex.onmousedown = null;
-                        hex.classList.add(`placeCheck`);
-                        if (!elmnt) {
-                              elmnt = hex;
-                        }
-                        dragElement(hex);
-                  }
-                  hex.style.marginBottom = -(100 / 4) / 3 + "%";
-            }
+                  dragElement(child);
+            })
             dragMouseDown(event);
       }
 
@@ -1232,99 +970,19 @@ function dragElement(elmnt) {
             // get the mouse cursor position at startup:
             pos3 = e.clientX;
             pos4 = e.clientY;
-
+            let elmntParent = elmnt.parentElement.parentElement;
             let inventoryItem = Array.from(elmnt.classList).find((value) => {
                   return value.includes(`dragItem`);
             });
             if (!inventoryItem) {
                   //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
-                  if (Array.from(elmnt.parentElement.classList).includes(`onBoard`)) {
-                        for (let hex of elmnt.parentElement.children) {
-                              if (Array.from(hex.classList).includes(`placeCheck`)) {
-                                    hex.classList.remove(`snapped`);
-                              }
-                        }
-                        for (let boardHex of elmnt.parentElement.onBoard) {
-                              if ((Array.from(boardHex.classList).includes(`hexContainer`))) {
-                                    boardHex.remove();
-                              } else if ((Array.from(boardHex.classList).includes(`innerHex`))) {
-                                    boardHex.style.backgroundColor = '';
-                              } else {
-                                    boardHex.style.opacity = '0%';
-                                    boardHex.firstChild.style.backgroundColor = `whitesmoke`;
-                              }
-                        }
-                        elmnt.parentElement.classList.remove(`onBoard`);
-                        elmnt.parentElement.onBoard = [];
-
-                        let thermometerBar = document.getElementById(`thermometerBar`);
-                        let totalTemp = 0;
-                        Array.from(document.querySelectorAll(`.onBoard`)).forEach((onBoardPiece) => {
-                              let pieceNumber = Number(onBoardPiece.numberID);
-                              totalTemp += pieceNumber;
+                  Array.from(elmntParent.firstChild.children).forEach((childHex) => {
+                        childHex.classList.remove(`snapped`);
+                        Array.from(childHex.children).filter((child) => Array.from(child.classList).includes("intersectionBlocker")).forEach((pieceIntersection) => {
+                              pieceIntersection.classList.remove(`snappedIntersection`);
                         });
-                        let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
-                        thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
-                        let thermometerBase = document.getElementById(`thermometerBase`);
-                        if(totalTemp > 33) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgba(139, 0, 0, 1) 50%, rgb(71, 0, 0))`;
-                              thermometerBar.style.background = `linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1))`;
-                        } else if (totalTemp < 31) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(0, 72, 139) 50%, rgb(0, 33, 71))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(0, 162, 255), rgb(0, 72, 139))`;
-                        } else if (totalTemp == 32) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(22, 146, 38) 50%, rgb(13, 90, 10))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(0, 255, 64), rgb(22, 146, 38))`;
-                        } else {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(3, 92, 0) 50%, rgb(0, 58, 14))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(15, 109, 39), rgb(3, 92, 0))`;
-                        }
-                        
-                        let thermometerNumber = document.getElementById(`thermometerNumber`);
-                        if(totalTemp == 0) {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
-                              thermometerNumber.style.visibility = `hidden`;
-                        } else if(totalTemp > 48) {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
-                              thermometerNumber.style.visibility = `hidden`;
-                        } else {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/${totalTemp}.svg`;
-                              thermometerNumber.style.visibility = `visible`;
-                        }
-                        
-
-                        let piecePositions = window.sessionStorage.getItem(`temperaturePieces`);
-                        if(!piecePositions) {
-                              piecePositions = {};
-                              Array.from(document.querySelectorAll(`.selection`)).forEach((piece) => {
-                                    piecePositions[piece.id] = false;
-                              });
-                              window.sessionStorage.setItem(`temperaturePieces`, JSON.stringify(piecePositions));
-                        } else {
-                              piecePositions = JSON.parse(piecePositions);
-                        }
-                        if(piecePositions[elmnt.parentElement.id]) {
-                              piecePositions[elmnt.parentElement.id] = false;
-                              window.sessionStorage.setItem(`temperaturePieces`, JSON.stringify(piecePositions));
-                        }
-
-                        let workshopData =  window.sessionStorage.getItem(`workshopData`);
-                        if(!workshopData) {
-                              workshopData = {
-                                    voltage: [false, false, false],
-                                    temperature: false,
-                                    pipes: false,
-                              }
-                              window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
-                        } else {
-                              workshopData = JSON.parse(workshopData);
-                        }
-                        workshopData[`temperature`] = false;
-                        window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
-
-                        flowLiquid();
-
-                  }
+                  });
+                  flowLiquid();
             }
 
             var rightclick;
@@ -1335,13 +993,13 @@ function dragElement(elmnt) {
                   rightclick = (e.button == 2);
             }
             if (rightclick) {
-                  rotatePiece(elmnt.parentElement);
+                  elmnt = rotatePiece(elmntParent);
                   return closeDragElement(e);
             }
 
             if (e.shiftKey) {
-                  elmnt.parentElement.style.top = e.clientY + "px";
-                  elmnt.parentElement.style.left = e.clientX + "px";
+                  elmntParent.style.top = e.clientY + "px";
+                  elmntParent.style.left = e.clientX + "px";
                   return closeDragElement(e);
             }
             document.onmouseup = closeDragElement;
@@ -1362,8 +1020,9 @@ function dragElement(elmnt) {
             });
             if (!inventoryItem) {
                   //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
-                  elmnt.parentElement.style.top = (elmnt.parentElement.offsetTop - pos2) + "px";
-                  elmnt.parentElement.style.left = (elmnt.parentElement.offsetLeft - pos1) + "px";
+                  let elmntParent = elmnt.parentElement.parentElement;
+                  elmntParent.style.top = (elmntParent.offsetTop - pos2) + "px";
+                  elmntParent.style.left = (elmntParent.offsetLeft - pos1) + "px";
             } else {
                   elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
                   elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
@@ -1383,189 +1042,62 @@ function dragElement(elmnt) {
             });
             if (!inventoryItem) {
                   //PLACE CODE HERE FOR SPECIAL MOVEMENT OF ITEMS IN ROOM
-                  let backToSpawn = overlayCheck(clickLocation, "pieceHolder");
+                  let elmntParent = elmnt.parentElement.parentElement;
+                  let backToSpawn = overlayCheck(clickLocation, "pieceDisplay");
                   if (backToSpawn[0] && event.shiftKey != true) {
-                        elmnt.parentElement.remove();
-                        elmnt.parentElement.originalPiece.style.filter = ``;
-                        elmnt.parentElement.originalPiece.taken = false;
+                        elmntParent.remove();
+                        elmntParent.originalPiece.style.filter = ``;
+                        elmntParent.originalPiece.taken = false;
                         return;
                   }
                   let willSnap = true;
-                  let snapDiv = null;
-                  for (let hex of elmnt.parentElement.children) {
-                        if (Array.from(hex.classList).includes(`invisiblePiece`)) {
-                              continue;
-                        }
+                  let allSnaps = [];
+                  let snapOffsets = [];
+                  Array.from(elmntParent.firstChild.children).forEach((childHex) => {
                         let centerLocation = Object.create(locationObject);
-                        centerLocation.x = hex.parentElement.offsetLeft + hex.offsetLeft + (hex.clientWidth / 2);
-                        centerLocation.y = hex.parentElement.offsetTop + hex.offsetTop + (hex.clientHeight / 2);
+                        let hexBounds = childHex.getBoundingClientRect();
+                        centerLocation.x = hexBounds.left + (hexBounds.width / 2);
+                        centerLocation.y = hexBounds.top + (hexBounds.height / 2);
                         let placedOver = overlayCheck(centerLocation, "slot");
                         let alreadyThere = overlayCheck(centerLocation, "snapped");
-                        alreadyThere = alreadyThere.filter((hexDiv) => {
-                              return hexDiv.parentElement.id != elmnt.parentElement.id;
-                        });
-                        if (!placedOver[0] || alreadyThere[0]) {
+                        let isRoom = true;
+                        if(alreadyThere[0]) {
+                              let alreadyHexBounds = alreadyThere[0].getBoundingClientRect();
+                              let alreadyDx = Math.abs(alreadyHexBounds.left - hexBounds.left);
+                              let alreadyDy = Math.abs(alreadyHexBounds.top - hexBounds.top);
+                              let alreadyDistance = Math.sqrt(alreadyDx * alreadyDx + alreadyDy * alreadyDy);
+                              if(alreadyDistance < hexSize / 2) {
+                                    isRoom = false;
+                              }
+                        }
+                        if (!placedOver[0] || !isRoom) {
                               willSnap = false;
                         } else {
-                              if (!snapDiv) {
-                                    snapDiv = placedOver[0];
-                                    let hexBounds = hex.getBoundingClientRect();
-                                    elmnt.parentElement.snapOffset = {
-                                          top: hexBounds.top - elmnt.parentElement.offsetTop,
-                                          left: hexBounds.left - elmnt.parentElement.offsetLeft,
-                                    };
+                              let otherHexBounds = placedOver[0].getBoundingClientRect();
+                              let dx = Math.abs(otherHexBounds.left - hexBounds.left);
+                              let dy = Math.abs(otherHexBounds.top - hexBounds.top);
+                              let distance = Math.sqrt(dx * dx + dy * dy);
+                              if(distance > hexSize / 2) {
+                                    willSnap = false;
+                              } else {
+                                          allSnaps.push(placedOver[0].parentElement);
+                                          snapOffsets.push({
+                                                top: hexBounds.top - elmntParent.offsetTop,
+                                                left: hexBounds.left - elmntParent.offsetLeft,
+                                          });
                               }
                         }
-                  }
+                  });
                   if (willSnap) {
-                        elmnt.parentElement.style.top = snapDiv.offsetTop - elmnt.parentElement.snapOffset.top + "px";
-                        elmnt.parentElement.style.left = snapDiv.offsetLeft - elmnt.parentElement.snapOffset.left + "px";
-                        elmnt.parentElement.classList.add(`onBoard`);
-                        let piecePositions = window.sessionStorage.getItem(`temperaturePieces`);
-                        if(!piecePositions) {
-                              piecePositions = {};
-                              Array.from(document.querySelectorAll(`.selection`)).forEach((piece) => {
-                                    piecePositions[piece.id] = false;
+                        elmntParent.style.top = allSnaps[0].offsetTop + allSnaps[0].parentElement.offsetTop - snapOffsets[0].top + "px";
+                        elmntParent.style.left = allSnaps[0].offsetLeft + allSnaps[0].parentElement.offsetLeft - snapOffsets[0].left + "px";
+                        Array.from(elmntParent.firstChild.children).forEach((childHex) => {
+                              childHex.classList.add(`snapped`);
+                              Array.from(childHex.children).filter((child) => Array.from(child.classList).includes("intersectionBlocker")).forEach((pieceIntersection) => {
+                                    pieceIntersection.classList.add(`snappedIntersection`);
                               });
-                              window.sessionStorage.setItem(`temperaturePieces`, JSON.stringify(piecePositions));
-                        } else {
-                              piecePositions = JSON.parse(piecePositions);
-                        }
-                        piecePositions[elmnt.parentElement.id] = {
-                              x: snapDiv.offsetLeft - elmnt.parentElement.snapOffset.left,
-                              y: snapDiv.offsetTop - elmnt.parentElement.snapOffset.top,
-                              rotation: elmnt.parentElement.rotation,
-                        };
-                        window.sessionStorage.setItem(`temperaturePieces`, JSON.stringify(piecePositions));
-                        for (let hex of elmnt.parentElement.children) {
-                              if (Array.from(hex.classList).includes('placeCheck')) {
-                                    hex.classList.add(`snapped`);
-                                    let centerLocation = Object.create(locationObject);
-                                    centerLocation.x = hex.parentElement.offsetLeft + hex.offsetLeft + (hex.clientWidth / 2);
-                                    centerLocation.y = hex.parentElement.offsetTop + hex.offsetTop + (hex.clientHeight / 2);
-                                    let placedOver = overlayCheck(centerLocation, "slot");
-                                    placedOver[0].firstChild.style.backgroundColor = 'black';
-                                    if (!elmnt.parentElement.onBoard) {
-                                          elmnt.parentElement.onBoard = [];
-                                    }
-                                    if (Array.from(hex.lastChild.classList).includes(`hexContainer`)) {
-                                          copiedNumber = hex.lastChild.cloneNode(true);
-                                          placedOver[0].firstChild.appendChild(copiedNumber);
-                                          copiedNumber.style.width = `60%`;
-                                          copiedNumber.style.height = copiedNumber.clientWidth / copiedNumber.parentElement.clientHeight * 100 + "%";
-                                          elmnt.parentElement.onBoard.push(copiedNumber);
-                                    }
-                                    elmnt.parentElement.onBoard.push(placedOver[0].firstChild);
-                                    let pieceIntersections = overlayCheck(hex, "intersection");
-                                    if (pieceIntersections.length > 0) {
-                                          for (let intersection of pieceIntersections) {
-                                                if (!elmnt.parentElement.onBoard.includes(intersection)) {
-                                                      let showIntersection = true;
-                                                      let hexesOnIntersection = overlayCheck(intersection, `snapped`);
-                                                      for (let checkHex of hexesOnIntersection) {
-                                                            if (!Array.from(elmnt.parentElement.children).includes(checkHex) || hexesOnIntersection.length < 2) {
-                                                                  showIntersection = false;
-                                                            }
-                                                      }
-                                                      if (showIntersection) {
-                                                            intersection.style.opacity = `100%`;
-                                                            intersection.firstChild.style.backgroundColor = 'black';
-                                                            elmnt.parentElement.onBoard.push(intersection);
-                                                      }
-                                                }
-                                          }
-                                    }
-                              }
-                        }
-
-                        //add to thermometer
-                        let thermometerBar = document.getElementById(`thermometerBar`);
-                        let totalTemp = 0;
-                        Array.from(document.querySelectorAll(`.onBoard`)).forEach((onBoardPiece) => {
-                              let pieceNumber = Number(onBoardPiece.numberID);
-                              totalTemp += pieceNumber;
                         });
-                        let baseHeight = Number(getComputedStyle(thermometerBar).getPropertyValue('--thermometerBaseHeight').replace(`px`, ``));
-                        thermometerBar.style.height = baseHeight + (totalTemp * 10) + "px";
-
-                        let thermometerBase = document.getElementById(`thermometerBase`);
-                        if(totalTemp > 33) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgba(139, 0, 0, 1) 50%, rgb(71, 0, 0))`;
-                              thermometerBar.style.background = `linear-gradient(rgba(255, 0, 0, 1), rgba(139, 0, 0, 1))`;
-                        } else if (totalTemp < 31) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(0, 72, 139) 50%, rgb(0, 33, 71))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(0, 162, 255), rgb(0, 72, 139))`;
-                        } else if (totalTemp == 32) {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(22, 146, 38) 50%, rgb(13, 90, 10))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(0, 255, 64), rgb(22, 146, 38))`;
-                        } else {
-                              thermometerBase.style.background = `radial-gradient(circle at top, rgb(3, 92, 0) 50%, rgb(0, 58, 14))`;
-                              thermometerBar.style.background = `linear-gradient(rgb(15, 109, 39), rgb(3, 92, 0))`;
-                        }
-
-                        let thermometerNumber = document.getElementById(`thermometerNumber`);
-                        if(totalTemp == 0) {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
-                              thermometerNumber.style.visibility = `hidden`;
-                        } else if(totalTemp > 48) {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/1.svg`;
-                              thermometerNumber.style.visibility = `hidden`;
-                        } else {
-                              thermometerNumber.firstChild.src = `./images/SVGNumbers/${totalTemp}.svg`;
-                              thermometerNumber.style.visibility = `visible`;
-                        }
-
-                        //lets check if everything is snapped
-
                         flowLiquid();
-
-                        let boardFilled = true;
-                        Array.from(document.querySelectorAll(`.slot`)).forEach((boardHex) => {
-                              let centerLocation = Object.create(locationObject);
-                              let hexBounds = boardHex.getBoundingClientRect();
-                              centerLocation.x = hexBounds.left + (boardHex.clientWidth / 2);
-                              centerLocation.y = hexBounds.top + (boardHex.clientHeight / 2);
-                              let snappedOn = overlayCheck(centerLocation, `snapped`);
-                              if (!snappedOn[0]) {
-                                    boardFilled = false;
-                              }
-                        });
-                        if (boardFilled) {
-                              if (correctNumber.includes(totalTemp)) {
-                                    let correctAnswer = true;
-                                    Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
-                                          if (pipeExit.style.backgroundColor == `red` || (Array.from(pipeExit.classList).includes(`pipeEnd`) && pipeExit.style.backgroundColor != `green`)) {
-                                                correctAnswer = false;
-                                          }
-                                    });
-                                    if (correctAnswer) {
-                                          let workshopData =  window.sessionStorage.getItem(`workshopData`);
-                                          if(!workshopData) {
-                                                workshopData = {
-                                                      voltage: false,
-                                                      temperature: false,
-                                                      pipes: false,
-                                                }
-                                                window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
-                                          } else {
-                                                workshopData = JSON.parse(workshopData);
-                                          }
-                                          workshopData[`temperature`] = true;
-                                          window.sessionStorage.setItem(`workshopData`, JSON.stringify(workshopData));
-                                          // Array.from(document.querySelectorAll(`.intersection`)).forEach((intersection) => {
-                                          //       if (intersection.firstChild.style.backgroundColor == liquidColor) {
-                                          //             intersection.firstChild.style.backgroundColor = `green`;
-                                          //       }
-                                          // });
-                                          // Array.from(document.querySelectorAll(`.pipeExit`)).forEach((pipeExit) => {
-                                          //       if ((Array.from(pipeExit.classList).includes(`pipeEnd`) || Array.from(pipeExit.classList).includes(`pipeStart`))) {
-                                          //             pipeExit.style.backgroundColor = `green`;
-                                          //       }
-                                          // });
-
-                                    }
-                              }
-                        }
                   }
             }
             if (overInventory && inventoryItem) {
